@@ -5,4 +5,5 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 EXPOSE 3000
-CMD ["npm", "start"]
+# Garanta que a última linha seja esta:
+CMD ["node", "server.js"]
