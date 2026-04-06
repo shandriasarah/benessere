@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDV | Beauty Hub</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/feather-icons"></script>
+<link rel="stylesheet" href="css/pdv.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="toggle-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
+  <h2>Beauty Hub</h2>
+  <ul>
+    <li><a href="admin_home.html"><i class="fa-solid fa-house"></i><span> Início</span></a></li>
+    <li><a href="agenda.html"><i class="fa-solid fa-clock"></i><span>Agendar Horario do Cliente</span></a></li>    <li><a href="cliente.html"><i class="fa-solid fa-users"></i><span>Clientes</span></a></li>
+    <li><a href="pdv.html" class="active"><i class="fa-solid fa-cash-register"></i><span> PDV</span></a></li>
+    <li><a href="index.html"><i class="fa-solid fa-right-from-bracket"></i><span> Sair</span></a></li>
+  </ul>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <h1>Beauty Hub</h1>
+
+    <div class="user-section">
+        <i class="fa-regular fa-bell"></i>
+        <i class="fa-regular fa-envelope"></i>
+        <div class="user-avatar"></div>
+      </div>
+
+  </div>
+
+  <div class="layout">
+    <!-- PDV Form -->
+    <div class="panel">
+      <h3>💵PVD- Beauty Hub</h3>
+      <label for="cliente">Cliente:</label>
+      <input type="text" id="cliente" placeholder="Digite o nome do cliente">
+
+      <label for="servico">Serviço:</label>
+      <select id="servico">
+        <option value="">Selecione um serviço</option>
+        <option value="Corte Feminino" data-valor="50">Corte Feminino</option>
+        <option value="Corte Masculino" data-valor="40">Corte Masculino</option>
+        <option value="Escova" data-valor="60">Escova</option>
+        <option value="Maquiagem" data-valor="90">Maquiagem</option>
+        <option value="Manicure e Pedicure" data-valor="70">Manicure e Pedicure</option>
+      </select>
+
+      <label for="valor">Valor (R$):</label>
+      <input type="number" id="valor" step="0.01" readonly>
+
+      <label for="recebido">Valor Recebido (R$):</label>
+      <input type="number" id="recebido" step="0.01" placeholder="Ex: 100.00">
+
+      <div class="result" id="resultado"></div>
+
+      <button class="btn" onclick="registrarPagamento()">Registrar Pagamento</button>
+    </div>
+
+    <!-- Histórico de Pagamentos -->
+    <div class="panel">
+      <h3>📜 Histórico de Pagamentos:</h3>
+      <table class="hist-table">
+        <thead>
+          <tr><th>Cliente:</th><th>Serviço</th><th>Pago</th><th>Status</th><th>Data</th></tr>
+        </thead>
+        <tbody id="historicoBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script src="js/pdv.js"></script>
+  <footer>© 2025 Beauty Hub - Todos os direitos reservados.</footer>
+</body>
+</html>

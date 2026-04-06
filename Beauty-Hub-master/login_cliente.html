@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login Cliente | Beauty Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/login_cliente.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><i class="fa-solid fa-sparkles"></i> Beauty Hub</div>
+  <div class="topbar-right">
+    <div class="user-avatar"></div>
+  </div>
+</div>
+
+<main>
+<div class="side-text">
+  <img src="img/logo_beautyhub.jpeg" alt="Beleza e confiança" />
+</div>
+
+
+  <a href="index.html" class="back-button">
+    <i class="fa-solid fa-arrow-left"></i>
+  </a>
+
+  <div class="form-container">
+    <h1>Login do Cliente</h1>
+    <p class="subtitle">Conecte-se ao seu espaço de beleza e bem-estar.</p>
+
+    <form onsubmit="return loginCliente(event)">
+      <div class="input-group">
+        <i class="fa-solid fa-envelope"></i>
+        <input id="clienteEmail" type="email" required placeholder="Digite seu email">
+      </div>
+
+      <div class="input-group">
+        <i class="fa-solid fa-lock"></i>
+        <input id="clienteSenha" type="password" required placeholder="Digite sua senha">
+      </div>
+
+      <button class="btn" type="submit">Entrar</button>
+      <p id="msgCliente"></p>
+    </form>
+
+    <p class="create-msg">Ainda não tem conta?</p>
+    <a href="cadastro.html" class="create-account">Criar Conta</a>
+  </div>
+</main>
+
+  <footer>© 2025 Beauty Hub - Todos os direitos reservados.</footer>
+
+<script src="js/login_cliente.js"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+const express = require('express');
+const router = express.Router();
+
+// Obter todos os agendamentos do usuário
+router.get('/meus-agendamentos/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const pool = req.db;
+    const connection = await pool.getConnection();
+
+    const [appointments] = await connection.execute(
+      `SELECT a.*, p.name as professional_name, s.type as service_type, s.name as service_name
+       FROM appointments a
+       JOIN professionals p ON a.professional_id = p.id
+       JOIN services s ON a.service_id = s.id
+       WHERE a.user_id = ?
+       ORDER BY a.appointment_date DESC`,
+      [userId]
+    );
+
+    connection.release();
+    res.json(appointments || []);
+  } catch (error) {
+    console.error('Erro ao buscar agendamentos:', error);
+    res.status(500).json({ error: 'Erro ao buscar agendamentos' });
+  }
+});
+
+// Criar novo agendamento
+router.post('/criar', async (req, res) => {
+  const { user_id, professional_id, service_id, appointment_date, appointment_time, total_price } = req.body;
+
+  if (!user_id || !professional_id || !service_id || !appointment_date || !appointment_time) {
+    return res.status(400).json({ error: 'Campos obrigatórios faltando' });
+  }
+
+  try {
+    const pool = req.db;
+    const connection = await pool.getConnection();
+
+    const [result] = await connection.execute(
+      `INSERT INTO appointments (user_id, professional_id, service_id, appointment_date, appointment_time, total_price, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [user_id, professional_id, service_id, appointment_date, appointment_time, total_price || 0, 'confirmed']
+    );
+
+    connection.release();
+
+    res.status(201).json({
+      message: 'Agendamento criado com sucesso',
+      appointmentId: result.insertId
+    });
+  } catch (error) {
+    console.error('Erro ao criar agendamento:', error);
+    res.status(500).json({ error: 'Erro ao criar agendamento' });
+  }
+});
+
+// Obter agendamentos de um dia (para admin)
+router.get('/dia/:date', async (req, res) => {
+  const { date } = req.params;
+
+  try {
+    const pool = req.db;
+    const connection = await pool.getConnection();
+
+    const [appointments] = await connection.execute(
+      `SELECT a.*, p.name as professional_name, u.nome as client_name, s.type as service_type, s.name as service_name
+       FROM appointments a
+       JOIN professionals p ON a.professional_id = p.id
+       JOIN users u ON a.user_id = u.id
+       JOIN services s ON a.service_id = s.id
+       WHERE a.appointment_date = ?
+       ORDER BY a.appointment_time`,
+      [date]
+    );
+
+    connection.release();
+    res.json(appointments || []);
+  } catch (error) {
+    console.error('Erro ao buscar agendamentos:', error);
+    res.status(500).json({ error: 'Erro ao buscar agendamentos' });
+  }
+});
+
+// Cancelar agendamento
+router.put('/cancelar/:appointmentId', async (req, res) => {
+  const { appointmentId } = req.params;
+
+  try {
+    const pool = req.db;
+    const connection = await pool.getConnection();
+
+    await connection.execute(
+      'UPDATE appointments SET status = ? WHERE id = ?',
+      ['cancelled', appointmentId]
+    );
+
+    connection.release();
+    res.json({ message: 'Agendamento cancelado com sucesso' });
+  } catch (error) {
+    console.error('Erro ao cancelar agendamento:', error);
+    res.status(500).json({ error: 'Erro ao cancelar agendamento' });
+  }
+});
+
+// Obter horários disponíveis para um profissional em um dia
+router.get('/horarios-disponiveis/:professionalId/:date', async (req, res) => {
+  const { professionalId, date } = req.params;
+
+  const availableHours = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+
+  try {
+    const pool = req.db;
+    const connection = await pool.getConnection();
+
+    const [appointments] = await connection.execute(
+      'SELECT appointment_time FROM appointments WHERE professional_id = ? AND appointment_date = ?',
+      [professionalId, date]
+    );
+
+    connection.release();
+
+    const bookedTimes = appointments.map(a => a.appointment_time);
+    const available = availableHours.filter(hour => !bookedTimes.includes(hour));
+
+    res.json({ availableHours: available });
+  } catch (error) {
+    console.error('Erro ao buscar horários:', error);
+    res.status(500).json({ error: 'Erro ao buscar horários' });
+  }
+});
+
+module.exports = router;

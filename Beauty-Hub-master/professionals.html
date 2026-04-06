@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Nossos Profissionais | Beauty Hub</title>
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="brand">Nossos Especialistas</div>
+    </div>
+
+    <main style="display: block; padding: 20px; text-align: center">
+      <h1>Lista de Profissionais (Dados da API)</h1>
+      <div
+        id="lista-profissionais"
+        style="
+          margin-top: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          align-items: center;
+        "
+      >
+        <p>Carregando profissionais...</p>
+      </div>
+      <br />
+      <a href="index.html" class="btn">Voltar</a>
+    </main>
+
+    <script>
+      // Esta é a parte que consome a API que você rodou no Docker
+      async function carregarProfissionais() {
+        try {
+          const response = await fetch(
+            "http://localhost:3000/api/professionals",
+          );
+          const dados = await response.json();
+
+          const container = document.getElementById("lista-profissionais");
+          container.innerHTML = ""; // Limpa o carregando
+
+          if (dados.length === 0) {
+            container.innerHTML =
+              "<p>Nenhum profissional cadastrado no banco.</p>";
+            return;
+          }
+
+          dados.forEach((p) => {
+            const div = document.createElement("div");
+            div.style.border = "1px solid #ccc";
+            div.style.padding = "10px";
+            div.style.width = "300px";
+            div.style.borderRadius = "8px";
+            div.innerHTML = `<strong>${p.name}</strong><br>${p.desc || "Sem descrição"}`;
+            container.appendChild(div);
+          });
+        } catch (error) {
+          document.getElementById("lista-profissionais").innerHTML =
+            '<p style="color: red;">Erro ao conectar com a API no Docker!</p>';
+        }
+      }
+
+      carregarProfissionais();
+    </script>
+  </body>
+</html>

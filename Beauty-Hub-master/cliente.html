@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Clientes | Beauty Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/cliente.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="toggle-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
+  <h2>Beauty Hub</h2>
+  <ul>
+    <li><a href="admin_home.html"><i class="fa-solid fa-house"></i><span> Início</span></a></li>
+    <li><a href="agenda.html"><i class="fa-solid fa-clock"></i><span>Agendar Horario do Cliente</span></a></li>
+    <li><a href="cliente.html" class="active"><i class="fa-solid fa-users"></i><span>Clientes</span></a></li>
+    <li><a href="pdv.html"><i class="fa-solid fa-cash-register"></i><span> PDV</span></a></li>
+    <li><a href="index.html"><i class="fa-solid fa-right-from-bracket"></i><span> Sair</span></a></li>
+  </ul>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <h1>Beauty Hub</h1>
+    <div class="controls">
+      <div class="search"><i class="fa-solid fa-magnifying-glass"></i><input id="searchInput" placeholder="Pesquisar por cliente..." /></div>
+      <button class="btn-small primary" id="newClient">➕ Novo Cliente</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <section class="panel">
+      <table class="table">
+        <h1>👥 Clientes:</h1>
+        <thead><tr><th>Nome</th><th>Email</th><th>Telefone</th><th>Status</th><th>Ações</th></tr></thead>
+        <tbody id="clientsBody"></tbody>
+      </table>
+      <div id="emptyMsg" class="empty" style="display:none">Nenhum cliente cadastrado</div>
+    </section>
+  </div>
+</div>
+
+<!-- Modal Cliente -->
+<div class="modal-overlay" id="clientModal">
+  <div class="modal">
+    <h3>Cadastro / Edição de Cliente</h3>
+    <input type="text" id="clientName" placeholder="Nome completo">
+    <input type="email" id="clientEmail" placeholder="Email">
+    <input type="text" id="clientPhone" placeholder="Telefone">
+    <input type="date" id="clientDOB" placeholder="Data de nascimento">
+    <select id="clientStatus">
+      <option value="Ativo">Ativo</option>
+      <option value="Inativo">Inativo</option>
+    </select>
+    <input type="text" id="clientAddress" placeholder="Endereço">
+    <input type="text" id="clientProfession" placeholder="Profissão">
+    <select id="clientGender">
+      <option value="">Gênero</option>
+      <option value="Masculino">Masculino</option>
+      <option value="Feminino">Feminino</option>
+      <option value="Outro">Outro</option>
+    </select>
+    <input type="text" id="clientDocument" placeholder="CPF / RG">
+    <textarea id="clientNotes" placeholder="Observações"></textarea>
+    <div class="modal-actions">
+      <button class="btn-small" id="clientCancel">Cancelar</button>
+      <button class="btn-small primary" id="clientSave">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Anamnese -->
+<div class="modal-overlay" id="anamneseModal">
+  <div class="modal">
+    <h3>Ficha de Anamnese</h3>
+    <textarea id="anamnesisHistory" placeholder="Histórico de saúde (doenças, alergias, medicamentos)"></textarea>
+    <textarea id="anamnesisTreatment" placeholder="Tratamentos em andamento"></textarea>
+    <textarea id="anamnesisPast" placeholder="Procedimentos anteriores"></textarea>
+    <textarea id="anamnesisObservations" placeholder="Observações do profissional"></textarea>
+    <input type="date" id="anamnesisLastVisit">
+    <input type="text" id="anamnesisFrequency" placeholder="Frequência de visitas">
+    <input type="text" id="anamnesisGoals" placeholder="Objetivos do cliente">
+    <input type="file" id="anamnesisPhoto" accept="image/*" multiple>
+    <div class="photo-container" id="photoPreviewContainer"></div>
+    <div class="modal-actions">
+      <button class="btn-small" id="anamnesisCancel">Cancelar</button>
+      <button class="btn-small primary" id="anamnesisSave">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/cliente.js"></script>
+  <footer>© 2025 Beauty Hub - Todos os direitos reservados.</footer>
+</body>
+</html>
