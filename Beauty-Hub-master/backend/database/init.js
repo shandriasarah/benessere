@@ -1,4 +1,4 @@
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2/promise");
 
 class Database {
   constructor(config) {
@@ -8,20 +8,21 @@ class Database {
 
   async init() {
     try {
-      // Primeiro, conectar sem especificar o banco para criar ele
       const connection = await mysql.createConnection({
         host: this.config.host,
         user: this.config.user,
-        password: this.config.password
+        password: this.config.password,
       });
 
-      // Criar o banco de dados se não existir
-      await connection.execute(`CREATE DATABASE IF NOT EXISTS ${this.config.database}`);
-      console.log(`✅ Banco de dados '${this.config.database}' verificado/criado`);
-      
+      await connection.execute(
+        `CREATE DATABASE IF NOT EXISTS ${this.config.database}`,
+      );
+      console.log(
+        `✅ Banco de dados '${this.config.database}' verificado/criado`,
+      );
+
       await connection.end();
 
-      // Agora criar pool de conexões com o banco especificado
       this.pool = await mysql.createPool({
         host: this.config.host,
         user: this.config.user,
@@ -29,13 +30,13 @@ class Database {
         database: this.config.database,
         waitForConnections: true,
         connectionLimit: 10,
-        queueLimit: 0
+        queueLimit: 0,
       });
 
-      console.log('✅ Conectado ao banco de dados MySQL');
+      console.log("✅ Conectado ao banco de dados MySQL");
       await this.createTables();
     } catch (err) {
-      console.error('❌ Erro ao conectar ao banco de dados:', err);
+      console.error("❌ Erro ao conectar ao banco de dados:", err);
       throw err;
     }
   }
@@ -44,7 +45,6 @@ class Database {
     const connection = await this.pool.getConnection();
 
     try {
-      // Tabela de Usuários (Clientes)
       await connection.execute(`
         CREATE TABLE IF NOT EXISTS users (
           id INT PRIMARY KEY AUTO_INCREMENT,
@@ -57,7 +57,6 @@ class Database {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
       `);
 
-      // Tabela de Admins
       await connection.execute(`
         CREATE TABLE IF NOT EXISTS admins (
           id INT PRIMARY KEY AUTO_INCREMENT,
@@ -67,7 +66,6 @@ class Database {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
       `);
 
-      // Tabela de Profissionais
       await connection.execute(`
         CREATE TABLE IF NOT EXISTS professionals (
           id INT PRIMARY KEY AUTO_INCREMENT,
@@ -78,7 +76,6 @@ class Database {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
       `);
 
-      // Tabela de Serviços
       await connection.execute(`
         CREATE TABLE IF NOT EXISTS services (
           id INT PRIMARY KEY AUTO_INCREMENT,
@@ -93,7 +90,6 @@ class Database {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
       `);
 
-      // Tabela de Agendamentos
       await connection.execute(`
         CREATE TABLE IF NOT EXISTS appointments (
           id INT PRIMARY KEY AUTO_INCREMENT,
@@ -116,7 +112,7 @@ class Database {
 
       await this.insertDefaultData(connection);
     } catch (err) {
-      console.error('Erro ao criar tabelas:', err);
+      console.error("Erro ao criar tabelas:", err);
     } finally {
       connection.release();
     }
@@ -125,20 +121,28 @@ class Database {
   async insertDefaultData(connection) {
     try {
       const [professionals] = await connection.execute(
-        'SELECT COUNT(*) as count FROM professionals'
+        "SELECT COUNT(*) as count FROM professionals",
       );
 
       if (professionals[0].count === 0) {
-        await connection.execute(`
+        await connection.execute(
+          `
           INSERT INTO professionals (name, description, image) VALUES 
           (?, ?, ?),
           (?, ?, ?)
-        `, [
-          'Marília Andrade', 'Quem sou eu: <br> Esteticista', 'img/marilia.jpg',
-          'João Silva', 'Quem sou eu: <br> Especialista', 'img/foto.jpg'
-        ]);
+        `,
+          [
+            "Marília Andrade",
+            "Quem sou eu: <br> Esteticista",
+            "img/marilia.jpg",
+            "João Silva",
+            "Quem sou eu: <br> Especialista",
+            "img/foto.jpg",
+          ],
+        );
 
-        await connection.execute(`
+        await connection.execute(
+          `
           INSERT INTO services (professional_id, type, name, price, duration) VALUES 
           (1, ?, ?, ?, ?),
           (1, ?, ?, ?, ?),
@@ -146,31 +150,51 @@ class Database {
           (1, ?, ?, ?, ?),
           (1, ?, ?, ?, ?),
           (2, ?, ?, ?, ?)
-        `, [
-          'Corte', 'Simples', 80.00, 45,
-          'Corte', 'Avançado', 120.00, 70,
-          'Manicure', 'Simples', 40.00, 30,
-          'Cílios', 'Clássico', 120.00, 90,
-          'Cílios', 'Volume Russo', 150.00, 120,
-          'Barba', 'Simples', 40.00, 20
-        ]);
+        `,
+          [
+            "Corte",
+            "Simples",
+            80.0,
+            45,
+            "Corte",
+            "Avançado",
+            120.0,
+            70,
+            "Manicure",
+            "Simples",
+            40.0,
+            30,
+            "Cílios",
+            "Clássico",
+            120.0,
+            90,
+            "Cílios",
+            "Volume Russo",
+            150.0,
+            120,
+            "Barba",
+            "Simples",
+            40.0,
+            20,
+          ],
+        );
 
-        console.log('✅ Dados padrão inseridos com sucesso');
+        console.log("✅ Dados padrão inseridos com sucesso");
       }
 
       const [admins] = await connection.execute(
-        'SELECT COUNT(*) as count FROM admins'
+        "SELECT COUNT(*) as count FROM admins",
       );
 
       if (admins[0].count === 0) {
         await connection.execute(
-          'INSERT INTO admins (user, senha) VALUES (?, ?)',
-          ['admin', '1234']
+          "INSERT INTO admins (user, senha) VALUES (?, ?)",
+          ["admin", "1234"],
         );
-        console.log('✅ Admin padrão criado: user: admin, password: 1234');
+        console.log("✅ Admin padrão criado: user: admin, password: 1234");
       }
     } catch (err) {
-      console.error('Erro ao inserir dados padrão:', err);
+      console.error("Erro ao inserir dados padrão:", err);
     }
   }
 

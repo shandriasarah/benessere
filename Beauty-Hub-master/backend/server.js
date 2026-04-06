@@ -11,7 +11,6 @@ const clientRoutes = require("./routes/clients");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || "*",
@@ -22,7 +21,6 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Inicializar banco de dados MySQL
 const dbConfig = {
   host: process.env.DB_HOST || "localhost",
   user: process.env.DB_USER || "root",
@@ -36,25 +34,21 @@ db.init().catch((err) => {
   process.exit(1);
 });
 
-// Armazenar pool na app para acessar nas rotas
 app.use((req, res, next) => {
   req.db = db.getPool();
   next();
 });
 
-// Rotas
 app.use("/api/auth", authRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/professionals", professionalsRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/clients", clientRoutes);
 
-// Health check
 app.get("/api/health", (req, res) => {
   res.json({ status: "API Beauty Hub está rodando", timestamp: new Date() });
 });
 
-// Rota raiz
 app.get("/", (req, res) => {
   res.json({
     message: "Beauty Hub API",
@@ -69,12 +63,10 @@ app.get("/", (req, res) => {
   });
 });
 
-// Middleware de erro 404
 app.use((req, res) => {
   res.status(404).json({ error: "Rota não encontrada" });
 });
 
-// Middleware de tratamento de erros
 app.use((err, req, res, next) => {
   console.error("Erro:", err);
   res
@@ -82,7 +74,6 @@ app.use((err, req, res, next) => {
     .json({ error: "Erro interno do servidor", message: err.message });
 });
 
-// Iniciar servidor
 app.listen(PORT, () => {
   console.log(`🚀 Beauty Hub Backend rodando em http://localhost:${PORT}`);
   console.log(

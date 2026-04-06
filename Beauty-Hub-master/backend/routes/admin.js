@@ -1,26 +1,22 @@
 const express = require("express");
 const router = express.Router();
 
-// Dashboard - Estatísticas
 router.get("/dashboard", async (req, res) => {
   try {
     const pool = req.db;
     const connection = await pool.getConnection();
 
-    // Contar clientes
     const [clientsResult] = await connection.execute(
       "SELECT COUNT(*) as count FROM users WHERE role = ?",
       ["client"],
     );
 
-    // Contar agendamentos de hoje
     const today = new Date().toISOString().split("T")[0];
     const [todayResult] = await connection.execute(
       "SELECT COUNT(*) as count FROM appointments WHERE DATE(appointment_date) = ? AND status = ?",
       [today, "confirmed"],
     );
 
-    // Calcular faturamento do mês
     const [revenueResult] = await connection.execute(
       `SELECT SUM(total_price) as total FROM appointments 
        WHERE MONTH(appointment_date) = MONTH(NOW()) 
@@ -41,7 +37,6 @@ router.get("/dashboard", async (req, res) => {
   }
 });
 
-// Listar todos os usuários
 router.get("/usuarios", async (req, res) => {
   try {
     const pool = req.db;
@@ -60,7 +55,6 @@ router.get("/usuarios", async (req, res) => {
   }
 });
 
-// Listar todos os agendamentos
 router.get("/agendamentos", async (req, res) => {
   try {
     const pool = req.db;
@@ -84,7 +78,6 @@ router.get("/agendamentos", async (req, res) => {
   }
 });
 
-// Faturamento por período
 router.get("/faturamento/:mes/:ano", async (req, res) => {
   const { mes, ano } = req.params;
 
@@ -109,7 +102,6 @@ router.get("/faturamento/:mes/:ano", async (req, res) => {
   }
 });
 
-// Excluir usuário
 router.delete("/usuario/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -117,12 +109,10 @@ router.delete("/usuario/:id", async (req, res) => {
     const pool = req.db;
     const connection = await pool.getConnection();
 
-    // Primeiro deletar agendamentos do usuário
     await connection.execute("DELETE FROM appointments WHERE user_id = ?", [
       id,
     ]);
 
-    // Depois deletar o usuário
     await connection.execute("DELETE FROM users WHERE id = ?", [id]);
 
     connection.release();
@@ -133,7 +123,6 @@ router.delete("/usuario/:id", async (req, res) => {
   }
 });
 
-// Reverter agendamento
 router.put("/agendamento/:id/reverter", async (req, res) => {
   const { id } = req.params;
 
