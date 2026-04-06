@@ -1,100 +1,106 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-// Obter perfil do cliente
-router.get('/perfil/:id', async (req, res) => {
+router.get("/perfil/:id", async (req, res) => {
   const { id } = req.params;
+  const pool = req.db;
+  let connection;
 
   try {
-    const pool = req.db;
-    const connection = await pool.getConnection();
-
-    const [users] = await connection.execute(
-      'SELECT id, nome, email, telefone, created_at FROM users WHERE id = ? AND role = ?',
-      [id, 'client']
+    connection = await pool.getConnection();
+    const [rows] = await connection.execute(
+      "SELECT id, nome, email, telefone, created_at FROM users WHERE id = ? AND role = ?",
+      [id, "client"],
     );
 
-    connection.release();
-
-    if (!users || users.length === 0) {
-      return res.status(404).json({ error: 'Usuário não encontrado' });
+    if (!rows.length) {
+      return res.status(404).json({ error: "Usuário não encontrado" });
     }
 
-    res.json(users[0]);
-  } catch (error) {
-    console.error('Erro ao buscar perfil:', error);
-    res.status(500).json({ error: 'Erro ao buscar perfil' });
+    res.json(rows[0]);
+  } catch (err) {
+    console.error("Erro ao buscar perfil:", err);
+    res.status(500).json({ error: "Erro interno no servidor" });
+  } finally {
+    if (connection) connection.release();
   }
 });
 
-// Atualizar perfil do cliente
-router.put('/perfil/:id', async (req, res) => {
+router.put("/perfil/:id", async (req, res) => {
   const { id } = req.params;
   const { nome, telefone, email } = req.body;
+  const pool = req.db;
+  let connection;
 
   if (!nome && !telefone && !email) {
-    return res.status(400).json({ error: 'Nenhum campo para atualizar' });
+    return res.status(400).json({ error: "Nenhum campo para atualizar" });
   }
 
+  const fields = [];
+  const values = [];
+
+  if (nome) {
+    fields.push("nome = ?");
+    values.push(nome);
+  }
+  if (telefone) {
+    fields.push("telefone = ?");
+    values.push(telefone);
+  }
+  if (email) {
+    fields.push("email = ?");
+    values.push(email.toLowerCase());
+  }
+
+  values.push(id, "client");
+
   try {
-    const pool = req.db;
-    const connection = await pool.getConnection();
+    connection = await pool.getConnection();
+    await connection.execute(
+      `UPDATE users SET ${fields.join(", ")} WHERE id = ? AND role = ?`,
+      values,
+    );
 
-    let updateFields = [];
-    let values = [];
-
-    if (nome) {
-      updateFields.push('nome = ?');
-      values.push(nome);
-    }
-    if (telefone) {
-      updateFields.push('telefone = ?');
-      values.push(telefone);
-    }
-    if (email) {
-      updateFields.push('email = ?');
-      values.push(email.toLowerCase());
-    }
-
-    values.push(id);
-    values.push('client');
-
-    const query = `UPDATE users SET ${updateFields.join(', ')} WHERE id = ? AND role = ?`;
-
-    await connection.execute(query, values);
-    connection.release();
-
-    res.json({ message: 'Perfil atualizado com sucesso' });
-  } catch (error) {
-    console.error('Erro ao atualizar perfil:', error);
-    res.status(500).json({ error: 'Erro ao atualizar perfil' });
+    res.json({ message: "Perfil atualizado com sucesso" });
+  } catch (err) {
+    console.error("Erro ao atualizar perfil:", err);
+    res.status(500).json({ error: "Erro interno no servidor" });
+  } finally {
+    if (connection) connection.release();
   }
 });
 
-// Obter histórico de agendamentos
-router.get('/agendamentos/:id', async (req, res) => {
+router.get("/agendamentos/:id", async (req, res) => {
   const { id } = req.params;
+  const pool = req.db;
+  let connection;
 
   try {
-    const pool = req.db;
-    const connection = await pool.getConnection();
-
-    const [appointments] = await connection.execute(
-      `SELECT a.id, a.appointment_date, a.appointment_time, a.status, a.total_price,
-              p.name as professional_name, s.type as service_type, s.name as service_name
+    connection = await pool.getConnection();
+    const [rows] = await connection.execute(
+      `SELECT
+         a.id,
+         a.appointment_date,
+         a.appointment_time,
+         a.status,
+         a.total_price,
+         p.name  AS professional_name,
+         s.type  AS service_type,
+         s.name  AS service_name
        FROM appointments a
        JOIN professionals p ON a.professional_id = p.id
-       JOIN services s ON a.service_id = s.id
+       JOIN services      s ON a.service_id      = s.id
        WHERE a.user_id = ?
        ORDER BY a.appointment_date DESC, a.appointment_time DESC`,
-      [id]
+      [id],
     );
 
-    connection.release();
-    res.json(appointments || []);
-  } catch (error) {
-    console.error('Erro ao buscar agendamentos:', error);
-    res.status(500).json({ error: 'Erro ao buscar agendamentos' });
+    res.json(rows);
+  } catch (err) {
+    console.error("Erro ao buscar agendamentos:", err);
+    res.status(500).json({ error: "Erro interno no servidor" });
+  } finally {
+    if (connection) connection.release();
   }
 });
 
