@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-// 1. LISTAR TODOS
 router.get("/", async (req, res) => {
   try {
     const pool = req.db;
@@ -12,7 +11,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// 2. CRIAR NOVO
 router.post("/criar", async (req, res) => {
   const { name, description, image } = req.body;
   try {
@@ -27,7 +25,6 @@ router.post("/criar", async (req, res) => {
   }
 });
 
-// 3. ATUALIZAR (PUT)
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const { name, description, image } = req.body;
@@ -43,7 +40,6 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// 4. DELETAR (DELETE)
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
