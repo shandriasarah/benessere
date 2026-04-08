@@ -1,4 +1,3 @@
-# 1. Usa uma imagem leve do Node
 FROM node:18-alpine
 WORKDIR /app
 COPY package*.json ./
