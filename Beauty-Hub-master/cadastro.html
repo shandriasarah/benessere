@@ -31,7 +31,7 @@
         Crie sua conta para agendar serviços e acompanhar sua beleza.
       </p>
 
-      <form onsubmit="return cadastrarCliente(event);">
+      <form onsubmit="cadastrarCliente(event)">
         <div class="input-group">
           <i class="fa-solid fa-user"></i>
           <input
@@ -82,7 +82,48 @@
     <footer>© 2025 Beauty Hub - Todos os direitos reservados.</footer>
 
     <script>
-      async function cadastrarCliente(event) {}
+      async function cadastrarCliente(event) {
+        event.preventDefault(); // Impede a página de recarregar
+
+        // Pegando os valores pelos IDs que você definiu no HTML
+        const nome = document.getElementById("cadNome").value;
+        const email = document.getElementById("cadEmail").value;
+        const senha = document.getElementById("cadSenha").value;
+        const msgElemento = document.getElementById("msgCliente");
+
+        try {
+          const response = await fetch(
+            "https://beauty-hub-72cv.onrender.com/api/auth/register",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                name: nome,
+                email: email,
+                password: senha,
+              }),
+            },
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            alert("✅ Conta criada com sucesso!");
+            window.location.href = "login_cliente.html";
+          } else {
+            msgElemento.innerText =
+              "❌ " + (data.message || "Erro ao cadastrar");
+            msgElemento.style.color = "red";
+          }
+        } catch (error) {
+          console.error("Erro na requisição:", error);
+          alert(
+            "Erro ao conectar com o servidor. Verifique sua internet ou se o Render está ativo.",
+          );
+        }
+      }
     </script>
   </body>
 </html>

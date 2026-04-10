@@ -1,21 +1,48 @@
-function cadastrarCliente(event){
-  event.preventDefault();
-  const nome=document.getElementById('cadNome').value.trim();
-  const email=document.getElementById('cadEmail').value.trim().toLowerCase();
-  const telefone=document.getElementById('cadTelefone').value.trim();
-  const senha=document.getElementById('cadSenha').value;
-  const msg=document.getElementById('msgCliente');
+async function cadastrarCliente(event) {
+  event.preventDefault(); // Impede a página de recarregar
 
-  let users=JSON.parse(localStorage.getItem('tb_users')||'[]');
-  if(users.find(u=>u.email===email)){
-    msg.style.color='red';
-    msg.textContent='Email já cadastrado 😕';
-    return;
+  // Captura os elementos do formulário
+  const nome = document.querySelector(
+    'input[placeholder="Digite seu nome"]',
+  ).value;
+  const email = document.querySelector(
+    'input[placeholder="Digite seu email"]',
+  ).value;
+  const senha = document.querySelector(
+    'input[placeholder="Crie uma senha"]',
+  ).value;
+  const msgElemento = document.getElementById("msgCliente");
+
+  try {
+    // Envia os dados para o seu link do Render
+    const response = await fetch(
+      "https://beauty-hub-72cv.onrender.com/api/auth/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: nome,
+          email: email,
+          password: senha,
+        }),
+      },
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert("✅ Conta criada com sucesso!");
+      window.location.href = "login_cliente.html"; // Vai para a tela de login
+    } else {
+      msgElemento.innerText = "❌ " + (data.message || "Erro ao cadastrar");
+      msgElemento.style.color = "red";
+    }
+  } catch (error) {
+    console.error("Erro na requisição:", error);
+    alert(
+      "Erro ao conectar com o servidor. Verifique se o Render ainda está carregando.",
+    );
   }
-
-  users.push({nome,email,telefone,senha,role:'client'});
-  localStorage.setItem('tb_users',JSON.stringify(users));
-  msg.style.color='green';
-  msg.textContent='Cadastro realizado! Redirecionando...';
-  setTimeout(()=>window.location.href='login_cliente.html',1000);
 }
