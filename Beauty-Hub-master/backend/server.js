@@ -120,6 +120,10 @@ app.get("/", (req, res) => {
   res.json({ message: "Beauty Hub API Ativa", version: "1.0.0" });
 });
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Servidor rodando na porta ${PORT}`);
+// Troque a linha do app.listen por esta exatamente:
+const server = app.listen(PORT, () => {
+  console.log(`🚀 Servidor pronto na porta ${PORT}`);
 });
+
+server.keepAliveTimeout = 120000; // Dá mais tempo para o servidor pensar
+server.headersTimeout = 120500;
