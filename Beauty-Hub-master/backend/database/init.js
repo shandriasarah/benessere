@@ -8,13 +8,12 @@ class Database {
 
   async init() {
     try {
-      // 1. Conexão inicial para verificar/criar o banco
       const connection = await mysql.createConnection({
         host: this.config.host,
         user: this.config.user,
         password: this.config.password,
-        port: this.config.port || 24756, // Garante a porta do Aiven
-        connectTimeout: 60000, // <--- ADICIONE ESTA LINHA
+        port: this.config.port || 24756,
+        connectTimeout: 60000,
       });
 
       await connection.execute(
@@ -26,19 +25,18 @@ class Database {
 
       await connection.end();
 
-      // 2. Criação do Pool de conexões (O que a API usa de verdade)
       this.pool = await mysql.createPool({
         host: this.config.host,
         user: this.config.user,
         password: this.config.password,
         database: this.config.database,
-        port: this.config.port || 24756, // Garante a porta do Aiven
+        port: this.config.port || 24756,
         waitForConnections: true,
         connectionLimit: 10,
         queueLimit: 0,
-        connectTimeout: 60000, // <--- ADICIONE ESTA LINHA
-        enableKeepAlive: true, // <--- DICA: Ajuda a manter a conexão viva
-        keepAliveInitialDelay: 10000, // <--- DICA: Ajuda a manter a conexão viva
+        connectTimeout: 60000,
+        enableKeepAlive: true,
+        keepAliveInitialDelay: 10000,
       });
 
       console.log("✅ Conectado ao banco de dados MySQL");
@@ -48,8 +46,6 @@ class Database {
       throw err;
     }
   }
-
-  // ... resto do seu código (createTables, etc)
 
   async createTables() {
     const connection = await this.pool.getConnection();
