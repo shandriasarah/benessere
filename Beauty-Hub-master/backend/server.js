@@ -9,8 +9,7 @@ const appointmentRoutes = require("./routes/appointments");
 const professionalsRoutes = require("./routes/professionals");
 const adminRoutes = require("./routes/admin");
 const clientRoutes = require("./routes/clients");
-const cors = require("cors");
-app.use(cors());
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
