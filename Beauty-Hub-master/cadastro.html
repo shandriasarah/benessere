@@ -84,12 +84,16 @@
     <script>
       async function cadastrarCliente(event) {
         event.preventDefault();
-        console.log("Botão clicado!"); // Isso vai nos mostrar se a função foi chamada
+        console.log("🚀 Tentando cadastrar...");
 
+        // Pegando os valores dos campos
         const nome = document.getElementById("cadNome").value;
         const email = document.getElementById("cadEmail").value;
         const senha = document.getElementById("cadSenha").value;
         const msgElemento = document.getElementById("msgCliente");
+
+        // Limpando mensagens anteriores
+        if (msgElemento) msgElemento.innerText = "";
 
         try {
           const response = await fetch(
@@ -106,17 +110,19 @@
           );
 
           const data = await response.json();
+          console.log("Resposta do servidor:", data);
 
           if (response.ok) {
             alert("✅ Conta criada com sucesso!");
             window.location.href = "login_cliente.html";
           } else {
-            msgElemento.innerText = "❌ " + (data.message || "Erro");
-            msgElemento.style.color = "red";
+            alert("❌ Erro: " + (data.message || "Falha no cadastro"));
           }
         } catch (error) {
-          console.error("Erro:", error);
-          alert("Erro ao conectar!");
+          console.error("Erro na requisição:", error);
+          alert(
+            "⚠️ O servidor demorou muito ou está offline. Tente novamente em instantes.",
+          );
         }
       }
     </script>
