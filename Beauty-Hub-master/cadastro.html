@@ -83,9 +83,9 @@
 
     <script>
       async function cadastrarCliente(event) {
-        event.preventDefault(); // Impede a página de recarregar
+        event.preventDefault();
+        console.log("Botão clicado!"); // Isso vai nos mostrar se a função foi chamada
 
-        // Pegando os valores pelos IDs que você definiu no HTML
         const nome = document.getElementById("cadNome").value;
         const email = document.getElementById("cadEmail").value;
         const senha = document.getElementById("cadSenha").value;
@@ -96,9 +96,7 @@
             "https://beauty-hub-72cv.onrender.com/api/auth/register",
             {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 name: nome,
                 email: email,
@@ -113,15 +111,12 @@
             alert("✅ Conta criada com sucesso!");
             window.location.href = "login_cliente.html";
           } else {
-            msgElemento.innerText =
-              "❌ " + (data.message || "Erro ao cadastrar");
+            msgElemento.innerText = "❌ " + (data.message || "Erro");
             msgElemento.style.color = "red";
           }
         } catch (error) {
-          console.error("Erro na requisição:", error);
-          alert(
-            "Erro ao conectar com o servidor. Verifique sua internet ou se o Render está ativo.",
-          );
+          console.error("Erro:", error);
+          alert("Erro ao conectar!");
         }
       }
     </script>
