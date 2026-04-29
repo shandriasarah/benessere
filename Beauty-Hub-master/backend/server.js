@@ -75,25 +75,38 @@ app.post("/api/auth/register", async (req, res) => {
 });
 
 // --- ROTA DE LOGIN ---
+// --- ROTA DE LOGIN ---
 app.post("/api/auth/login", (req, res) => {
   const { email, password } = req.body;
   const pool = db.getPool();
   const sql = "SELECT * FROM users WHERE email = ?";
 
   pool.query(sql, [email], async (err, data) => {
-    if (err) return res.status(500).json(err);
-    if (data.length === 0)
+    if (err) {
+      console.error("❌ Erro na consulta do banco:", err);
+      return res.status(500).json(err);
+    }
+
+    if (data.length === 0) {
+      console.log(`🔍 Tentativa de login: E-mail ${email} não encontrado.`);
       return res.status(404).json({ message: "Usuário não encontrado." });
+    }
+
+    // --- LINHAS DE DIAGNÓSTICO (O segredo está aqui) ---
+    console.log("------------------------------------------");
+    console.log("Senha digitada pelo usuário:", password);
+    console.log("Hash que está no banco:", data[0].password);
 
     const match = await bcrypt.compare(password, data[0].password);
+    console.log("Resultado da comparação bcrypt:", match);
+    console.log("------------------------------------------");
+
     if (!match) return res.status(401).json({ message: "Senha incorreta." });
 
     const token = jwt.sign(
       { id: data[0].id },
       process.env.JWT_SECRET || "CHAVE_RESERVA",
-      {
-        expiresIn: "1d",
-      },
+      { expiresIn: "1d" },
     );
 
     res.json({
