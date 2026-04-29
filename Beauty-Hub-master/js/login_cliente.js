@@ -1,18 +1,52 @@
-function loginCliente(event){
-  event.preventDefault();
-  const email=document.getElementById('clienteEmail').value.trim().toLowerCase();
-  const senha=document.getElementById('clienteSenha').value;
-  const users=JSON.parse(localStorage.getItem('tb_users')||'[]');
-  const msg=document.getElementById('msgCliente');
-  const user=users.find(u=>u.email===email && u.senha===senha && u.role==='client');
+async function loginCliente(event) {
+  event.preventDefault(); // Impede a página de recarregar
 
-  if(user){
-    sessionStorage.setItem('tb_logged',JSON.stringify(user));
-    msg.style.color='green';
-    msg.textContent='Login realizado! Redirecionando...';
-    setTimeout(()=>window.location.href='cliente_home.html',1000);
-  }else{
-    msg.style.color='red';
-    msg.textContent='Email ou senha incorretos 😕';
+  const email = document
+    .getElementById("clienteEmail")
+    .value.trim()
+    .toLowerCase();
+  const password = document.getElementById("clienteSenha").value;
+  const msg = document.getElementById("msgCliente");
+
+  msg.style.color = "blue";
+  msg.textContent = "Verificando dados...";
+
+  try {
+    const response = await fetch(
+      "https://beauty-hub-72cv.onrender.com/api/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      },
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+      // Se o servidor disse que está OK (200)
+      sessionStorage.setItem(
+        "tb_logged",
+        JSON.stringify({
+          token: data.token,
+          name: data.name,
+          email: email,
+        }),
+      );
+
+      msg.style.color = "green";
+      msg.textContent = "Login realizado! Redirecionando...";
+      setTimeout(() => (window.location.href = "cliente_home.html"), 1000);
+    } else {
+      // Se o servidor deu erro (401 ou 404)
+      msg.style.color = "red";
+      msg.textContent = data.message || "Email ou senha incorretos.";
+    }
+  } catch (error) {
+    console.error("Erro na requisição:", error);
+    msg.style.color = "red";
+    msg.textContent = "Erro ao conectar com o servidor. Tente novamente.";
   }
 }
