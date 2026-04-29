@@ -65,10 +65,10 @@
       </div>
 
       <div class="content">
-        <h1>✨ Bem-vindo(a) à sua área no Beauty Hub!</h1>
+        <h1>Bem-vindo(a), <span id="nomeUsuario">Cliente</span>!</h1>
+
         <p class="lead">
           Aqui, cada clique é um passo para realçar sua beleza e cuidar de você
-          💅
         </p>
 
         <div class="choice-buttons">
@@ -89,7 +89,7 @@
             <h3>Cuide-se com praticidade</h3>
             <p>
               No Beauty Hub, você agenda, acompanha e atualiza tudo em um só
-              lugar. Pensado para o seu conforto e praticidade 💜
+              lugar. Pensado para o seu conforto e praticidade
             </p>
           </div>
 
@@ -98,7 +98,7 @@
             <h3>Brilhe sempre</h3>
             <p>
               Agende um horário e saia com a autoestima lá em cima. Seu
-              bem-estar vem em primeiro lugar ✨
+              bem-estar vem em primeiro lugar
             </p>
           </div>
 
@@ -107,7 +107,7 @@
             <h3>Nova energia</h3>
             <p>
               Transforme o dia com um novo look ou tratamento. A beleza é o
-              reflexo da sua luz interior 🌞
+              reflexo da sua luz interior
             </p>
           </div>
         </div>
@@ -115,11 +115,7 @@
 
       <footer>© 2025 Beauty Hub - Todos os direitos reservados.</footer>
     </div>
-    document.addEventListener('DOMContentLoaded', () => { const usuario =
-    JSON.parse(sessionStorage.getItem('usuarioLogado')); if (usuario) { // Se
-    você tiver um elemento com id="welcome-name", ele mostra o nome do BD const
-    txtNome = document.getElementById('welcome-name'); if (txtNome)
-    txtNome.textContent = `Bem-vinda, ${usuario.name}!`; } });
+
     <script src="js/cliente_home.js"></script>
   </body>
 </html>
