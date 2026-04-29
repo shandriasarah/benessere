@@ -1,6 +1,19 @@
 async function loginCliente(event) {
   event.preventDefault(); // Impede a página de recarregar
+  // ... dentro da função de login, após o fetch ...
+  const data = await response.json();
 
+  if (response.ok) {
+    // Salva o nome e o cargo (role) que vieram do Banco de Dados
+    sessionStorage.setItem("usuarioLogado", JSON.stringify(data.user));
+
+    // Direciona para a página certa
+    if (data.user.role === "admin") {
+      window.location.href = "admin_home.html";
+    } else {
+      window.location.href = "cliente_home.html";
+    }
+  }
   const email = document
     .getElementById("clienteEmail")
     .value.trim()
