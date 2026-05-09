@@ -9,6 +9,7 @@ const appointmentRoutes = require("./routes/appointments");
 const professionalsRoutes = require("./routes/professionals");
 const adminRoutes = require("./routes/admin");
 const clientRoutes = require("./routes/clients");
+const path = require("path");
 
 const app = express();
 
@@ -42,6 +43,11 @@ db.init()
 app.use((req, res, next) => {
   req.db = db.getPool();
   next();
+});
+app.use(express.static(path.join(__dirname, "../../public")));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../public/index.html"));
 });
 
 // --- ROTA DE REGISTRO ---
