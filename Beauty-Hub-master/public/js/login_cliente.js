@@ -15,6 +15,20 @@ async function loginCliente(event) {
     return;
   }
 
+  const response = await fetch(
+    "https://beauty-hub-72cv.onrender.com/api/auth/login",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: emailInput.value.trim().toLowerCase(),
+        password: passwordInput.value,
+      }),
+    },
+  );
+
   try {
     // 2. Faz a requisição para a rota correta do Render que confirmamos no seu server.js
     const response = await fetch(
