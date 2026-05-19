@@ -127,9 +127,7 @@ function gerarHorariosTeste() {
 async function confirmarAgendamento() {
   // Validações antes de enviar
   if (!usuarioLogado) {
-    alert(
-      "⚠️ Você precisa estar logado para agendar! Voltando para o login...",
-    );
+    alert("Você precisa estar logado para agendar! Voltando para o login...");
     window.location.href = "login_cliente.html";
     return;
   }
@@ -144,38 +142,62 @@ async function confirmarAgendamento() {
   btnConfirmar.innerText = "Agendando...";
 
   // Montar o objeto igual ao que o seu back-end espera receber
-  const dadosAgendamento = {
-    client_id: usuarioLogado.id, // ID pego automaticamente da Sarah logada!
-    professional_id: profissionalSelecionadoId,
-    date: dataSelecionada,
-    time: horarioSelecionado,
-    service: "Serviço Geral", // Você pode customizar depois se tiver campo de serviço
-  };
+  // --- 4. CONFIRMAR AGENDAMENTO NO BANCO (CORRIGIDO) ---
+  async function confirmarAgendamento() {
+    // Validações antes de enviar
+    if (!usuarioLogado) {
+      alert(
+        " Você precisa estar logado para agendar! Voltando para o login...",
+      );
+      window.location.href = "login_cliente.html";
+      return;
+    }
 
-  try {
-    const response = await fetch(`${API_URL}/appointments`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dadosAgendamento),
-    });
+    if (!profissionalSelecionadoId || !dataSelecionada || !horarioSelecionado) {
+      alert("Por favor, selecione o Profissional, o Dia e o Horário!");
+      return;
+    }
 
-    const data = await response.json();
+    const btnConfirmar = document.getElementById("confirmBtn");
+    btnConfirmar.disabled = true;
+    btnConfirmar.innerText = "Agendando...";
 
-    if (response.ok) {
-      alert(" Horário agendado com sucesso!");
-      closeAgendarModal();
-      window.location.href = "meus_agendamentos.html"; // Te joga para a tela de histórico
-    } else {
-      alert(data.message || "Erro ao salvar o agendamento.");
+    // Ajustando os dados exatamente como o seu router.post('/criar') espera receber!
+    const dadosAgendamento = {
+      user_id: usuarioLogado.id, // Pega o ID da Sarah logada
+      professional_id: profissionalSelecionadoId, // ID do profissional escolhido
+      service_id: 1, // ID temporário (Serviço Geral) enquanto você não lista serviços
+      appointment_date: dataSelecionada, // Formato AAAA-MM-DD
+      appointment_time: horarioSelecionado, // Formato HH:MM
+      total_price: 50.0, // Preço fictício padrão
+    };
+
+    try {
+      // CORREÇÃO DA URL: Adicionado o '/criar' no final da rota de appointments
+      const response = await fetch(`${API_URL}/appointments/criar`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dadosAgendamento),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Horário agendado com sucesso!");
+        closeAgendarModal();
+        window.location.href = "meus_agendamentos.html"; // Redireciona para o histórico
+      } else {
+        alert(data.error || data.message || "Erro ao salvar o agendamento.");
+        btnConfirmar.disabled = false;
+        btnConfirmar.innerText = "Confirmar";
+      }
+    } catch (error) {
+      console.error("Erro ao enviar agendamento:", error);
+      alert("Erro ao conectar com o servidor.");
       btnConfirmar.disabled = false;
       btnConfirmar.innerText = "Confirmar";
     }
-  } catch (error) {
-    console.error("Erro ao enviar agendamento:", error);
-    alert(" Erro ao conectar com o servidor.");
-    btnConfirmar.disabled = false;
-    btnConfirmar.innerText = "Confirmar";
   }
 }
