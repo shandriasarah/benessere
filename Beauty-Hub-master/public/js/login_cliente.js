@@ -1,14 +1,22 @@
+// Garanta que o início da sua função loginCliente declare os elementos assim:
 async function loginCliente(event) {
-  event.preventDefault();
+  if (event) event.preventDefault(); // Evita que a página recarregue
 
-  const email = document
-    .getElementById("loginEmail")
-    .value.trim()
-    .toLowerCase();
-  const senha = document.getElementById("loginSenha").value;
+  // 1. Captura os campos da tela usando os IDs corretos do seu formulário
+  const emailInput =
+    document.getElementById("email") ||
+    document.querySelector("input[type='email']");
+  const passwordInput =
+    document.getElementById("password") ||
+    document.querySelector("input[type='password']");
+
+  if (!emailInput || !passwordInput) {
+    console.error("Campos de entrada não foram encontrados no HTML.");
+    return;
+  }
 
   try {
-    // Procure a linha do fetch dentro do seu login_cliente.js e ajuste para ficar assim:
+    // 2. Faz a requisição para a rota correta do Render que confirmamos no seu server.js
     const response = await fetch(
       "https://beauty-hub-72cv.onrender.com/api/auth/login",
       {
@@ -17,7 +25,7 @@ async function loginCliente(event) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: emailInput.value.trim().toLowerCase(),
+          email: emailInput.value.trim().toLowerCase(), // Deixa tudo minúsculo automaticamente!
           password: passwordInput.value,
         }),
       },
@@ -26,13 +34,15 @@ async function loginCliente(event) {
     const data = await response.json();
 
     if (response.ok) {
+      // Salva a sessão da Sarah logada perfeitamente na memória
       sessionStorage.setItem("tb_logged", JSON.stringify(data.user || data));
-      window.location.href = "cliente_home.html";
+      alert("🎉 Login realizado com sucesso!");
+      window.location.href = "cliente_home.html"; // Te joga para a home do salão
     } else {
-      alert(data.message || "E-mail ou senha incorretos! ");
+      alert(data.message || "Usuário ou senha incorretos.");
     }
   } catch (error) {
     console.error("Erro no login:", error);
-    alert(" Erro ao conectar com o servidor.");
+    alert("Erro ao conectar com o servidor.");
   }
 }
