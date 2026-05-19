@@ -13,7 +13,7 @@ class Database {
       connectTimeout: 20000, // 20 segundos para esperar o Aiven
     });
 
-    console.log("🌊 Pool de conexões MySQL criado.");
+    console.log(" Pool de conexões MySQL criado.");
   }
 
   async init() {

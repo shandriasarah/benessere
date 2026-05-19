@@ -36,7 +36,6 @@ db.init()
   .then(() => console.log("✅ Banco de dados conectado com sucesso!"))
   .catch((err) => {
     console.error("Erro ao inicializar banco de dados:", err);
-    // Não vamos matar o processo imediatamente para o Render não dar 502 de cara
   });
 
 // Middleware para passar o pool do banco para as rotas
@@ -44,11 +43,9 @@ app.use((req, res, next) => {
   req.db = db.getPool();
   next();
 });
-app.use(express.static(path.join(__dirname, "../../public")));
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../../public/index.html"));
-});
+// Ajustado de ../../public para ../public (para bater certinho com a estrutura de pastas no Render)
+app.use(express.static(path.join(__dirname, "../public")));
 
 // --- ROTA DE REGISTRO ---
 app.post("/api/auth/register", async (req, res) => {
@@ -80,26 +77,25 @@ app.post("/api/auth/register", async (req, res) => {
   }
 });
 
-// --- ROTA DE LOGIN ---
+// --- ROTA DE LOGIN (CORRIGIDA) ---
 app.post("/api/auth/login", async (req, res) => {
   const { email, password } = req.body;
   const pool = db.getPool();
-  res.json({
-    message: "Login realizado!",
-    token: token,
-    user: {
-      name: data[0].name,
-      email: data[0].email,
-      role: data[0].role, // Aqui o site vai saber se é cliente ou adm
-    },
-  });
+
+  if (!pool) {
+    return res
+      .status(500)
+      .json({ message: "Servidor desconectado do banco de dados." });
+  }
 
   try {
     const sql = "SELECT * FROM users WHERE email = ?";
     pool.query(sql, [email], async (err, data) => {
       if (err) {
         console.error("Erro na consulta do banco:", err);
-        return res.status(500).json(err);
+        return res
+          .status(500)
+          .json({ message: "Erro na consulta do servidor." });
       }
 
       if (data.length === 0) {
@@ -107,31 +103,34 @@ app.post("/api/auth/login", async (req, res) => {
         return res.status(404).json({ message: "Usuário não encontrado." });
       }
 
-      // --- LINHAS DE DIAGNÓSTICO (O segredo está aqui) ---
-      console.log("------------------------------------------");
-      console.log("Senha digitada pelo usuário:", password);
-      console.log("Hash que está no banco:", data[0].password);
-
+      // Validação da senha criptografada
       const match = await bcrypt.compare(password, data[0].password);
-      console.log("Resultado da comparação bcrypt:", match);
-      console.log("------------------------------------------");
 
-      if (!match) return res.status(401).json({ message: "Senha incorreta." });
+      if (!match) {
+        return res.status(401).json({ message: "Senha incorreta." });
+      }
 
+      // Criação do token de sessão segura
       const token = jwt.sign(
         { id: data[0].id },
         process.env.JWT_SECRET || "CHAVE_RESERVA",
         { expiresIn: "1d" },
       );
 
-      res.json({
-        message: "Login realizado!",
+      // Agora sim, enviamos a resposta apenas DEPOIS de validar tudo com sucesso!
+      return res.json({
+        message: "Login realizado com sucesso!",
         token: token,
-        name: data[0].name,
+        user: {
+          name: data[0].name,
+          email: data[0].email,
+          role: data[0].role, // Informa se é client ou admin
+        },
       });
     });
   } catch (error) {
-    res.status(500).json({ message: "Erro interno." });
+    console.error("Erro interno no login:", error);
+    res.status(500).json({ message: "Erro interno no servidor." });
   }
 });
 
@@ -142,19 +141,20 @@ app.use("/api/professionals", professionalsRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/clients", clientRoutes);
 
-// ROTA DE SAÚDE (Para você testar no navegador)
+// ROTA DE SAÚDE (Para monitorar o status da aplicação)
 app.get("/api/health", (req, res) => {
   res.json({ status: "API Beauty Hub está rodando", timestamp: new Date() });
 });
 
+// Rota raiz padrão para a API
 app.get("/", (req, res) => {
-  res.json({ message: "Beauty Hub API Ativa", version: "1.0.0" });
+  res.json({ message: "Beauty Hub API Ativa e Pronta", version: "1.0.0" });
 });
 
-// Troque a linha do app.listen por esta exatamente:
+// Inicialização estável do servidor no Render
 const server = app.listen(PORT, () => {
-  console.log(` Servidor pronto na porta ${PORT}`);
+  console.log(`🚀 Servidor pronto na porta ${PORT}`);
 });
 
-server.keepAliveTimeout = 120000; // Dá mais tempo para o servidor pensar
+server.keepAliveTimeout = 120000;
 server.headersTimeout = 120500;
