@@ -31,17 +31,20 @@ async function carregarProfissionais() {
       return;
     }
 
-    // Criar os cards de cada profissional na tela
+    // SUBSTITUA APENAS O TRECHO DO foreach DENTRO DE carregarProfissionais NO SEU agendar.js:
     profissionais.forEach((prof) => {
       const card = document.createElement("div");
-      card.className = "professional-card"; // Estilize essa classe no seu CSS se quiser
+      card.className = "professional-card";
       card.innerHTML = `
-                <h3>${prof.name}</h3>
-                <p class="specialty">${prof.specialty || "Especialista em Beleza"}</p>
-                <button class="select-prof-btn" onclick="openAgendarModal(${prof.id}, '${prof.name}')">
-                    Escolher ${prof.name}
-                </button>
-            `;
+        <div class="card-avatar">
+            <i class="fa-solid fa-user-tie"></i>
+        </div>
+        <h3>${prof.name}</h3>
+        <p class="specialty">${prof.specialty || "Especialista em Beleza"}</p>
+        <button class="select-prof-btn" onclick="openAgendarModal(${prof.id}, '${prof.name}')">
+            Agendar Horário <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    `;
       container.appendChild(card);
     });
   } catch (error) {
