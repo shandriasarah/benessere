@@ -90,17 +90,20 @@
 
         const btn = document.getElementById("btnCadastrar");
         const msgElemento = document.getElementById("msgCliente");
-        const nome = document.getElementById("cadNome").value;
-        const email = document.getElementById("cadEmail").value;
+        const nome = document.getElementById("cadNome").value.trim();
+        const email = document
+          .getElementById("cadEmail")
+          .value.trim()
+          .toLowerCase();
         const senha = document.getElementById("cadSenha").value;
 
-        // Feedback visual imediato
+        // Feedback visual imediato para o usuário
         btn.disabled = true;
         btn.innerText = "Enviando...";
         msgElemento.innerText = "Conectando ao servidor...";
         msgElemento.style.color = "#666";
 
-        console.log(" Iniciando requisição para o Render...");
+        console.log("Iniciando requisição para o Render...");
 
         try {
           const response = await fetch(
@@ -114,32 +117,34 @@
               body: JSON.stringify({
                 name: nome,
                 email: email,
-                password: senha,
+                password: senha, // Enviando como password para corresponder ao back-end
               }),
             },
           );
 
           const data = await response.json();
-          console.log("Resposta recebida:", data);
+          console.log("Resposta recebida do servidor:", data);
 
           if (response.ok) {
             msgElemento.innerText = "✅ Conta criada com sucesso!";
             msgElemento.style.color = "green";
-            alert("✅ Conta criada com sucesso!");
-            window.location.href = "login_cliente.html";
+
+            // Um pequeno delay elegante antes de mudar de tela para dar tempo de ler a mensagem verde
+            setTimeout(() => {
+              window.location.href = "login_cliente.html";
+            }, 1500);
           } else {
-            // Se o e-mail for duplicado, cairá aqui
+            // Trata e-mails já cadastrados ou falhas de validação
             msgElemento.innerText =
               "❌ " + (data.message || "Erro no cadastro");
             msgElemento.style.color = "red";
-            alert("❌ Erro: " + (data.message || "Falha no cadastro"));
           }
         } catch (error) {
           console.error("Erro na requisição:", error);
           msgElemento.innerText = "⚠️ Servidor em repouso. Tente novamente.";
           msgElemento.style.color = "orange";
           alert(
-            "⚠️ O servidor está 'acordando' ou offline.\n\nPor favor, aguarde 10 segundos e clique em 'Criar Conta' novamente.",
+            "⚠️ O servidor no Render pode estar reiniciando ou 'acordando'.\n\nPor favor, aguarde cerca de 10 a 15 segundos e clique em 'Criar Conta' novamente.",
           );
         } finally {
           btn.disabled = false;
