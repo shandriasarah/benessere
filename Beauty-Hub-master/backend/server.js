@@ -134,7 +134,6 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-// --- OUTRAS ROTAS ---
 app.use("/api/auth", authRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/professionals", professionalsRoutes);

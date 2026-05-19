@@ -1,158 +1,178 @@
-function toggleMenu(){ document.querySelector('.sidebar').classList.toggle('closed'); }
+// URLs da sua API no Render
+const API_URL = "https://beauty-hub-72cv.onrender.com/api";
 
-let agendamentos = [];
-const profissionais = [
-  { name:'Marília Andrade', desc:'Quem sou eu: <br> Esteticista...', img:'img/marilia.jpg', services:[ { type:'Corte', options:[ {name:'Simples',duration:'⏱️45 min',price:'💰R$80,00'}, {name:'Avançado',price:'💰R$120,00',duration:'⏱️70 min'} ] }, { type:'Manicure', options:[ {name:'Simples',duration:'⏱️30 min',price:'💰R$40',} ] }, { type:'Cílios', options:[ {name:'Clássico', duration:'⏱️90 min',price:'💰R$120,00'}, {name:'Volume Russo',price:'💰R$150,00',duration:'⏱️120 min'} ] } ] },
-  { name:'João Silva', desc:'Quem sou eu: <br> Especialista...', img:'img/foto.jpg', services:[ { type:'Barba', options:[ {name:'Simples',price:'💰R$40',duration:'⏱️20 min'} ] } ] }
-];
+// Variáveis para guardar o que o usuário escolheu antes de confirmar
+let profissionalSelecionadoId = null;
+let dataSelecionada = null;
+let horarioSelecionado = null;
 
-const container=document.getElementById('profissionaisContainer');
-profissionais.forEach((p,index)=>{
-  const card=document.createElement('div'); card.className='prof-card';
-  card.innerHTML=`
-    <div class="prof-header">
-      <div class="prof-left">
-        <img src="${p.img}" alt="${p.name}">
-        <div class="prof-info">
-          <h2>${p.name}</h2>
-          <p>${p.desc}</p>
-        </div>
-      </div>
-      <span class="arrow-prof">›</span>
-    </div>
-    <div class="services-container"></div>`;
-  container.appendChild(card);
+// Pegar os dados do usuário logado na sessão
+const usuarioLogado = JSON.parse(sessionStorage.getItem("tb_logged"));
 
-  const servicesContainer=card.querySelector('.services-container');
-  p.services.forEach(s=>{
-    const serviceCard=document.createElement('div'); serviceCard.className='service-card';
-    serviceCard.innerHTML=`${s.type} <span class="arrow">›</span>`;
-    const optionsDiv=document.createElement('div'); optionsDiv.className='service-options';
-    s.options.forEach(opt=>{
-      const optDiv=document.createElement('div'); optDiv.className='option-item';
-      optDiv.innerHTML=`
-        <div class="option-info">
-          <span>${opt.name}</span>
-          <span>${opt.duration}</span>
-          <span>${opt.price}</span>
-        </div>
-        <button class="agendar-btn" onclick="openAgendarModal(${index},'${s.type}','${opt.name}')">Agendar</button>`;
-      optionsDiv.appendChild(optDiv);
-    });
-    serviceCard.addEventListener('click',()=>{
-      serviceCard.classList.toggle('active');
-      optionsDiv.classList.toggle('open');
-    });
-    servicesContainer.appendChild(serviceCard);
-    servicesContainer.appendChild(optionsDiv);
-  });
-
-  card.querySelector('.prof-header').addEventListener('click',()=>{
-    card.classList.toggle('active');
-    servicesContainer.classList.toggle('open');
-  });
+// Executa assim que a página carregar
+document.addEventListener("DOMContentLoaded", () => {
+  carregarProfissionais();
+  configurarCalendarioBasico();
 });
 
-// Modal e Calendário
-let selectedProf=null, selectedService=null, selectedOption=null, selectedDate=null, selectedTime=null;
-function openAgendarModal(profIndex,serviceType,optionName){
-  selectedProf=profIndex; selectedService=serviceType; selectedOption=optionName;
-  document.getElementById('modalAgendar').style.display='flex';
-  renderCalendar();
-}
-function closeAgendarModal(){
-  document.getElementById('modalAgendar').style.display='none';
-  selectedDate=null; selectedTime=null; 
-  document.getElementById('confirmBtn').style.display='none';
-}
+// --- 1. BUSCAR E EXIBIR PROFISSIONAIS ---
+async function carregarProfissionais() {
+  const container = document.getElementById("profissionaisContainer");
+  container.innerHTML = "<p>Carregando profissionais...</p>";
 
-// Calendário
-const calendarGrid=document.getElementById('calendarGrid');
-const monthYear=document.getElementById('monthYear');
-let today=new Date(), currentMonth=today.getMonth(), currentYear=today.getFullYear();
+  try {
+    const response = await fetch(`${API_URL}/professionals`);
+    const profissionais = await response.json();
 
-document.getElementById('prevMonth').addEventListener('click',()=>{
-  currentMonth--; if(currentMonth<0){ currentMonth=11; currentYear--; } renderCalendar();
-});
-document.getElementById('nextMonth').addEventListener('click',()=>{
-  currentMonth++; if(currentMonth>11){ currentMonth=0; currentYear++; } renderCalendar();
-});
+    container.innerHTML = ""; // Limpa o texto de carregando
 
-function renderCalendar(){
-  calendarGrid.innerHTML='';
-  const firstDay = new Date(currentYear,currentMonth,1).getDay();
-  const daysInMonth = new Date(currentYear,currentMonth+1,0).getDate();
-  monthYear.textContent = `${new Date(currentYear,currentMonth).toLocaleString('pt-br',{month:'long'})} ${currentYear}`;
-
-  for(let i=0;i<firstDay;i++) calendarGrid.appendChild(document.createElement('div'));
-
-  for(let d=1; d<=daysInMonth; d++){
-    const dayDiv=document.createElement('div'); dayDiv.className='day';
-    const date = new Date(currentYear,currentMonth,d);
-    const fullDate = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-
-    if(date.getDay()===0){ // domingo bloqueado
-      dayDiv.classList.add('occupied','sunday');
-    } else {
-      dayDiv.classList.add('available');
-      dayDiv.addEventListener('click',()=>{
-        document.querySelectorAll('.day').forEach(e=>e.classList.remove('selected'));
-        dayDiv.classList.add('selected');
-        selectedDate = fullDate;
-        renderHorarios();
-      });
+    if (profissionais.length === 0) {
+      container.innerHTML = "<p>Nenhum profissional disponível no momento.</p>";
+      return;
     }
-    dayDiv.textContent=d;
-    calendarGrid.appendChild(dayDiv);
+
+    // Criar os cards de cada profissional na tela
+    profissionais.forEach((prof) => {
+      const card = document.createElement("div");
+      card.className = "professional-card"; // Estilize essa classe no seu CSS se quiser
+      card.innerHTML = `
+                <h3>${prof.name}</h3>
+                <p class="specialty">${prof.specialty || "Especialista em Beleza"}</p>
+                <button class="select-prof-btn" onclick="openAgendarModal(${prof.id}, '${prof.name}')">
+                    Escolher ${prof.name}
+                </button>
+            `;
+      container.appendChild(card);
+    });
+  } catch (error) {
+    console.error("Erro ao carregar profissionais:", error);
+    container.innerHTML =
+      "<p>Erro ao conectar com o servidor. Tente recarregar a página.</p>";
   }
 }
 
-// Horários
-const horarios=['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
-const horariosGrid=document.getElementById('horariosGrid');
+// --- 2. CONTROLE DO MODAL ---
+function openAgendarModal(id, nomeProf) {
+  profissionalSelecionadoId = id;
+  document.getElementById("modalAgendar").style.display = "flex";
 
-function renderHorarios(){
-  horariosGrid.innerHTML='';
-  horarios.forEach(h=>{
-    const slotDiv=document.createElement('div'); slotDiv.className='slot';
-    slotDiv.textContent=h;
-    // Checa se já existe agendamento nesse horário
-    const existe = agendamentos.find(a=>a.date===selectedDate && a.time===h && a.prof===selectedProf && a.service===selectedService && a.option===selectedOption);
-    if(existe){ slotDiv.classList.add('occupied'); }
-    else{ slotDiv.classList.add('available'); slotDiv.addEventListener('click',()=>{
-      document.querySelectorAll('.slot').forEach(s=>s.classList.remove('selected'));
-      slotDiv.classList.add('selected');
-      selectedTime = h;
-      document.getElementById('confirmBtn').style.display='block';
-    });}
-    horariosGrid.appendChild(slotDiv);
+  // Gerar horários estáticos de teste (9h às 17h) para o cliente clicar
+  gerarHorariosTeste();
+}
+
+function closeAgendarModal() {
+  document.getElementById("modalAgendar").style.display = "none";
+  // Limpar seleções
+  dataSelecionada = null;
+  horarioSelecionado = null;
+}
+
+// --- 3. SELEÇÃO DE DATA E HORA (SIMPLIFICADA) ---
+function configurarCalendarioBasico() {
+  const grid = document.getElementById("calendarGrid");
+  document.getElementById("monthYear").innerText = "Maio 2026";
+
+  grid.innerHTML = "";
+  // Cria 30 dias na tela para teste rápido
+  for (let i = 1; i <= 30; i++) {
+    const dia = document.createElement("div");
+    dia.className = "calendar-day";
+    dia.innerText = i;
+    dia.onclick = () => {
+      // Remover marcação do dia anterior
+      document
+        .querySelectorAll(".calendar-day")
+        .forEach((d) => d.classList.remove("selected"));
+      dia.classList.add("selected");
+      // Formata a data para o padrão do banco (AAAA-MM-DD)
+      dataSelecionada = `2026-05-${i.toString().padStart(2, "0")}`;
+    };
+    grid.appendChild(dia);
+  }
+}
+
+function gerarHorariosTeste() {
+  const grid = document.getElementById("horariosGrid");
+  grid.innerHTML = "";
+  const listaHorarios = [
+    "09:00",
+    "10:00",
+    "11:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+  ];
+
+  listaHorarios.forEach((hora) => {
+    const btn = document.createElement("button");
+    btn.className = "time-slot";
+    btn.innerText = hora;
+    btn.onclick = () => {
+      document
+        .querySelectorAll(".time-slot")
+        .forEach((b) => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      horarioSelecionado = hora;
+    };
+    grid.appendChild(btn);
   });
 }
 
-// CONFIRMAR AGENDAMENTO COM WHATSAPP
-function confirmarAgendamento(){
-  if(selectedDate && selectedTime){
-    const agendamento = {
-      prof: selectedProf,
-      service: selectedService,
-      option: selectedOption,
-      date: selectedDate,
-      time: selectedTime
-    };
-    agendamentos.push(agendamento);
+// --- 4. CONFIRMAR AGENDAMENTO NO BANCO ---
+async function confirmarAgendamento() {
+  // Validações antes de enviar
+  if (!usuarioLogado) {
+    alert(
+      "⚠️ Você precisa estar logado para agendar! Voltando para o login...",
+    );
+    window.location.href = "login_cliente.html";
+    return;
+  }
 
-    const profName = profissionais[selectedProf].name;
-    const mensagem = ` *Agendamento Confirmado* \n\n` +
-                     ` Profissional: ${profName}\n` +
-                     ` Serviço: ${selectedService}\n` +
-                     ` Opção: ${selectedOption}\n` +
-                     ` Data: ${selectedDate}\n` +
-                     ` Horário: ${selectedTime}`;
+  if (!profissionalSelecionadoId || !dataSelecionada || !horarioSelecionado) {
+    alert(" Por favor, selecione o Profissional, o Dia e o Horário!");
+    return;
+  }
 
-    // 1️⃣ Enviar para a loja
-    window.open(`https://wa.me/5581999292333?text=${encodeURIComponent(mensagem)}`, '_blank');
+  const btnConfirmar = document.getElementById("confirmBtn");
+  btnConfirmar.disabled = true;
+  btnConfirmar.innerText = "Agendando...";
 
-    alert('Agendamento confirmado e mensagem enviada via WhatsApp!');
-    closeAgendarModal();
+  // Montar o objeto igual ao que o seu back-end espera receber
+  const dadosAgendamento = {
+    client_id: usuarioLogado.id, // ID pego automaticamente da Sarah logada!
+    professional_id: profissionalSelecionadoId,
+    date: dataSelecionada,
+    time: horarioSelecionado,
+    service: "Serviço Geral", // Você pode customizar depois se tiver campo de serviço
+  };
+
+  try {
+    const response = await fetch(`${API_URL}/appointments`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dadosAgendamento),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert(" Horário agendado com sucesso!");
+      closeAgendarModal();
+      window.location.href = "meus_agendamentos.html"; // Te joga para a tela de histórico
+    } else {
+      alert(data.message || "Erro ao salvar o agendamento.");
+      btnConfirmar.disabled = false;
+      btnConfirmar.innerText = "Confirmar";
+    }
+  } catch (error) {
+    console.error("Erro ao enviar agendamento:", error);
+    alert(" Erro ao conectar com o servidor.");
+    btnConfirmar.disabled = false;
+    btnConfirmar.innerText = "Confirmar";
   }
 }
