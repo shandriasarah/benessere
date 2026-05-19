@@ -8,6 +8,7 @@ async function loginCliente(event) {
   const senha = document.getElementById("loginSenha").value;
 
   try {
+    // Procure a linha do fetch dentro do seu login_cliente.js e ajuste para ficar assim:
     const response = await fetch(
       "https://beauty-hub-72cv.onrender.com/api/auth/login",
       {
@@ -15,7 +16,10 @@ async function loginCliente(event) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password: senha }),
+        body: JSON.stringify({
+          email: emailInput.value.trim().toLowerCase(),
+          password: passwordInput.value,
+        }),
       },
     );
 
