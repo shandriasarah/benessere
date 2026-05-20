@@ -55,46 +55,26 @@ async function carregarProfissionais() {
   }
 }
 
-// --- 2. ABRIR E FECHAR MODAL (CORRIGIDO) ---
+// --- 2. ABRIR E FECHAR MODAL ---
 function openAgendarModal(profissionalId) {
-  // RASTREADOR 1: Testar se o clique no botão roxo funciona
-  alert("1. O JavaScript recebeu o seu clique! ID do profissional: " + profissionalId);
-
   const modal = document.getElementById("agendarModal");
-  
-  // RASTREADOR 2: Testar se o HTML tem o ID correto
-  if (!modal) {
-    alert("2. ERRO: O JavaScript tentou abrir o modal, mas não achou NADA com o id='agendarModal' no seu HTML!");
-    return;
+  if (modal) {
+    modal.style.display = "flex"; // Abre o modal na tela
   }
 
-  // Se achou, tenta exibir
-  modal.style.display = "flex"; 
-  alert("3. Sucesso! O modal foi encontrado e o comando para abrir foi enviado.");
+  profissionalSelecionadoId = profissionalId;
 
+  // Renderiza os horários para clique
   gerarHorariosTeste();
 
-  const btnConfirmar = document.getElementById("confirmBtn");
-  if (btnConfirmar) {
-    btnConfirmar.disabled = false; 
-    btnConfirmar.innerText = "Confirmar"; 
-  }
-
-  dataSelecionada = null;
-  horarioSelecionado = null;
-  document.querySelectorAll(".calendar-day").forEach((d) => d.classList.remove("selected"));
-}
-  // Gera a lista de horários clicáveis na tela automaticamente
-  gerarHorariosTeste();
-
-  // Destrava o botão de confirmar e restaura o texto original
+  // Restaura o botão de confirmar
   const btnConfirmar = document.getElementById("confirmBtn");
   if (btnConfirmar) {
     btnConfirmar.disabled = false;
     btnConfirmar.innerText = "Confirmar";
   }
 
-  // Reseta seleções internas e visuais anteriores
+  // Reseta seleções de dias anteriores por segurança
   dataSelecionada = null;
   horarioSelecionado = null;
   document
@@ -118,7 +98,8 @@ function configurarCalendarioBasico() {
   const grid = document.getElementById("calendarGrid");
   if (!grid) return;
 
-  document.getElementById("monthYear").innerText = "Maio 2026";
+  const monthYearEl = document.getElementById("monthYear");
+  if (monthYearEl) monthYearEl.innerText = "Maio 2026";
 
   grid.innerHTML = "";
   for (let i = 1; i <= 30; i++) {
@@ -167,7 +148,7 @@ function gerarHorariosTeste() {
   });
 }
 
-// --- 4. CONFIRMAR AGENDAMENTO NO BANCO (LIMPO E UNIFICADO) ---
+// --- 4. CONFIRMAR AGENDAMENTO NO BANCO ---
 async function confirmarAgendamento() {
   if (!usuarioLogado) {
     alert("Você precisa estar logado para agendar! Voltando para o login...");
@@ -189,13 +170,14 @@ async function confirmarAgendamento() {
   const dadosAgendamento = {
     user_id: usuarioLogado.id,
     professional_id: profissionalSelecionadoId,
-    service_id: 1,
+    service_id: 1, // Serviço Geral Provisório
     appointment_date: dataSelecionada,
     appointment_time: horarioSelecionado,
     total_price: 50.0,
   };
 
   try {
+    // Rota correta apontando para o '/criar'
     const response = await fetch(`${API_URL}/appointments/criar`, {
       method: "POST",
       headers: {
