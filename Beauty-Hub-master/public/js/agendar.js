@@ -57,14 +57,33 @@ async function carregarProfissionais() {
 
 // --- 2. ABRIR E FECHAR MODAL (CORRIGIDO) ---
 function openAgendarModal(profissionalId) {
-  profissionalSelecionadoId = profissionalId;
+  // RASTREADOR 1: Testar se o clique no botão roxo funciona
+  alert("1. O JavaScript recebeu o seu clique! ID do profissional: " + profissionalId);
 
-  // Força o modal a aparecer na tela mudando o estilo para flex ou block
   const modal = document.getElementById("agendarModal");
-  if (modal) {
-    modal.style.display = "flex";
+  
+  // RASTREADOR 2: Testar se o HTML tem o ID correto
+  if (!modal) {
+    alert("2. ERRO: O JavaScript tentou abrir o modal, mas não achou NADA com o id='agendarModal' no seu HTML!");
+    return;
   }
 
+  // Se achou, tenta exibir
+  modal.style.display = "flex"; 
+  alert("3. Sucesso! O modal foi encontrado e o comando para abrir foi enviado.");
+
+  gerarHorariosTeste();
+
+  const btnConfirmar = document.getElementById("confirmBtn");
+  if (btnConfirmar) {
+    btnConfirmar.disabled = false; 
+    btnConfirmar.innerText = "Confirmar"; 
+  }
+
+  dataSelecionada = null;
+  horarioSelecionado = null;
+  document.querySelectorAll(".calendar-day").forEach((d) => d.classList.remove("selected"));
+}
   // Gera a lista de horários clicáveis na tela automaticamente
   gerarHorariosTeste();
 
