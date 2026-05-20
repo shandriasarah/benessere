@@ -18,6 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
 // --- 1. BUSCAR E EXIBIR PROFISSIONAIS ---
 async function carregarProfissionais() {
   const container = document.getElementById("profissionaisContainer");
+  if (!container) return;
+
   container.innerHTML = "<p>Carregando profissionais...</p>";
 
   try {
@@ -31,7 +33,6 @@ async function carregarProfissionais() {
       return;
     }
 
-    // SUBSTITUA APENAS O TRECHO DO foreach DENTRO DE carregarProfissionais NO SEU agendar.js:
     profissionais.forEach((prof) => {
       const card = document.createElement("div");
       card.className = "professional-card";
@@ -41,10 +42,10 @@ async function carregarProfissionais() {
         </div>
         <h3>${prof.name}</h3>
         <p class="specialty">${prof.specialty || "Especialista em Beleza"}</p>
-        <button class="select-prof-btn" onclick="openAgendarModal(${prof.id}, '${prof.name}')">
+        <button class="select-prof-btn" onclick="openAgendarModal(${prof.id})">
             Agendar Horário <i class="fa-solid fa-chevron-right"></i>
         </button>
-    `;
+      `;
       container.appendChild(card);
     });
   } catch (error) {
@@ -54,54 +55,62 @@ async function carregarProfissionais() {
   }
 }
 
-// 1. Procure a função que abre o modal quando você clica no profissional
+// --- 2. ABRIR E FECHAR MODAL (CORRIGIDO) ---
 function openAgendarModal(profissionalId) {
-  // ... (guarde aqui o código que você já tem para abrir o modal) ...
   profissionalSelecionadoId = profissionalId;
 
-  // 🌟 AS LINHAS DA VITÓRIA: Adicione este bloco aqui dentro!
-  const btnConfirmar = document.getElementById("confirmBtn");
-  if (btnConfirmar) {
-    btnConfirmar.disabled = false; // Destrava o botão
-    btnConfirmar.innerText = "Confirmar"; // Devolve o texto original
+  // Força o modal a aparecer na tela mudando o estilo para flex ou block
+  const modal = document.getElementById("agendarModal");
+  if (modal) {
+    modal.style.display = "flex";
   }
 
-  // Limpa as seleções internas antigas para não misturar os profissionais
+  // Gera a lista de horários clicáveis na tela automaticamente
+  gerarHorariosTeste();
+
+  // Destrava o botão de confirmar e restaura o texto original
+  const btnConfirmar = document.getElementById("confirmBtn");
+  if (btnConfirmar) {
+    btnConfirmar.disabled = false;
+    btnConfirmar.innerText = "Confirmar";
+  }
+
+  // Reseta seleções internas e visuais anteriores
   dataSelecionada = null;
   horarioSelecionado = null;
-
-  // Se você tiver uma função que limpa visualmente os botões selecionados, chame-a aqui
-  // Exemplo: removerSelecoesAnteriores();
+  document
+    .querySelectorAll(".calendar-day")
+    .forEach((d) => d.classList.remove("selected"));
 }
+
 function closeAgendarModal() {
-  const modal = document.getElementById("agendarModal"); // ou o ID do seu modal
+  const modal = document.getElementById("agendarModal");
   if (modal) modal.style.display = "none";
 
-  // Destrava o botão ao fechar por garantia
   const btnConfirmar = document.getElementById("confirmBtn");
   if (btnConfirmar) {
     btnConfirmar.disabled = false;
     btnConfirmar.innerText = "Confirmar";
   }
 }
-// --- 3. SELEÇÃO DE DATA E HORA (SIMPLIFICADA) ---
+
+// --- 3. SELEÇÃO DE DATA E HORA ---
 function configurarCalendarioBasico() {
   const grid = document.getElementById("calendarGrid");
+  if (!grid) return;
+
   document.getElementById("monthYear").innerText = "Maio 2026";
 
   grid.innerHTML = "";
-  // Cria 30 dias na tela para teste rápido
   for (let i = 1; i <= 30; i++) {
     const dia = document.createElement("div");
     dia.className = "calendar-day";
     dia.innerText = i;
     dia.onclick = () => {
-      // Remover marcação do dia anterior
       document
         .querySelectorAll(".calendar-day")
         .forEach((d) => d.classList.remove("selected"));
       dia.classList.add("selected");
-      // Formata a data para o padrão do banco (AAAA-MM-DD)
       dataSelecionada = `2026-05-${i.toString().padStart(2, "0")}`;
     };
     grid.appendChild(dia);
@@ -110,6 +119,8 @@ function configurarCalendarioBasico() {
 
 function gerarHorariosTeste() {
   const grid = document.getElementById("horariosGrid");
+  if (!grid) return;
+
   grid.innerHTML = "";
   const listaHorarios = [
     "09:00",
@@ -137,9 +148,8 @@ function gerarHorariosTeste() {
   });
 }
 
-// --- 4. CONFIRMAR AGENDAMENTO NO BANCO ---
+// --- 4. CONFIRMAR AGENDAMENTO NO BANCO (LIMPO E UNIFICADO) ---
 async function confirmarAgendamento() {
-  // Validações antes de enviar
   if (!usuarioLogado) {
     alert("Você precisa estar logado para agendar! Voltando para o login...");
     window.location.href = "login_cliente.html";
@@ -147,69 +157,51 @@ async function confirmarAgendamento() {
   }
 
   if (!profissionalSelecionadoId || !dataSelecionada || !horarioSelecionado) {
-    alert(" Por favor, selecione o Profissional, o Dia e o Horário!");
+    alert("Por favor, selecione o Dia e o Horário antes de confirmar!");
     return;
   }
 
   const btnConfirmar = document.getElementById("confirmBtn");
-  btnConfirmar.disabled = true;
-  btnConfirmar.innerText = "Agendando...";
-
-  // Montar o objeto igual ao que o seu back-end espera receber
-  // --- 4. CONFIRMAR AGENDAMENTO NO BANCO (CORRIGIDO) ---
-  async function confirmarAgendamento() {
-    // Validações antes de enviar
-    if (!usuarioLogado) {
-      alert(
-        " Você precisa estar logado para agendar! Voltando para o login...",
-      );
-      window.location.href = "login_cliente.html";
-      return;
-    }
-
-    if (!profissionalSelecionadoId || !dataSelecionada || !horarioSelecionado) {
-      alert("Por favor, selecione o Profissional, o Dia e o Horário!");
-      return;
-    }
-
-    const btnConfirmar = document.getElementById("confirmBtn");
+  if (btnConfirmar) {
     btnConfirmar.disabled = true;
     btnConfirmar.innerText = "Agendando...";
+  }
 
-    // Ajustando os dados exatamente como o seu router.post('/criar') espera receber!
-    const dadosAgendamento = {
-      user_id: usuarioLogado.id, // Pega o ID da Sarah logada
-      professional_id: profissionalSelecionadoId, // ID do profissional escolhido
-      service_id: 1, // ID temporário (Serviço Geral) enquanto você não lista serviços
-      appointment_date: dataSelecionada, // Formato AAAA-MM-DD
-      appointment_time: horarioSelecionado, // Formato HH:MM
-      total_price: 50.0, // Preço fictício padrão
-    };
+  const dadosAgendamento = {
+    user_id: usuarioLogado.id,
+    professional_id: profissionalSelecionadoId,
+    service_id: 1,
+    appointment_date: dataSelecionada,
+    appointment_time: horarioSelecionado,
+    total_price: 50.0,
+  };
 
-    try {
-      // CORREÇÃO DA URL: Adicionado o '/criar' no final da rota de appointments
-      const response = await fetch(`${API_URL}/appointments/criar`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dadosAgendamento),
-      });
+  try {
+    const response = await fetch(`${API_URL}/appointments/criar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dadosAgendamento),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (response.ok) {
-        alert("Horário agendado com sucesso!");
-        closeAgendarModal();
-        window.location.href = "meus_agendamentos.html"; // Redireciona para o histórico
-      } else {
-        alert(data.error || data.message || "Erro ao salvar o agendamento.");
+    if (response.ok) {
+      alert("Horário agendado com sucesso!");
+      closeAgendarModal();
+      window.location.href = "meus_agendamentos.html";
+    } else {
+      alert(data.error || data.message || "Erro ao salvar o agendamento.");
+      if (btnConfirmar) {
         btnConfirmar.disabled = false;
         btnConfirmar.innerText = "Confirmar";
       }
-    } catch (error) {
-      console.error("Erro ao enviar agendamento:", error);
-      alert("Erro ao conectar com o servidor.");
+    }
+  } catch (error) {
+    console.error("Erro ao enviar agendamento:", error);
+    alert("Erro ao conectar com o servidor.");
+    if (btnConfirmar) {
       btnConfirmar.disabled = false;
       btnConfirmar.innerText = "Confirmar";
     }
