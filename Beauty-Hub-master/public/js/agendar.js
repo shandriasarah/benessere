@@ -54,22 +54,36 @@ async function carregarProfissionais() {
   }
 }
 
-// --- 2. CONTROLE DO MODAL ---
-function openAgendarModal(id, nomeProf) {
-  profissionalSelecionadoId = id;
-  document.getElementById("modalAgendar").style.display = "flex";
+// 1. Procure a função que abre o modal quando você clica no profissional
+function openAgendarModal(profissionalId) {
+  // ... (guarde aqui o código que você já tem para abrir o modal) ...
+  profissionalSelecionadoId = profissionalId;
 
-  // Gerar horários estáticos de teste (9h às 17h) para o cliente clicar
-  gerarHorariosTeste();
-}
+  // 🌟 AS LINHAS DA VITÓRIA: Adicione este bloco aqui dentro!
+  const btnConfirmar = document.getElementById("confirmBtn");
+  if (btnConfirmar) {
+    btnConfirmar.disabled = false; // Destrava o botão
+    btnConfirmar.innerText = "Confirmar"; // Devolve o texto original
+  }
 
-function closeAgendarModal() {
-  document.getElementById("modalAgendar").style.display = "none";
-  // Limpar seleções
+  // Limpa as seleções internas antigas para não misturar os profissionais
   dataSelecionada = null;
   horarioSelecionado = null;
-}
 
+  // Se você tiver uma função que limpa visualmente os botões selecionados, chame-a aqui
+  // Exemplo: removerSelecoesAnteriores();
+}
+function closeAgendarModal() {
+  const modal = document.getElementById("agendarModal"); // ou o ID do seu modal
+  if (modal) modal.style.display = "none";
+
+  // Destrava o botão ao fechar por garantia
+  const btnConfirmar = document.getElementById("confirmBtn");
+  if (btnConfirmar) {
+    btnConfirmar.disabled = false;
+    btnConfirmar.innerText = "Confirmar";
+  }
+}
 // --- 3. SELEÇÃO DE DATA E HORA (SIMPLIFICADA) ---
 function configurarCalendarioBasico() {
   const grid = document.getElementById("calendarGrid");
