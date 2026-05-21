@@ -89,24 +89,6 @@
     document.querySelectorAll(".calendar-day").forEach((d) => d.classList.remove("selected"));
   }
 
-    // Renderiza os horários para clique
-    gerarHorariosTeste();
-
-    // Restaura o botão de confirmar
-    const btnConfirmar = document.getElementById("confirmBtn");
-    if (btnConfirmar) {
-      btnConfirmar.disabled = false;
-      btnConfirmar.innerText = "Confirmar";
-    }
-
-    // Reseta seleções de dias anteriores por segurança
-    dataSelecionada = null;
-    horarioSelecionado = null;
-    document
-      .querySelectorAll(".calendar-day")
-      .forEach((d) => d.classList.remove("selected"));
-  }
-
   // Vincula as funções de abrir/fechar direto aos botões para segurança global
   window.closeAgendarModal = function () {
     const modal = document.getElementById("agendarModal");
