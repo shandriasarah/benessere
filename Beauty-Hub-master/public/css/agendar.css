@@ -553,12 +553,14 @@ footer {
 .modal {
   display: none; /* O JS controla isso mudando para flex */
   position: fixed;
-  z-index: 9999; /* Garante que fica na frente de tudo */
-  left: 0;
+  z-index: 9999;
+  left: 250px; /* 👈 ISSO AQUI: Empurra o modal para começar depois da sua barra lateral */
   top: 0;
-  width: 100%;
+  width: calc(
+    100% - 250px
+  ); /* 👈 Ajusta a largura para descontar o espaço da barra lateral */
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Fundo escuro transparente */
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro transparente */
   justify-content: center;
   align-items: center;
 }
