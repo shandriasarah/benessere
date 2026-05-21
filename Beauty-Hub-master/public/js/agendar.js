@@ -1,4 +1,3 @@
-// URLs da sua API no Render
 const API_URL = "https://beauty-hub-72cv.onrender.com/api";
 
 // Variáveis para guardar o que o usuário escolheu antes de confirmar
