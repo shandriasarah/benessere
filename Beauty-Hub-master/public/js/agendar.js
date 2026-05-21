@@ -1,209 +1,219 @@
-const API_URL = "https://beauty-hub-72cv.onrender.com/api";
+// A bolha de isolamento começa aqui (Impede erros de duplicidade no navegador)
+(() => {
+  const API_URL = "https://beauty-hub-72cv.onrender.com/api";
 
-// Variáveis para guardar o que o usuário escolheu antes de confirmar
-let profissionalSelecionadoId = null;
-let dataSelecionada = null;
-let horarioSelecionado = null;
+  // Variáveis para guardar o que o usuário escolheu antes de confirmar
+  let profissionalSelecionadoId = null;
+  let dataSelecionada = null;
+  let horarioSelecionado = null;
 
-// Pegar os dados do usuário logado na sessão
-const usuarioLogado = JSON.parse(sessionStorage.getItem("tb_logged"));
+  // Pegar os dados do usuário logado na sessão
+  const usuarioLogado = JSON.parse(sessionStorage.getItem("tb_logged"));
 
-// Executa assim que a página carregar
-document.addEventListener("DOMContentLoaded", () => {
-  carregarProfissionais();
-  configurarCalendarioBasico();
-});
+  // Executa assim que a página carregar
+  document.addEventListener("DOMContentLoaded", () => {
+    carregarProfissionais();
+    configurarCalendarioBasico();
+  });
 
-// --- 1. BUSCAR E EXIBIR PROFISSIONAIS ---
-async function carregarProfissionais() {
-  const container = document.getElementById("profissionaisContainer");
-  if (!container) return;
+  // --- 1. BUSCAR E EXIBIR PROFISSIONAIS ---
+  async function carregarProfissionais() {
+    const container = document.getElementById("profissionaisContainer");
+    if (!container) return;
 
-  container.innerHTML = "<p>Carregando profissionais...</p>";
+    container.innerHTML = "<p>Carregando profissionais...</p>";
 
-  try {
-    const response = await fetch(`${API_URL}/professionals`);
-    const profissionais = await response.json();
+    try {
+      const response = await fetch(`${API_URL}/professionals`);
+      const profissionais = await response.json();
 
-    container.innerHTML = ""; // Limpa o texto de carregando
+      container.innerHTML = ""; // Limpa o texto de carregando
 
-    if (profissionais.length === 0) {
-      container.innerHTML = "<p>Nenhum profissional disponível no momento.</p>";
+      if (profissionais.length === 0) {
+        container.innerHTML =
+          "<p>Nenhum profissional disponível no momento.</p>";
+        return;
+      }
+
+      profissionais.forEach((prof) => {
+        const card = document.createElement("div");
+        card.className = "professional-card";
+        card.innerHTML = `
+          <div class="card-avatar">
+              <i class="fa-solid fa-user-tie"></i>
+          </div>
+          <h3>${prof.name}</h3>
+          <p class="specialty">${prof.specialty || "Especialista em Beleza"}</p>
+          <button class="select-prof-btn" id="btn-prof-${prof.id}">
+              Agendar Horário <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        `;
+        container.appendChild(card);
+
+        // Define o clique do botão de forma segura para não depender do HTML global
+        const btnNode = document.getElementById(`btn-prof-${prof.id}`);
+        if (btnNode) {
+          btnNode.onclick = () => openAgendarModal(prof.id);
+        }
+      });
+    } catch (error) {
+      console.error("Erro ao carregar profissionais:", error);
+      container.innerHTML =
+        "<p>Erro ao conectar com o servidor. Tente recarregar a página.</p>";
+    }
+  }
+
+  // --- 2. ABRIR E FECHAR MODAL ---
+  function openAgendarModal(profissionalId) {
+    const modal = document.getElementById("agendarModal");
+    if (modal) {
+      modal.style.display = "flex"; // Abre o modal na tela
+    }
+
+    profissionalSelecionadoId = profesionalId;
+
+    // Renderiza os horários para clique
+    gerarHorariosTeste();
+
+    // Restaura o botão de confirmar
+    const btnConfirmar = document.getElementById("confirmBtn");
+    if (btnConfirmar) {
+      btnConfirmar.disabled = false;
+      btnConfirmar.innerText = "Confirmar";
+    }
+
+    // Reseta seleções de dias anteriores por segurança
+    dataSelecionada = null;
+    horarioSelecionado = null;
+    document
+      .querySelectorAll(".calendar-day")
+      .forEach((d) => d.classList.remove("selected"));
+  }
+
+  // Vincula as funções de abrir/fechar direto aos botões para segurança global
+  window.closeAgendarModal = function () {
+    const modal = document.getElementById("agendarModal");
+    if (modal) modal.style.display = "none";
+
+    const btnConfirmar = document.getElementById("confirmBtn");
+    if (btnConfirmar) {
+      btnConfirmar.disabled = false;
+      btnConfirmar.innerText = "Confirmar";
+    }
+  };
+
+  // --- 3. SELEÇÃO DE DATA E HORA ---
+  function configurarCalendarioBasico() {
+    const grid = document.getElementById("calendarGrid");
+    if (!grid) return;
+
+    const monthYearEl = document.getElementById("monthYear");
+    if (monthYearEl) monthYearEl.innerText = "Maio 2026";
+
+    grid.innerHTML = "";
+    for (let i = 1; i <= 30; i++) {
+      const dia = document.createElement("div");
+      dia.className = "calendar-day";
+      dia.innerText = i;
+      dia.onclick = () => {
+        document
+          .querySelectorAll(".calendar-day")
+          .forEach((d) => d.classList.remove("selected"));
+        dia.classList.add("selected");
+        dataSelecionada = `2026-05-${i.toString().padStart(2, "0")}`;
+      };
+      grid.appendChild(dia);
+    }
+  }
+
+  function gerarHorariosTeste() {
+    const grid = document.getElementById("horariosGrid");
+    if (!grid) return;
+
+    grid.innerHTML = "";
+    const listaHorarios = [
+      "09:00",
+      "10:00",
+      "11:00",
+      "13:00",
+      "14:00",
+      "15:00",
+      "16:00",
+      "17:00",
+    ];
+
+    listaHorarios.forEach((hora) => {
+      const btn = document.createElement("button");
+      btn.className = "time-slot";
+      btn.innerText = hora;
+      btn.onclick = () => {
+        document
+          .querySelectorAll(".time-slot")
+          .forEach((b) => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        horarioSelecionado = hora;
+      };
+      grid.appendChild(btn);
+    });
+  }
+
+  // --- 4. CONFIRMAR AGENDAMENTO NO BANCO ---
+  window.confirmarAgendamento = async function () {
+    if (!usuarioLogado) {
+      alert("Você precisa estar logado para agendar! Voltando para o login...");
+      window.location.href = "login_cliente.html";
       return;
     }
 
-    profissionais.forEach((prof) => {
-      const card = document.createElement("div");
-      card.className = "professional-card";
-      card.innerHTML = `
-        <div class="card-avatar">
-            <i class="fa-solid fa-user-tie"></i>
-        </div>
-        <h3>${prof.name}</h3>
-        <p class="specialty">${prof.specialty || "Especialista em Beleza"}</p>
-        <button class="select-prof-btn" onclick="openAgendarModal(${prof.id})">
-            Agendar Horário <i class="fa-solid fa-chevron-right"></i>
-        </button>
-      `;
-      container.appendChild(card);
-    });
-  } catch (error) {
-    console.error("Erro ao carregar profissionais:", error);
-    container.innerHTML =
-      "<p>Erro ao conectar com o servidor. Tente recarregar a página.</p>";
-  }
-}
+    if (!profissionalSelecionadoId || !dataSelecionada || !horarioSelecionado) {
+      alert("Por favor, selecione o Dia e o Horário antes de confirmar!");
+      return;
+    }
 
-// --- 2. ABRIR E FECHAR MODAL ---
-function openAgendarModal(profissionalId) {
-  const modal = document.getElementById("agendarModal");
-  if (modal) {
-    modal.style.display = "flex"; // Abre o modal na tela
-  }
+    const btnConfirmar = document.getElementById("confirmBtn");
+    if (btnConfirmar) {
+      btnConfirmar.disabled = true;
+      btnConfirmar.innerText = "Agendando...";
+    }
 
-  profissionalSelecionadoId = profissionalId;
-
-  // Renderiza os horários para clique
-  gerarHorariosTeste();
-
-  // Restaura o botão de confirmar
-  const btnConfirmar = document.getElementById("confirmBtn");
-  if (btnConfirmar) {
-    btnConfirmar.disabled = false;
-    btnConfirmar.innerText = "Confirmar";
-  }
-
-  // Reseta seleções de dias anteriores por segurança
-  dataSelecionada = null;
-  horarioSelecionado = null;
-  document
-    .querySelectorAll(".calendar-day")
-    .forEach((d) => d.classList.remove("selected"));
-}
-
-function closeAgendarModal() {
-  const modal = document.getElementById("agendarModal");
-  if (modal) modal.style.display = "none";
-
-  const btnConfirmar = document.getElementById("confirmBtn");
-  if (btnConfirmar) {
-    btnConfirmar.disabled = false;
-    btnConfirmar.innerText = "Confirmar";
-  }
-}
-
-// --- 3. SELEÇÃO DE DATA E HORA ---
-function configurarCalendarioBasico() {
-  const grid = document.getElementById("calendarGrid");
-  if (!grid) return;
-
-  const monthYearEl = document.getElementById("monthYear");
-  if (monthYearEl) monthYearEl.innerText = "Maio 2026";
-
-  grid.innerHTML = "";
-  for (let i = 1; i <= 30; i++) {
-    const dia = document.createElement("div");
-    dia.className = "calendar-day";
-    dia.innerText = i;
-    dia.onclick = () => {
-      document
-        .querySelectorAll(".calendar-day")
-        .forEach((d) => d.classList.remove("selected"));
-      dia.classList.add("selected");
-      dataSelecionada = `2026-05-${i.toString().padStart(2, "0")}`;
+    const dadosAgendamento = {
+      user_id: usuarioLogado.id,
+      professional_id: profissionalSelecionadoId,
+      service_id: 1,
+      appointment_date: dataSelecionada,
+      appointment_time: horarioSelecionado,
+      total_price: 50.0,
     };
-    grid.appendChild(dia);
-  }
-}
 
-function gerarHorariosTeste() {
-  const grid = document.getElementById("horariosGrid");
-  if (!grid) return;
+    try {
+      const response = await fetch(`${API_URL}/appointments/criar`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dadosAgendamento),
+      });
 
-  grid.innerHTML = "";
-  const listaHorarios = [
-    "09:00",
-    "10:00",
-    "11:00",
-    "13:00",
-    "14:00",
-    "15:00",
-    "16:00",
-    "17:00",
-  ];
+      const data = await response.json();
 
-  listaHorarios.forEach((hora) => {
-    const btn = document.createElement("button");
-    btn.className = "time-slot";
-    btn.innerText = hora;
-    btn.onclick = () => {
-      document
-        .querySelectorAll(".time-slot")
-        .forEach((b) => b.classList.remove("selected"));
-      btn.classList.add("selected");
-      horarioSelecionado = hora;
-    };
-    grid.appendChild(btn);
-  });
-}
-
-// --- 4. CONFIRMAR AGENDAMENTO NO BANCO ---
-async function confirmarAgendamento() {
-  if (!usuarioLogado) {
-    alert("Você precisa estar logado para agendar! Voltando para o login...");
-    window.location.href = "login_cliente.html";
-    return;
-  }
-
-  if (!profissionalSelecionadoId || !dataSelecionada || !horarioSelecionado) {
-    alert("Por favor, selecione o Dia e o Horário antes de confirmar!");
-    return;
-  }
-
-  const btnConfirmar = document.getElementById("confirmBtn");
-  if (btnConfirmar) {
-    btnConfirmar.disabled = true;
-    btnConfirmar.innerText = "Agendando...";
-  }
-
-  const dadosAgendamento = {
-    user_id: usuarioLogado.id,
-    professional_id: profissionalSelecionadoId,
-    service_id: 1, // Serviço Geral Provisório
-    appointment_date: dataSelecionada,
-    appointment_time: horarioSelecionado,
-    total_price: 50.0,
-  };
-
-  try {
-    // Rota correta apontando para o '/criar'
-    const response = await fetch(`${API_URL}/appointments/criar`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dadosAgendamento),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      alert("Horário agendado com sucesso!");
-      closeAgendarModal();
-      window.location.href = "meus_agendamentos.html";
-    } else {
-      alert(data.error || data.message || "Erro ao salvar o agendamento.");
+      if (response.ok) {
+        alert("Horário agendado com sucesso!");
+        window.closeAgendarModal();
+        window.location.href = "meus_agendamentos.html";
+      } else {
+        alert(data.error || data.message || "Erro ao salvar o agendamento.");
+        if (btnConfirmar) {
+          btnConfirmar.disabled = false;
+          btnConfirmar.innerText = "Confirmar";
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao enviar agendamento:", error);
+      alert("Erro ao conectar com o servidor.");
       if (btnConfirmar) {
         btnConfirmar.disabled = false;
         btnConfirmar.innerText = "Confirmar";
       }
     }
-  } catch (error) {
-    console.error("Erro ao enviar agendamento:", error);
-    alert("Erro ao conectar com o servidor.");
-    if (btnConfirmar) {
-      btnConfirmar.disabled = false;
-      btnConfirmar.innerText = "Confirmar";
-    }
-  }
-}
+  };
+})(); // Fim da bolha de proteção
