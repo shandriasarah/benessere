@@ -551,41 +551,78 @@ footer {
 
 /* --- ESTILIZAÇÃO DO MODAL --- */
 .modal {
-  display: none; /* O JS controla isto mudando para flex */
+  display: none; /* O JS controla isso mudando para flex */
   position: fixed;
   z-index: 9999;
-  left: 0;
+
+  /* Faz o modal começar exatamente onde termina a sua barra lateral */
+  left: 250px;
   top: 0;
-  width: 100%;
+
+  /* Ocupa apenas o espaço restante da tela (desconta os 250px da barra) */
+  width: calc(100% - 250px);
   height: 100%;
+
   background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro transparente */
 
-  /* Ativa o alinhamento flexível */
-  display: none;
+  /* Centraliza a caixinha branca perfeitamente no espaço que sobrou */
   justify-content: center;
   align-items: center;
 }
 
-/* --- CAIXA BRANCA CENTRADA NA ÁREA DE CONTEÚDO --- */
+/* --- CAIXA BRANCA DO CALENDÁRIO --- */
 .modal-content {
   background-color: #ffffff;
   padding: 30px;
   border-radius: 16px;
   width: 90%;
-  max-width: 450px;
+  max-width: 440px; /* Tamanho ideal para alinhar as colunas dos dias */
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
   position: relative;
 
-  /* 🌟 O TRUQUE: Empurra a caixa branca para o centro da área restante automaticamente */
-  margin-left: 250px;
+  /* Removemos qualquer margem manual para o flexbox trabalhar sozinho */
+  margin: 0;
 
   animation: abrirModal 0.3s ease-out;
 }
 
-/* Se a tela for pequena (responsividade para telemóveis/tablets) */
+/* Garante que os dias fiquem bem distribuídos e bonitos */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+/* Animação suave para o modal surgir */
+@keyframes abrirModal {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Botão de fechar (X) no cantinho */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+/* Responsividade: Se a tela for de celular (menos de 768px) e a sidebar sumir */
 @media (max-width: 768px) {
-  .modal-content {
-    margin-left: 0; /* Remove o recuo se a sidebar sumir em telas pequenas */
+  .modal {
+    left: 0;
+    width: 100%;
   }
 }
 
