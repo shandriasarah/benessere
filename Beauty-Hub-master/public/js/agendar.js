@@ -63,14 +63,31 @@
     }
   }
 
-  // --- 2. ABRIR E FECHAR MODAL ---
+// --- 2. ABRIR E FECHAR MODAL (100% PADRONIZADO) ---
   function openAgendarModal(profissionalId) {
     const modal = document.getElementById("agendarModal");
     if (modal) {
       modal.style.display = "flex"; // Abre o modal na tela
     }
 
-    profissionalSelecionadoId = professionalId;
+    // Salvando o ID com a escrita idêntica à do parâmetro
+    profissionalSelecionadoId = profissionalId;
+    
+    // Renderiza os horários para clique
+    gerarHorariosTeste();
+
+    // Restaura o botão de confirmar para o estado inicial
+    const btnConfirmar = document.getElementById("confirmBtn");
+    if (btnConfirmar) {
+      btnConfirmar.disabled = false;
+      btnConfirmar.innerText = "Confirmar";
+    }
+
+    // Reseta seleções de dias anteriores por segurança
+    dataSelecionada = null;
+    horarioSelecionado = null;
+    document.querySelectorAll(".calendar-day").forEach((d) => d.classList.remove("selected"));
+  }
 
     // Renderiza os horários para clique
     gerarHorariosTeste();
