@@ -70,7 +70,7 @@
       modal.style.display = "flex"; // Abre o modal na tela
     }
 
-    profissionalSelecionadoId = profesionalId;
+    profissionalSelecionadoId = professionalId;
 
     // Renderiza os horários para clique
     gerarHorariosTeste();
