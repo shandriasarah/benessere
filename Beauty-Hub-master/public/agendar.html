@@ -1,66 +1,115 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Agende Seu Horarios | Beauty Hub</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="css/agendar.css">
-</head>
-<body>
-
-<div class="sidebar">
-  <div class="toggle-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
-  <h2>Beauty Hub</h2>
-  <ul>
-    <li><a href="cliente_home.html"><i class="fa-solid fa-house"></i><span> Início</span></a></li>
-    <li><a href="agendar.html" class="active"><i class="fa-solid fa-clock"></i><span> Agende Seu Horarios</span></a></li>
-    <li><a href="meus_agendamentos.html"><i class="fa-solid fa-calendar-days"></i><span> Meus Agendamentos</span></a></li>
-    <li><a href="perfil.html"><i class="fa-solid fa-user"></i><span> Perfil</span></a></li>
-    <li><a href="index.html"><i class="fa-solid fa-right-from-bracket"></i><span> Sair</span></a></li>
-  </ul>
-</div>
-
-<div class="main">
-  <div class="topbar">
-    <div class="brand"><i class="fa-solid fa-sparkles"></i> Beauty Hub</div>
-    <div class="topbar-right">
-      <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
-      <button class="icon-btn"><i class="fa-regular fa-envelope"></i></button>
-      <div class="user-avatar"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Agende Seu Horarios | Beauty Hub</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/agendar.css" />
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="toggle-btn" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"></i>
+      </div>
+      <h2>Beauty Hub</h2>
+      <ul>
+        <li>
+          <a href="cliente_home.html"
+            ><i class="fa-solid fa-house"></i><span> Início</span></a
+          >
+        </li>
+        <li>
+          <a href="agendar.html" class="active"
+            ><i class="fa-solid fa-clock"></i
+            ><span> Agende Seu Horarios</span></a
+          >
+        </li>
+        <li>
+          <a href="meus_agendamentos.html"
+            ><i class="fa-solid fa-calendar-days"></i
+            ><span> Meus Agendamentos</span></a
+          >
+        </li>
+        <li>
+          <a href="perfil.html"
+            ><i class="fa-solid fa-user"></i><span> Perfil</span></a
+          >
+        </li>
+        <li>
+          <a href="index.html"
+            ><i class="fa-solid fa-right-from-bracket"></i><span> Sair</span></a
+          >
+        </li>
+      </ul>
     </div>
-  </div>
 
-  <div class="content">
-    <h1>Escolha o Profissional da sua preferencia:</h1>
-    <p class="lead">Encontre o especialista perfeito para realçar sua beleza e autoestima.</p>
-    <div id="profissionaisContainer"></div>
-  </div>
+    <div class="main">
+      <div class="topbar">
+        <div class="brand"><i class="fa-solid fa-sparkles"></i> Beauty Hub</div>
+        <div class="topbar-right">
+          <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+          <button class="icon-btn">
+            <i class="fa-regular fa-envelope"></i>
+          </button>
+          <div class="user-avatar"></div>
+        </div>
+      </div>
 
-  <footer>© 2025 Beauty Hub - Todos os direitos reservados.</footer>
-</div>
+      <div class="content">
+        <h1>Escolha o Profissional da sua preferencia:</h1>
+        <p class="lead">
+          Encontre o especialista perfeito para realçar sua beleza e autoestima.
+        </p>
+        <div id="profissionaisContainer"></div>
+      </div>
 
-<!-- Modal -->
-<div id="agendarModal" class="modal">
-   > </div>
-    <button class="close-btn" onclick="closeAgendarModal()">×</button>
-    <h2>Escolha a Data Disponível:</h2>
-    <div class="calendar-header">
-      <button id="prevMonth">&lt;</button>
-      <span id="monthYear"></span>
-      <button id="nextMonth">&gt;</button>
+      <footer>© 2025 Beauty Hub - Todos os direitos reservados.</footer>
     </div>
-    <div class="weekdays-grid">
-      <div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div>
-    </div>
-    <div class="calendar-grid" id="calendarGrid"></div>
-    <h2>Escolha o Horário Disponível:</h2>
-    <div id="horariosGrid"></div>
-    <button id="confirmBtn" class="agendar-btn" onclick="confirmarAgendamento()">Confirmar</button>
-  </div>
-</div>
 
-<script src="js/agendar.js"></script>
-</body>
+    <!-- Modal -->
+    <div id="agendarModal" class="modal">
+      <div class="modal-content">
+        <button class="close-btn" onclick="closeAgendarModal()">×</button>
+
+        <h2>Escolha a Data Disponível:</h2>
+        <div class="calendar-header">
+          <button id="prevMonth">&lt;</button>
+          <span id="monthYear"></span>
+          <button id="nextMonth">&gt;</button>
+        </div>
+
+        <div class="weekdays-grid">
+          <div>D</div>
+          <div>S</div>
+          <div>T</div>
+          <div>Q</div>
+          <div>Q</div>
+          <div>S</div>
+          <div>S</div>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+
+        <h2>Escolha o Horário Disponível:</h2>
+        <div id="horariosGrid"></div>
+
+        <button
+          id="confirmBtn"
+          class="agendar-btn"
+          onclick="confirmarAgendamento()"
+        >
+          Confirmar
+        </button>
+      </div>
+    </div>
+
+    <script src="js/agendar.js"></script>
+  </body>
 </html>
