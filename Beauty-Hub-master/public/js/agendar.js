@@ -63,7 +63,7 @@
     }
   }
 
-// --- 2. ABRIR E FECHAR MODAL (100% PADRONIZADO) ---
+  // --- 2. ABRIR E FECHAR MODAL (100% PADRONIZADO) ---
   function openAgendarModal(profissionalId) {
     const modal = document.getElementById("agendarModal");
     if (modal) {
@@ -72,7 +72,7 @@
 
     // Salvando o ID com a escrita idêntica à do parâmetro
     profissionalSelecionadoId = profissionalId;
-    
+
     // Renderiza os horários para clique
     gerarHorariosTeste();
 
@@ -86,7 +86,9 @@
     // Reseta seleções de dias anteriores por segurança
     dataSelecionada = null;
     horarioSelecionado = null;
-    document.querySelectorAll(".calendar-day").forEach((d) => d.classList.remove("selected"));
+    document
+      .querySelectorAll(".calendar-day")
+      .forEach((d) => d.classList.remove("selected"));
   }
 
   // Vincula as funções de abrir/fechar direto aos botões para segurança global
@@ -200,7 +202,12 @@
         window.closeAgendarModal();
         window.location.href = "meus_agendamentos.html";
       } else {
-        alert(data.error || data.message || "Erro ao salvar o agendamento.");
+        // 🌟 AGORA VAI EXIBIR O DETALHE REAL:
+        console.error("Detalhes do erro do servidor:", data);
+        alert(
+          `Erro do Servidor: ${data.error || data.message || JSON.stringify(data)}`,
+        );
+
         if (btnConfirmar) {
           btnConfirmar.disabled = false;
           btnConfirmar.innerText = "Confirmar";
