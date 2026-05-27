@@ -1,51 +1,66 @@
 /* ==========================================================================
-   1. ESTRUTURA E CARDS DA PÁGINA
+   1. LAYOUT GERAL E SIDEBAR (SISTEMA INTEGRADO)
    ========================================================================== */
 body {
   margin: 0;
   font-family: "Inter", sans-serif;
   background-color: #f3e9fe;
+  display: flex;
 }
 
-/* Container que segura as caixas dos profissionais */
+/* Área principal de conteúdo do painel */
+.main-content {
+  flex: 1;
+  padding: 30px;
+  margin-left: 260px; /* Alinha o conteúdo para não ficar debaixo da sidebar */
+}
+
+/* --- SEU BANNER DE PROFISSIONAIS --- */
 #profissionaisContainer {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
-  padding: 20px;
+  gap: 25px;
+  margin-top: 20px;
 }
 
 .professional-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  width: 200px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 25px;
+  width: 220px;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px rgba(106, 27, 154, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.professional-card:hover {
+  transform: translateY(-5px);
 }
 
 .select-prof-btn {
   background-color: #6a1b9a;
   color: white;
   border: none;
-  padding: 10px 15px;
+  padding: 12px 20px;
   border-radius: 8px;
   cursor: pointer;
-  margin-top: 10px;
+  font-weight: 600;
+  margin-top: 15px;
+  width: 100%;
 }
 
 /* ==========================================================================
-   2. JANELA DO MODAL (CALENDÁRIO)
+   2. ESTRUTURA E COMPORTAMENTO DO MODAL DO CALENDÁRIO
    ========================================================================== */
 .modal {
-  display: none; /* JS altera para flex */
+  display: none; /* Ativado via JavaScript como 'flex' */
   position: fixed;
   z-index: 9999;
-  left: 250px;
+  left: 260px; /* Começa exatamente após o menu roxo lateral */
   top: 0;
-  width: calc(100% - 250px);
+  width: calc(100% - 260px);
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
   justify-content: center;
   align-items: center;
 }
@@ -53,16 +68,17 @@ body {
 .modal-content {
   background-color: #ffffff;
   padding: 30px;
-  border-radius: 16px;
+  border-radius: 20px;
   width: 90%;
   max-width: 440px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
   position: relative;
   text-align: center;
+  animation: surgirModal 0.3s ease-out;
 }
 
 /* ==========================================================================
-   3. GRIDS DO CALENDÁRIO E HORÁRIOS
+   3. DESIGN DO GRIDS (CALENDÁRIO E DIAS)
    ========================================================================== */
 .calendar-grid {
   display: grid !important;
@@ -76,7 +92,12 @@ body {
   text-align: center;
   cursor: pointer;
   border-radius: 50%;
-  background-color: #f9f9f9;
+  font-weight: 500;
+  color: #333;
+}
+
+.calendar-day:hover {
+  background-color: #f1e7fe;
 }
 
 .horarios-grid {
@@ -87,16 +108,21 @@ body {
 }
 
 .time-slot {
-  padding: 8px;
-  border: 1px solid #ccc;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
   background-color: #fff;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 500;
+  color: #555;
 }
 
-/* ==========================================================================
-   4. ESTADOS DE CLIQUE (SELECIONADO)
-   ========================================================================== */
+.time-slot:hover {
+  background-color: #f1e7fe;
+  border-color: #6a1b9a;
+}
+
+/* 🌟 REALCE VISUAL DOS SELECIONADOS 🌟 */
 .calendar-day.selected {
   background-color: #6a1b9a !important;
   color: #ffffff !important;
@@ -110,12 +136,36 @@ body {
   font-weight: bold !important;
 }
 
+/* Botões utilitários adicionais */
 .close-btn {
   position: absolute;
-  top: 15px;
+  top: 20px;
   right: 20px;
   background: none;
   border: none;
   font-size: 24px;
   cursor: pointer;
+  color: #999;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+@keyframes surgirModal {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal {
+    left: 0;
+    width: 100%;
+  }
 }
