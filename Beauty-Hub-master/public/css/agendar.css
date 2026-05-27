@@ -1,5 +1,5 @@
 /* ==========================================================================
-   1. LAYOUT GERAL E SIDEBAR (SISTEMA INTEGRADO)
+   1. REGRA DO MENU LATERAL (SIDEBAR ROXA ORIGINAL)
    ========================================================================== */
 body {
   margin: 0;
@@ -8,19 +8,86 @@ body {
   display: flex;
 }
 
-/* Área principal de conteúdo do painel */
-.main-content {
-  flex: 1;
-  padding: 30px;
-  margin-left: 260px; /* Alinha o conteúdo para não ficar debaixo da sidebar */
+/* Estilização da sua lista de links para virar a Barra Lateral */
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 25px 15px;
+  width: 240px;
+  height: 100vh;
+  background: linear-gradient(
+    135deg,
+    #6a1b9a,
+    #4a148c
+  ); /* Degradê roxo profissional */
+  position: fixed;
+  left: 0;
+  top: 0;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 1000;
 }
 
-/* --- SEU BANNER DE PROFISSIONAIS --- */
+ul li a {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+/* Ícones do menu */
+ul li a i {
+  font-size: 18px;
+  width: 25px;
+  text-align: center;
+}
+
+/* Efeito ao passar o mouse nos links */
+ul li a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+/* Item ativo (página atual) */
+ul li a.active {
+  background-color: #ffffff;
+  color: #6a1b9a;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================================
+   2. ÁREA DE CONTEÚDO (CARDS DOS PROFISSIONAIS)
+   ========================================================================== */
+.main-content,
+main,
+.container-principal {
+  flex: 1;
+  padding: 30px;
+  margin-left: 270px; /* Garante que o conteúdo comece após a barra roxa */
+}
+
+/* Se você não tiver uma tag servindo de container para o título, adicionamos essa margem */
+h2,
+h3,
+p {
+  margin-left: 270px;
+}
+
 #profissionaisContainer {
   display: flex;
   flex-wrap: wrap;
   gap: 25px;
   margin-top: 20px;
+  margin-left: 270px; /* Alinha o bloco de profissionais perfeitamente */
 }
 
 .professional-card {
@@ -50,15 +117,15 @@ body {
 }
 
 /* ==========================================================================
-   2. ESTRUTURA E COMPORTAMENTO DO MODAL DO CALENDÁRIO
+   3. JANELA DO MODAL DO CALENDÁRIO (CENTRADO)
    ========================================================================== */
 .modal {
-  display: none; /* Ativado via JavaScript como 'flex' */
+  display: none; /* JS altera para flex */
   position: fixed;
   z-index: 9999;
-  left: 260px; /* Começa exatamente após o menu roxo lateral */
+  left: 240px; /* Começa logo após a barra lateral */
   top: 0;
-  width: calc(100% - 260px);
+  width: calc(100% - 240px);
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
   justify-content: center;
@@ -77,9 +144,7 @@ body {
   animation: surgirModal 0.3s ease-out;
 }
 
-/* ==========================================================================
-   3. DESIGN DO GRIDS (CALENDÁRIO E DIAS)
-   ========================================================================== */
+/* Grids Internos do Calendário */
 .calendar-grid {
   display: grid !important;
   grid-template-columns: repeat(7, 1fr) !important;
@@ -93,7 +158,6 @@ body {
   cursor: pointer;
   border-radius: 50%;
   font-weight: 500;
-  color: #333;
 }
 
 .calendar-day:hover {
@@ -113,16 +177,9 @@ body {
   background-color: #fff;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 500;
-  color: #555;
 }
 
-.time-slot:hover {
-  background-color: #f1e7fe;
-  border-color: #6a1b9a;
-}
-
-/* 🌟 REALCE VISUAL DOS SELECIONADOS 🌟 */
+/* 🌟 PINTA DE ROXO O DIA/HORA SELECIONADO 🌟 */
 .calendar-day.selected {
   background-color: #6a1b9a !important;
   color: #ffffff !important;
@@ -136,7 +193,6 @@ body {
   font-weight: bold !important;
 }
 
-/* Botões utilitários adicionais */
 .close-btn {
   position: absolute;
   top: 20px;
@@ -146,10 +202,6 @@ body {
   font-size: 24px;
   cursor: pointer;
   color: #999;
-}
-
-.close-btn:hover {
-  color: #333;
 }
 
 @keyframes surgirModal {
@@ -164,6 +216,18 @@ body {
 }
 
 @media (max-width: 768px) {
+  ul {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .main-content,
+  #profissionaisContainer,
+  h2,
+  h3,
+  p {
+    margin-left: 0;
+  }
   .modal {
     left: 0;
     width: 100%;
