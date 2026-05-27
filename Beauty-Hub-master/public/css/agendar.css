@@ -1,13 +1,44 @@
-/* --- LAYOUT GERAL DA PÁGINA --- */
+/* ==========================================================================
+   1. ESTRUTURA E CARDS DA PÁGINA
+   ========================================================================== */
 body {
   margin: 0;
   font-family: "Inter", sans-serif;
   background-color: #f3e9fe;
 }
 
-/* --- ESTILIZAÇÃO DO MODAL (ESTRUTURA FIXA) --- */
+/* Container que segura as caixas dos profissionais */
+#profissionaisContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+}
+
+.professional-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  width: 200px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.select-prof-btn {
+  background-color: #6a1b9a;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* ==========================================================================
+   2. JANELA DO MODAL (CALENDÁRIO)
+   ========================================================================== */
 .modal {
-  display: none; /* O JS muda para flex ao abrir */
+  display: none; /* JS altera para flex */
   position: fixed;
   z-index: 9999;
   left: 250px;
@@ -19,7 +50,6 @@ body {
   align-items: center;
 }
 
-/* --- CAIXA BRANCA DO CALENDÁRIO --- */
 .modal-content {
   background-color: #ffffff;
   padding: 30px;
@@ -28,70 +58,58 @@ body {
   max-width: 440px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
   position: relative;
-  margin: 0;
-  animation: abrirModal 0.3s ease-out;
   text-align: center;
 }
 
-/* --- ALINHAMENTO DO GRID DO CALENDÁRIO --- */
+/* ==========================================================================
+   3. GRIDS DO CALENDÁRIO E HORÁRIOS
+   ========================================================================== */
 .calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
+  gap: 8px !important;
   margin: 20px 0;
 }
 
-/* Estilo padrão de cada dia */
 .calendar-day {
   padding: 10px;
   text-align: center;
   cursor: pointer;
   border-radius: 50%;
-  transition: all 0.2s ease;
+  background-color: #f9f9f9;
 }
 
-.calendar-day:hover {
-  background-color: #f1e7fe;
-}
-
-/* --- ALINHAMENTO DOS HORÁRIOS --- */
 .horarios-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 10px !important;
   margin: 20px 0;
 }
 
-/* Estilo padrão dos botões de hora */
 .time-slot {
   padding: 8px;
   border: 1px solid #ccc;
   background-color: #fff;
   border-radius: 6px;
   cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s ease;
 }
 
-.time-slot:hover {
-  background-color: #f1e7fe;
-}
-
-/* 🌟 DESTAQUE PARA QUANDO CLICAR (SELECIONADO) 🌟 */
+/* ==========================================================================
+   4. ESTADOS DE CLIQUE (SELECIONADO)
+   ========================================================================== */
 .calendar-day.selected {
   background-color: #6a1b9a !important;
   color: #ffffff !important;
-  font-weight: bold;
+  font-weight: bold !important;
 }
 
 .time-slot.selected {
   background-color: #6a1b9a !important;
   color: #ffffff !important;
   border-color: #6a1b9a !important;
-  font-weight: bold;
+  font-weight: bold !important;
 }
 
-/* Botão fechar (X) */
 .close-btn {
   position: absolute;
   top: 15px;
@@ -100,24 +118,4 @@ body {
   border: none;
   font-size: 24px;
   cursor: pointer;
-  color: #666;
-}
-
-/* Animação */
-@keyframes abrirModal {
-  from {
-    transform: scale(0.85);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@media (max-width: 768px) {
-  .modal {
-    left: 0;
-    width: 100%;
-  }
 }
