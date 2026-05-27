@@ -1,202 +1,123 @@
-(() => {
-  const API_URL = "https://beauty-hub-72cv.onrender.com/api";
-
-  let profissionalSelecionadoId = null;
-  let dataSelecionada = null;
-  let horarioSelecionado = null;
-
-  const usuarioLogado = JSON.parse(sessionStorage.getItem("tb_logged"));
-
-  document.addEventListener("DOMContentLoaded", () => {
-    carregarProfissionais();
-    configurarCalendarioBasico();
-  });
-
-  async function carregarProfissionais() {
-    const container = document.getElementById("profissionaisContainer");
-    if (!container) return;
-
-    container.innerHTML = "<p>Carregando profissionais...</p>";
-
-    try {
-      const response = await fetch(`${API_URL}/professionals`);
-      const profissionais = await response.json();
-
-      container.innerHTML = "";
-
-      if (profissionais.length === 0) {
-        container.innerHTML = "<p>Nenhum profissional disponível no momento.</p>";
-        return;
-      }
-
-      profissionais.forEach((prof) => {
-        const card = document.createElement("div");
-        card.className = "professional-card";
-        card.innerHTML = `
-          <div class="card-avatar">
-              <i class="fa-solid fa-user-tie"></i>
-          </div>
-          <h3>${prof.name}</h3>
-          <p class="specialty">${prof.specialty || "Especialista em Beleza"}</p>
-          <button class="select-prof-btn" id="btn-prof-${prof.id}">
-              Agendar Horário <i class="fa-solid fa-chevron-right"></i>
-          </button>
-        `;
-        container.appendChild(card);
-
-        const btnNode = document.getElementById(`btn-prof-${prof.id}`);
-        if (btnNode) {
-          btnNode.onclick = () => openAgendarModal(prof.id);
-        }
-      });
-    } catch (error) {
-      console.error("Erro ao carregar profissionais:", error);
-      container.innerHTML = "<p>Erro ao conectar com o servidor. Tente recarregar a página.</p>";
-    }
-  }
-
-  function openAgendarModal(profissionalId) {
-    const modal = document.getElementById("agendarModal");
-    if (modal) {
-      modal.style.display = "flex";
-    }
-
-    profissionalSelecionadoId = profissionalId;
-    gerarHorariosTeste();
-
-    const btnConfirmar = document.getElementById("confirmBtn");
-    if (btnConfirmar) {
-      btnConfirmar.disabled = false;
-      btnConfirmar.innerText = "Confirmar";
-    }
-
-    dataSelecionada = null;
-    horarioSelecionado = null;
-    document.querySelectorAll(".calendar-day").forEach((d) => d.classList.remove("selected"));
-    document.querySelectorAll(".time-slot").forEach((b) => b.classList.remove("selected"));
-  }
-
-  window.closeAgendarModal = function() {
-    const modal = document.getElementById("agendarModal");
-    if (modal) modal.style.display = "none";
-  }
-
-  function configurarCalendarioBasico() {
-    const grid = document.getElementById("calendarGrid");
-    if (!grid) return;
-
-    const monthYearEl = document.getElementById("monthYear");
-    if (monthYearEl) monthYearEl.innerText = "Maio 2026";
-
-    grid.innerHTML = "";
-    for (let i = 1; i <= 30; i++) {
-      const dia = document.createElement("div");
-      dia.className = "calendar-day";
-      dia.innerText = i;
-      
-      dia.onclick = () => {
-        document.querySelectorAll(".calendar-day").forEach((d) => d.classList.remove("selected"));
-        dia.classList.add("selected"); // Fica roxo visualmente
-        dataSelecionada = `2026-05-${i.toString().padStart(2, "0")}`; // Salva o dado
-      };
-      grid.appendChild(dia);
-    }
-  }
-
-  function gerarHorariosTeste() {
-    const grid = document.getElementById("horariosGrid");
-    if (!grid) return;
-
-    grid.innerHTML = "";
-    const listaHorarios = ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00"];
-
-    listaHorarios.forEach((hora) => {
-      const btn = document.createElement("button");
-      btn.className = "time-slot";
-      btn.innerText = hora;
-      
-      btn.onclick = () => {
-        document.querySelectorAll(".time-slot").forEach((b) => b.classList.remove("selected"));
-        btn.classList.add("selected"); // Fica roxo visualmente
-        horarioSelecionado = hora; // Salva o dado
-      };
-      grid.appendChild(btn);
-    });
-  }
-
-  window.confirmarAgendamento = async function() {
-    if (!usuarioLogado) {
-      alert("Você precisa estar logado para agendar! Voltando para o login...");
-      window.location.href = "login_cliente.html";
-      return;
-    }
-
-    if (!profissionalSelecionadoId || !dataSelecionada || !horarioSelecionado) {
-      alert("Por favor, selecione o Dia e o Horário antes de confirmar!");
-      return;
-    }
-
-    const btnConfirmar = document.getElementById("confirmBtn");
-    if (btnConfirmar) {
-      btnConfirmar.disabled = true;
-      btnConfirmar.innerText = "Agendando...";
-    }
-
-    const dadosAgendamento = {
-      user_id: usuarioLogado.id,
-      professional_id: profissionalSelecionadoId,
-      service_id: 1, 
-      appointment_date: dataSelecionada,
-      appointment_time: horarioSelecionado,
-      total_price: 50.0,
-    };
-
-    try {
-      const response = await fetch(`${API_URL}/appointments/criar`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dadosAgendamento),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert("Horário agendado com sucesso!");
-        window.closeAgendarModal();
-        window.location.href = "meus_agendamentos.html";
-      } else {
-        alert(`Erro do Servidor: ${data.error || data.message || "Erro interno no banco."}`);
-        if (btnConfirmar) {
-          btnConfirmar.disabled = false;
-          btnConfirmar.innerText = "Confirmar";
-        }
-      }
-    } catch (error) {
-      console.error("Erro ao enviar agendamento:", error);
-      alert("Erro ao conectar com o servidor.");
-      if (btnConfirmar) {
-        btnConfirmar.disabled = false;
-        btnConfirmar.innerText = "Confirmar";
-      }
-    }
-  }
-  /* Quando o dia ou horário for selecionado, ele ganha destaque */
-.calendar-day.selected, .time-slot.selected {
-  background-color: #6a1b9a !important; /* Cor roxa do seu tema */
-  color: #ffffff !important;
-  border-radius: 50%; /* Mantém o círculo no dia */
-  font-weight: bold;
+/* --- LAYOUT GERAL DA PÁGINA --- */
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background-color: #f3e9fe;
 }
 
-/* Deixa o cursor com formato de "mãozinha" para você saber que é clicável */
-.calendar-day, .time-slot {
+/* --- ESTILIZAÇÃO DO MODAL (ESTRUTURA FIXA) --- */
+.modal {
+  display: none; /* O JS muda para flex ao abrir */
+  position: fixed;
+  z-index: 9999;
+  left: 250px;
+  top: 0;
+  width: calc(100% - 250px);
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- CAIXA BRANCA DO CALENDÁRIO --- */
+.modal-content {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 440px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  margin: 0;
+  animation: abrirModal 0.3s ease-out;
+  text-align: center;
+}
+
+/* --- ALINHAMENTO DO GRID DO CALENDÁRIO --- */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin: 20px 0;
+}
+
+/* Estilo padrão de cada dia */
+.calendar-day {
+  padding: 10px;
+  text-align: center;
   cursor: pointer;
+  border-radius: 50%;
   transition: all 0.2s ease;
 }
 
-.calendar-day:hover, .time-slot:hover {
+.calendar-day:hover {
   background-color: #f1e7fe;
 }
-})();
+
+/* --- ALINHAMENTO DOS HORÁRIOS --- */
+.horarios-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 20px 0;
+}
+
+/* Estilo padrão dos botões de hora */
+.time-slot {
+  padding: 8px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.time-slot:hover {
+  background-color: #f1e7fe;
+}
+
+/* 🌟 DESTAQUE PARA QUANDO CLICAR (SELECIONADO) 🌟 */
+.calendar-day.selected {
+  background-color: #6a1b9a !important;
+  color: #ffffff !important;
+  font-weight: bold;
+}
+
+.time-slot.selected {
+  background-color: #6a1b9a !important;
+  color: #ffffff !important;
+  border-color: #6a1b9a !important;
+  font-weight: bold;
+}
+
+/* Botão fechar (X) */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+/* Animação */
+@keyframes abrirModal {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal {
+    left: 0;
+    width: 100%;
+  }
+}
