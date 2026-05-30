@@ -1,110 +1,229 @@
-function toggleMenu(){
-  document.querySelector('.sidebar').classList.toggle('closed');
+const API_URL = "https://beauty-hub-72cv.onrender.com/api";
+const usuarioLogado = JSON.parse(sessionStorage.getItem("tb_logged"));
+
+function toggleMenu() {
+  document.querySelector(".sidebar").classList.toggle("closed");
 }
 
-/* ---------- Dados iniciais / storage ---------- */
-const storageKey = 'tb_bookings_list_v2';
-let list = JSON.parse(localStorage.getItem(storageKey) || '[]');
-if(!list || list.length === 0){
-  list = [
-    {date:'2025-11-05', time:'10:00', prof:'Marília Andrade', service:'Corte Feminino', status:'Agendado'},
-    {date:'2025-11-07', time:'14:00', prof:'João Silva', service:'Barba Completa', status:'Agendado'},
-    {date:'2025-09-12', time:'16:00', prof:'Ana Paula', service:'Manicure', status:'Concluído'}
-  ];
-  localStorage.setItem(storageKey, JSON.stringify(list));
+// Formata data ISO para DD/MM/AAAA
+function formatDateBR(isoDate) {
+  if (!isoDate) return "-";
+  return isoDate.split("T")[0].split("-").reverse().join("/");
 }
 
-/* ---------- Helpers ---------- */
-function formatDateBR(isoDate){return isoDate.split('-').reverse().join('/');}
-function isFutureOrToday(isoDate, time){
-  const [y,m,d] = isoDate.split('-').map(Number);
-  const [hh,mm] = (time||'00:00').split(':').map(Number);
-  const dt = new Date(y,m-1,d,hh,mm,0);
-  const now = new Date();
-  return dt >= new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0,0,0);
+// Retorna true se a data/hora ainda não passou
+function isFuturo(isoDate, time) {
+  const [y, m, d] = isoDate.split("T")[0].split("-").map(Number);
+  const [hh, mm] = (time || "00:00")
+    .replace("T", " ")
+    .substring(0, 5)
+    .split(":")
+    .map(Number);
+  return new Date(y, m - 1, d, hh, mm) >= new Date();
 }
 
-/* ---------- Render ---------- */
-const tbody = document.getElementById('agendamentosBody');
-const emptyMsg = document.getElementById('emptyMsg');
-const searchInput = document.getElementById('searchInput');
-const filterStatus = document.getElementById('filterStatus');
-const clearFiltersBtn = document.getElementById('clearFilters');
+// Normaliza horário que pode vir como "HH:MM:SS" ou "HH:MM"
+function formatTime(time) {
+  if (!time) return "-";
+  return String(time).substring(0, 5);
+}
 
-function renderAgendamentos(){
-  tbody.innerHTML = '';
-  const query = (searchInput.value || '').trim().toLowerCase();
-  const statusFilter = filterStatus.value;
-  const filtered = list.filter((b) => {
-    if(statusFilter !== 'all' && b.status !== statusFilter) return false;
-    if(!query) return true;
-    const dateBR = formatDateBR(b.date);
-    return (b.prof + ' ' + b.service + ' ' + dateBR + ' ' + b.time).toLowerCase().includes(query);
-  });
+// Determina status real baseado na data
+function resolveStatus(agendamento) {
+  if (agendamento.status === "cancelled") return "Cancelado";
+  if (isFuturo(agendamento.appointment_date, agendamento.appointment_time))
+    return "Agendado";
+  return "Concluído";
+}
 
-  if(filtered.length === 0){
-    emptyMsg.style.display = 'block';
+// Busca agendamentos do banco
+async function carregarAgendamentos() {
+  if (!usuarioLogado) {
+    window.location.href = "login_cliente.html";
     return;
-  } else {
-    emptyMsg.style.display = 'none';
   }
 
-  filtered.sort((a,b) => new Date(`${a.date}T${a.time}:00`) - new Date(`${b.date}T${b.time}:00`));
+  const tbody = document.getElementById("agendamentosBody");
+  const emptyMsg = document.getElementById("emptyMsg");
+  tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;color:#888">Carregando...</td></tr>`;
 
-  filtered.forEach((b) => {
-    const tr = document.createElement('tr');
-    let status = b.status || (isFutureOrToday(b.date,b.time) ? 'Agendado' : 'Concluído');
-    if(b.status === 'Agendado' && !isFutureOrToday(b.date,b.time)) status = 'Concluído';
-    const statusClass = status === 'Agendado' ? 'agendado' : (status === 'Cancelado' ? 'cancelado' : 'concluido');
+  try {
+    const response = await fetch(
+      `${API_URL}/appointments/meus-agendamentos/${usuarioLogado.id}`,
+    );
+    const agendamentos = await response.json();
 
+    window._agendamentos = agendamentos; // guarda para filtros
+    renderAgendamentos(agendamentos);
+  } catch (error) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;color:red">Erro ao carregar agendamentos.</td></tr>`;
+  }
+}
+
+function renderAgendamentos(lista) {
+  const tbody = document.getElementById("agendamentosBody");
+  const emptyMsg = document.getElementById("emptyMsg");
+  const query = (
+    document.getElementById("searchInput").value || ""
+  ).toLowerCase();
+  const filtroStatus = document.getElementById("filterStatus").value;
+
+  let filtrados = lista.filter((a) => {
+    const status = resolveStatus(a);
+    if (filtroStatus !== "all" && status !== filtroStatus) return false;
+    if (!query) return true;
+    const dataBR = formatDateBR(a.appointment_date);
+    return (
+      (a.professional_name || "") +
+      " " +
+      (a.service_name || "") +
+      " " +
+      dataBR +
+      " " +
+      formatTime(a.appointment_time)
+    )
+      .toLowerCase()
+      .includes(query);
+  });
+
+  // Ordena: futuros primeiro, depois por data
+  filtrados.sort((a, b) => {
+    const da = new Date(
+      `${a.appointment_date.split("T")[0]}T${formatTime(a.appointment_time)}`,
+    );
+    const db = new Date(
+      `${b.appointment_date.split("T")[0]}T${formatTime(b.appointment_time)}`,
+    );
+    return db - da;
+  });
+
+  tbody.innerHTML = "";
+
+  if (filtrados.length === 0) {
+    emptyMsg.style.display = "block";
+    return;
+  }
+  emptyMsg.style.display = "none";
+
+  filtrados.forEach((a) => {
+    const status = resolveStatus(a);
+    const statusClass =
+      status === "Agendado"
+        ? "agendado"
+        : status === "Cancelado"
+          ? "cancelado"
+          : "concluido";
+    const podeEditar = status === "Agendado";
+
+    const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${formatDateBR(b.date)}</td>
-      <td>${b.time}</td>
-      <td>${b.prof}</td>
-      <td>${b.service}</td>
+      <td>${formatDateBR(a.appointment_date)}</td>
+      <td>${formatTime(a.appointment_time)}</td>
+      <td>${a.professional_name || "-"}</td>
+      <td>${a.service_name || "Corte e Beleza"}</td>
       <td><span class="status ${statusClass}">${status}</span></td>
       <td class="actions">
-        <button class="btn edit">✏️</button>
-        <button class="btn cancel">❌</button>
-        <button class="btn reagendar" style="display:none">🔁</button>
+        <button class="btn edit" title="Editar agendamento" ${!podeEditar ? "disabled" : ""}>
+          <i class="fa-solid fa-pen"></i>
+        </button>
+        <button class="btn cancel" title="Cancelar agendamento" ${!podeEditar ? "disabled" : ""}>
+          <i class="fa-solid fa-ban"></i>
+        </button>
       </td>
     `;
     tbody.appendChild(tr);
 
-    const editBtn = tr.querySelector('.edit');
-    const cancelBtn = tr.querySelector('.cancel');
-    const reagendarBtn = tr.querySelector('.reagendar');
-
-    if(status==='Concluído' || status==='Cancelado'){
-      editBtn.disabled = true; cancelBtn.disabled = true;
-      editBtn.style.opacity=0.5; cancelBtn.style.opacity=0.5;
-      editBtn.style.cursor='not-allowed'; cancelBtn.style.cursor='not-allowed';
-      if(status==='Cancelado') reagendarBtn.style.display='inline-block';
-    } else {
-      editBtn.addEventListener('click', ()=>{
-        const newTime = prompt('Digite a nova hora (ex: 10:00):', b.time);
-        if(newTime && /^\d{2}:\d{2}$/.test(newTime)){ b.time=newTime; localStorage.setItem(storageKey, JSON.stringify(list)); renderAgendamentos(); }
-        else if(newTime!==null) alert('Formato inválido. Use HH:MM.');
-      });
-      cancelBtn.addEventListener('click', ()=>{
-        if(confirm('Deseja realmente cancelar este agendamento?')){ b.status='Cancelado'; localStorage.setItem(storageKey, JSON.stringify(list)); renderAgendamentos(); }
-      });
+    if (podeEditar) {
+      tr.querySelector(".edit").addEventListener("click", () =>
+        abrirModalEdicao(a),
+      );
+      tr.querySelector(".cancel").addEventListener("click", () =>
+        cancelarAgendamento(a.id),
+      );
     }
-
-    reagendarBtn.addEventListener('click', ()=>{
-      const newDate = prompt('Nova data (AAAA-MM-DD):', b.date);
-      if(!newDate) return;
-      const newTime = prompt('Nova hora (HH:MM):', b.time);
-      if(!newTime) return;
-      if(!/^\d{4}-\d{2}-\d{2}$/.test(newDate) || !/^\d{2}:\d{2}$/.test(newTime)){ alert('Formato inválido. Data: AAAA-MM-DD. Hora: HH:MM'); return; }
-      b.date=newDate; b.time=newTime; b.status='Agendado';
-      localStorage.setItem(storageKey, JSON.stringify(list)); renderAgendamentos();
-    });
   });
 }
 
-searchInput.addEventListener('input',()=>renderAgendamentos());
-filterStatus.addEventListener('change',()=>renderAgendamentos());
-clearFiltersBtn.addEventListener('click',()=>{searchInput.value=''; filterStatus.value='all'; renderAgendamentos();});
+// Cancela agendamento no banco
+async function cancelarAgendamento(id) {
+  if (!confirm("Deseja realmente cancelar este agendamento?")) return;
+  try {
+    const response = await fetch(`${API_URL}/appointments/cancelar/${id}`, {
+      method: "PUT",
+    });
+    if (response.ok) {
+      alert("Agendamento cancelado com sucesso!");
+      carregarAgendamentos();
+    } else {
+      alert("Erro ao cancelar agendamento.");
+    }
+  } catch {
+    alert("Erro ao conectar com o servidor.");
+  }
+}
 
-renderAgendamentos();
+// Modal de edição simples
+function abrirModalEdicao(agendamento) {
+  const modal = document.getElementById("modalEdicao");
+  document.getElementById("editData").value =
+    agendamento.appointment_date.split("T")[0];
+  document.getElementById("editHora").value = formatTime(
+    agendamento.appointment_time,
+  );
+  document.getElementById("editId").value = agendamento.id;
+  modal.style.display = "flex";
+}
+
+window.fecharModalEdicao = function () {
+  document.getElementById("modalEdicao").style.display = "none";
+};
+
+window.salvarEdicao = async function () {
+  const id = document.getElementById("editId").value;
+  const novaData = document.getElementById("editData").value;
+  const novaHora = document.getElementById("editHora").value;
+
+  if (!novaData || !novaHora) {
+    alert("Preencha data e hora!");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/appointments/editar/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        appointment_date: novaData,
+        appointment_time: novaHora,
+      }),
+    });
+    if (response.ok) {
+      alert("Agendamento atualizado!");
+      fecharModalEdicao();
+      carregarAgendamentos();
+    } else {
+      alert("Erro ao atualizar agendamento.");
+    }
+  } catch {
+    alert("Erro ao conectar com o servidor.");
+  }
+};
+
+// Filtros
+document
+  .getElementById("searchInput")
+  .addEventListener("input", () =>
+    renderAgendamentos(window._agendamentos || []),
+  );
+document
+  .getElementById("filterStatus")
+  .addEventListener("change", () =>
+    renderAgendamentos(window._agendamentos || []),
+  );
+document.getElementById("clearFilters").addEventListener("click", () => {
+  document.getElementById("searchInput").value = "";
+  document.getElementById("filterStatus").value = "all";
+  renderAgendamentos(window._agendamentos || []);
+});
+
+carregarAgendamentos();

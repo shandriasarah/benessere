@@ -20,7 +20,21 @@ router.get("/meus-agendamentos/:userId", async (req, res) => {
     res.status(500).json({ error: "Erro ao buscar agendamentos" });
   }
 });
+// Editar agendamento
+router.put("/editar/:id", (req, res) => {
+  const { id } = req.params;
+  const { appointment_date, appointment_time } = req.body;
+  const pool = req.db;
 
+  pool.query(
+    "UPDATE appointments SET appointment_date = ?, appointment_time = ?, status = 'scheduled' WHERE id = ?",
+    [appointment_date, appointment_time, id],
+    (err) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ message: "Agendamento atualizado com sucesso!" });
+    },
+  );
+});
 // Criar novo agendamento
 router.post("/criar", (req, res) => {
   const {
