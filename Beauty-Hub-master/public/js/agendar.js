@@ -103,28 +103,114 @@
   };
 
   // --- 3. SELEÇÃO DE DATA E HORA ---
-  function configurarCalendarioBasico() {
-    const grid = document.getElementById("calendarGrid");
-    if (!grid) return;
+  // Substitua a função configurarCalendarioBasico e adicione as variáveis no topo da bolha:
 
+  let mesAtual = new Date().getMonth(); // mês atual
+  let anoAtual = new Date().getFullYear();
+
+  const meses = [
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro",
+  ];
+
+  function configurarCalendarioBasico() {
+    renderizarCalendario(anoAtual, mesAtual);
+  }
+
+  function renderizarCalendario(ano, mes) {
+    const grid = document.getElementById("calendarGrid");
     const monthYearEl = document.getElementById("monthYear");
-    if (monthYearEl) monthYearEl.innerText = "Maio 2026";
+    if (!grid || !monthYearEl) return;
+
+    monthYearEl.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px">
+      <button onclick="mudarMes(-1)" style="background:none;border:none;font-size:18px;cursor:pointer;color:#6B21A8">&#8249;</button>
+      <span style="font-weight:700;color:#6B21A8">${meses[mes]} ${ano}</span>
+      <button onclick="mudarMes(1)" style="background:none;border:none;font-size:18px;cursor:pointer;color:#6B21A8">&#8250;</button>
+    </div>
+  `;
 
     grid.innerHTML = "";
-    for (let i = 1; i <= 30; i++) {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    const diasNoMes = new Date(ano, mes + 1, 0).getDate();
+    const primeiroDia = new Date(ano, mes, 1).getDay(); // 0=domingo
+
+    // Espaços vazios antes do dia 1
+    for (let i = 0; i < primeiroDia; i++) {
+      const vazio = document.createElement("div");
+      grid.appendChild(vazio);
+    }
+
+    for (let i = 1; i <= diasNoMes; i++) {
       const dia = document.createElement("div");
       dia.className = "calendar-day";
       dia.innerText = i;
-      dia.onclick = () => {
-        document
-          .querySelectorAll(".calendar-day")
-          .forEach((d) => d.classList.remove("selected"));
-        dia.classList.add("selected");
-        dataSelecionada = `2026-05-${i.toString().padStart(2, "0")}`;
-      };
+
+      const dataEste = new Date(ano, mes, i);
+      dataEste.setHours(0, 0, 0, 0);
+
+      // Desabilita dias passados
+      if (dataEste < hoje) {
+        dia.style.opacity = "0.3";
+        dia.style.cursor = "not-allowed";
+      } else {
+        dia.onclick = () => {
+          document
+            .querySelectorAll(".calendar-day")
+            .forEach((d) => d.classList.remove("selected"));
+          dia.classList.add("selected");
+          dataSelecionada = `${ano}-${String(mes + 1).padStart(2, "0")}-${String(i).padStart(2, "0")}`;
+        };
+      }
       grid.appendChild(dia);
     }
   }
+
+  window.mudarMes = function (direcao) {
+    mesAtual += direcao;
+    if (mesAtual > 11) {
+      mesAtual = 0;
+      anoAtual++;
+    }
+    if (mesAtual < 0) {
+      mesAtual = 11;
+      anoAtual--;
+    }
+    // Não permite voltar ao passado
+    const hoje = new Date();
+    if (
+      anoAtual < hoje.getFullYear() ||
+      (anoAtual === hoje.getFullYear() && mesAtual < hoje.getMonth())
+    ) {
+      mesAtual -= direcao;
+      if (mesAtual > 11) {
+        mesAtual = 0;
+        anoAtual++;
+      }
+      if (mesAtual < 0) {
+        mesAtual = 11;
+        anoAtual--;
+      }
+      return;
+    }
+    dataSelecionada = null;
+    document
+      .querySelectorAll(".calendar-day")
+      .forEach((d) => d.classList.remove("selected"));
+    renderizarCalendario(anoAtual, mesAtual);
+  };
 
   function gerarHorariosTeste() {
     const grid = document.getElementById("horariosGrid");
