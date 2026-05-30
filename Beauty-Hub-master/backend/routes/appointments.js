@@ -73,14 +73,16 @@ router.post("/criar", (req, res) => {
   ];
 
   // 3. Execução utilizando o padrão correto de callback do projeto
+  // DEPOIS:
   pool.query(sql, valores, (err, result) => {
     if (err) {
       console.error("Erro ao inserir agendamento no MySQL:", err);
-      return res
-        .status(500)
-        .json({ error: "Erro interno ao salvar no banco de dados." });
+      return res.status(500).json({
+        error: "Erro interno ao salvar no banco de dados.",
+        detalhe: err.message, // 👈 mostra o erro real
+        codigo: err.code, // 👈 mostra o código do erro
+      });
     }
-
     // Retorna o sucesso e libera o front-end
     return res.status(201).json({
       message: "Agendamento realizado com sucesso!",
