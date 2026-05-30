@@ -1,26 +1,27 @@
 const express = require("express");
 const router = express.Router();
 // Obter todos os agendamentos do usuário
-router.get("/meus-agendamentos/:userId", async (req, res) => {
+// Obter todos os agendamentos do usuário
+router.get("/meus-agendamentos/:userId", (req, res) => {
   const { userId } = req.params;
-  try {
-    const pool = req.db;
-    const connection = await pool.getConnection();
-    const [appointments] = await connection.execute(
-      `SELECT a.*, p.name as professional_name, s.type as service_type, s.name as service_name
-       FROM appointments a
-       JOIN professionals p ON a.professional_id = p.id
-       JOIN services s ON a.service_id = s.id
-       WHERE a.user_id = ?
-       ORDER BY a.appointment_date DESC`,
-      [userId],
-    );
-    connection.release();
-    res.json(appointments || []);
-  } catch (error) {
-    console.error("Erro ao buscar agendamentos:", error);
-    res.status(500).json({ error: "Erro ao buscar agendamentos" });
-  }
+  const pool = req.db;
+
+  pool.query(
+    `SELECT a.*, p.name as professional_name, s.type as service_type, s.name as service_name
+     FROM appointments a
+     JOIN professionals p ON a.professional_id = p.id
+     JOIN services s ON a.service_id = s.id
+     WHERE a.user_id = ?
+     ORDER BY a.appointment_date DESC`,
+    [userId],
+    (err, appointments) => {
+      if (err) {
+        console.error("Erro ao buscar agendamentos:", err);
+        return res.status(500).json({ error: "Erro ao buscar agendamentos" });
+      }
+      res.json(appointments || []);
+    },
+  );
 });
 // Editar agendamento
 router.put("/editar/:id", (req, res) => {
