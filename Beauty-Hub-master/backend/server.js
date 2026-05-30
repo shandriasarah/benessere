@@ -184,11 +184,34 @@ app.get("*", (req, res) => {
     }
   });
 });
-
+// Auto-ping para não dormir (plano gratuito Render)
+const https = require("https");
+setInterval(
+  () => {
+    https
+      .get("https://beauty-hub-72cv.onrender.com/api/health", (res) => {
+        console.log("Auto-ping:", res.statusCode);
+      })
+      .on("error", () => {});
+  },
+  14 * 60 * 1000,
+); // Pinga a cada 14 minutos
 // Inicialização estável do servidor
 const server = app.listen(PORT, () => {
   console.log(` Servidor pronto na porta ${PORT}`);
 });
+// Auto-ping para não dormir (plano gratuito Render)
+const https = require("https");
+setInterval(
+  () => {
+    https
+      .get("https://beauty-hub-72cv.onrender.com/api/health", (res) => {
+        console.log("Auto-ping:", res.statusCode);
+      })
+      .on("error", () => {});
+  },
+  14 * 60 * 1000,
+); // Pinga a cada 14 minutos
 
 server.keepAliveTimeout = 120000;
 server.headersTimeout = 120500;
