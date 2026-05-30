@@ -88,6 +88,20 @@ router.post("/criar", (req, res) => {
       message: "Agendamento realizado com sucesso!",
       id: result.insertId,
     });
+    // ROTA DE DIAGNÓSTICO - REMOVER DEPOIS
+    router.get("/debug", (req, res) => {
+      const pool = req.db;
+      pool.query("SELECT * FROM services", (err, services) => {
+        pool.query("DESCRIBE appointments", (err2, columns) => {
+          res.json({
+            services,
+            columns,
+            erroServices: err?.message,
+            erroColumns: err2?.message,
+          });
+        });
+      });
+    });
   });
 });
 
