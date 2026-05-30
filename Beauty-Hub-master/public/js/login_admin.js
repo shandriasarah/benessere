@@ -7,24 +7,21 @@ async function loginAdmin(event) {
   const msg = document.getElementById("msgAdmin");
 
   try {
-    const res = await fetch(`${API_URL}/auth/login`, {
+    const res = await fetch(`${API_URL}/auth/login-admin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: user, password: senha }),
+      body: JSON.stringify({ user, senha }),
     });
     const data = await res.json();
 
-    if (res.ok && data.user?.role === "admin") {
+    if (res.ok) {
       sessionStorage.setItem("tb_admin_logged", JSON.stringify(data.user));
       msg.style.color = "green";
       msg.textContent = "Login realizado! Redirecionando...";
       setTimeout(() => (window.location.href = "admin_home.html"), 1000);
-    } else if (res.ok && data.user?.role !== "admin") {
-      msg.style.color = "red";
-      msg.textContent = "Acesso negado. Você não é administrador.";
     } else {
       msg.style.color = "red";
-      msg.textContent = data.message || "Usuário ou senha incorretos.";
+      msg.textContent = data.error || "Usuário ou senha incorretos.";
     }
   } catch {
     msg.style.color = "red";
