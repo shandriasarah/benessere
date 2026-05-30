@@ -1,47 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-// ROTA SETUP - cria tabelas (remover depois)
-router.get("/setup", (req, res) => {
-  const pool = req.db;
-
-  const sql1 = `CREATE TABLE IF NOT EXISTS services (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    type VARCHAR(100),
-    price DECIMAL(10,2) DEFAULT 0.00
-  )`;
-
-  const sql2 = `CREATE TABLE IF NOT EXISTS appointments (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    professional_id INT NOT NULL,
-    service_id INT NOT NULL,
-    appointment_date DATE NOT NULL,
-    appointment_time TIME NOT NULL,
-    total_price DECIMAL(10,2) DEFAULT 50.00,
-    status VARCHAR(20) DEFAULT 'scheduled',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (professional_id) REFERENCES professionals(id),
-    FOREIGN KEY (service_id) REFERENCES services(id)
-  )`;
-
-  const sql3 = `INSERT IGNORE INTO services (id, name, type) VALUES (1, 'Corte e Beleza', 'beleza')`;
-
-  pool.query(sql1, (err1) => {
-    pool.query(sql2, (err2) => {
-      pool.query(sql3, (err3) => {
-        res.json({
-          services: err1 ? err1.message : "OK",
-          appointments: err2 ? err2.message : "OK",
-          serviceInsert: err3 ? err3.message : "OK",
-        });
-      });
-    });
-  });
-});
-
 // Obter todos os agendamentos do usuário
 router.get("/meus-agendamentos/:userId", async (req, res) => {
   const { userId } = req.params;
