@@ -155,5 +155,29 @@ router.post("/cadastro-cliente", async (req, res) => {
 router.post("/logout", (req, res) => {
   res.json({ message: "Logout realizado com sucesso" });
 });
+// Rota para criar tabela admins e inserir admin padrão - REMOVER DEPOIS
+router.get("/setup-admin", (req, res) => {
+  const pool = req.db;
+
+  pool.query(
+    `CREATE TABLE IF NOT EXISTS admins (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL
+  )`,
+    (err1) => {
+      if (err1) return res.status(500).json({ error: err1.message });
+
+      pool.query(
+        "INSERT IGNORE INTO admins (user, senha) VALUES (?, ?)",
+        ["admin", "admin123"],
+        (err2) => {
+          if (err2) return res.status(500).json({ error: err2.message });
+          res.json({ ok: true, user: "admin", senha: "admin123" });
+        },
+      );
+    },
+  );
+});
 
 module.exports = router;
