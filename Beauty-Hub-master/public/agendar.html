@@ -74,20 +74,13 @@
       <footer>© 2025 Beauty Hub - Todos os direitos reservados.</footer>
     </div>
 
-<div id="agendarModal" class="modal">
-  <div class="modal-content">
-    <button class="close-btn" onclick="closeAgendarModal()">&times;</button>
-    
-    <h3>Escolha a Data Disponível:</h3>
-    <div id="monthYear">Maio 2026</div>
-    <div id="calendarGrid" class="calendar-grid"></div>
-    
-    <h3>Escolha o Horário Disponível:</h3>
-    <div id="horariosGrid" class="horarios-grid"></div>
-    
-    <button id="confirmBtn" onclick="confirmarAgendamento()">Confirmar</button>
-  </div>
-</div>
+    <!-- MODAL -->
+    <div id="agendarModal" class="modal">
+      <div class="modal-content">
+        <button class="close-btn" onclick="closeAgendarModal()">&times;</button>
+
+        <h3>Escolha a Data Disponível:</h3>
+        <div id="monthYear">Maio 2026</div>
         <div class="weekdays-grid">
           <div>D</div>
           <div>S</div>
@@ -97,23 +90,17 @@
           <div>S</div>
           <div>S</div>
         </div>
-        <div class="calendar-grid" id="calendarGrid"></div>
+        <div id="calendarGrid" class="calendar-grid"></div>
 
-        <h2>Escolha o Horário Disponível:</h2>
-        <div id="horariosGrid"></div>
+        <h3>Escolha o Horário Disponível:</h3>
+        <div id="horariosGrid" class="horarios-grid"></div>
 
-        <button
-          id="confirmBtn"
-          class="agendar-btn"
-          onclick="confirmarAgendamento()"
-        >
+        <button id="confirmBtn" onclick="confirmarAgendamento()">
           Confirmar
         </button>
       </div>
     </div>
 
     <script src="js/agendar.js"></script>
-
-    <script src="js/agendar.js?v=2"></script>
   </body>
 </html>
