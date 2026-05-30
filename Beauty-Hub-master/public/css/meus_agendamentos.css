@@ -148,10 +148,9 @@ body {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: url("img/logo_beautyhub.jpeg") center/cover;
+  background: url("../img/logo_beautyhub.jpeg") center/cover;
   border: 2px solid #c4b5fd;
 }
-
 /* Conteúdo */
 main {
   padding: 40px 28px 80px;
