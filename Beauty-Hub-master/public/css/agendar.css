@@ -1,107 +1,66 @@
 /* ==========================================================================
-   1. REGRA DO MENU LATERAL (SIDEBAR ROXA ORIGINAL)
+   1. REGRAS GERAIS E LAYOUT (IGUAL À FOTO DA DIREITA)
    ========================================================================== */
 body {
   margin: 0;
   font-family: "Inter", sans-serif;
   background-color: #f3e9fe;
-  display: flex;
 }
 
-/* Estilização da sua lista de links para virar a Barra Lateral */
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 25px 15px;
-  width: 240px;
-  height: 100vh;
-  background: linear-gradient(
-    135deg,
-    #6a1b9a,
-    #4a148c
-  ); /* Degradê roxo profissional */
-  position: fixed;
-  left: 0;
-  top: 0;
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  z-index: 1000;
+/* Área do cabeçalho que contém o título "Escolha o Profissional..." */
+.header-container,
+.main-content h2,
+main h2,
+body > h2 {
+  padding-left: 280px !important;
+  margin-top: 30px;
+  box-sizing: border-box;
 }
 
-ul li a {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: none;
-  padding: 14px 18px;
-  border-radius: 10px;
-  font-weight: 500;
-  font-size: 15px;
-  transition: all 0.2s ease;
-}
-
-/* Ícones do menu */
-ul li a i {
-  font-size: 18px;
-  width: 25px;
-  text-align: center;
-}
-
-/* Efeito ao passar o mouse nos links */
-ul li a:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
-}
-
-/* Item ativo (página atual) */
-ul li a.active {
-  background-color: #ffffff;
-  color: #6a1b9a;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.header-container p,
+main p,
+body > p {
+  padding-left: 280px !important;
+  box-sizing: border-box;
 }
 
 /* ==========================================================================
-   2. ÁREA DE CONTEÚDO (CARDS DOS PROFISSIONAIS)
+   2. GRID DOS PROFISSIONAIS (CARDS ESPAÇADOS E ALINHADOS)
    ========================================================================== */
-.main-content,
-main,
-.container-principal {
-  flex: 1;
-  padding: 30px;
-  margin-left: 270px; /* Garante que o conteúdo comece após a barra roxa */
-}
-
-/* Se você não tiver uma tag servindo de container para o título, adicionamos essa margem */
-h2,
-h3,
-p {
-  margin-left: 270px;
-}
-
 #profissionaisContainer {
   display: flex;
   flex-wrap: wrap;
-  gap: 25px;
-  margin-top: 20px;
-  margin-left: 270px; /* Alinha o bloco de profissionais perfeitamente */
+  gap: 30px;
+  padding: 20px 20px 20px 280px !important; /* Deixa o espaço exato para a barra lateral */
+  box-sizing: border-box;
 }
 
 .professional-card {
   background: #ffffff;
   border-radius: 16px;
-  padding: 25px;
-  width: 220px;
+  padding: 30px 20px;
+  width: 240px;
   text-align: center;
   box-shadow: 0 4px 15px rgba(106, 27, 154, 0.05);
-  transition: transform 0.2s ease;
+  box-sizing: border-box;
 }
 
-.professional-card:hover {
-  transform: translateY(-5px);
+.card-avatar {
+  font-size: 35px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.professional-card h3 {
+  margin: 10px 0 5px 0;
+  font-size: 18px;
+  color: #000;
+}
+
+.professional-card .specialty {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
 }
 
 .select-prof-btn {
@@ -112,22 +71,27 @@ p {
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  margin-top: 15px;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
 }
 
 /* ==========================================================================
-   3. JANELA DO MODAL DO CALENDÁRIO (CENTRADO)
+   3. O MODAL CENTRALIZADO (MÁGICA DO AGENDAMENTO)
    ========================================================================== */
 .modal {
-  display: none; /* JS altera para flex */
+  display: none; /* Controlado pelo JS */
   position: fixed;
-  z-index: 9999;
-  left: 240px; /* Começa logo após a barra lateral */
+  z-index: 99999;
+  left: 0;
   top: 0;
-  width: calc(100% - 240px);
+  width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.4); /* Fundo escurecido semi-transparente */
+  backdrop-filter: blur(4px); /* Efeito blur de fundo elegante */
   justify-content: center;
   align-items: center;
 }
@@ -135,16 +99,25 @@ p {
 .modal-content {
   background-color: #ffffff;
   padding: 30px;
-  border-radius: 20px;
+  border-radius: 24px;
   width: 90%;
-  max-width: 440px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  max-width: 460px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   position: relative;
   text-align: center;
+  box-sizing: border-box;
   animation: surgirModal 0.3s ease-out;
 }
 
-/* Grids Internos do Calendário */
+/* Cabeçalhos internos do modal */
+.modal-content h3 {
+  color: #6a1b9a;
+  font-size: 20px;
+  margin-top: 0;
+  font-weight: 700;
+}
+
+/* Grid do Calendário (7 colunas perfeitas) */
 .calendar-grid {
   display: grid !important;
   grid-template-columns: repeat(7, 1fr) !important;
@@ -153,17 +126,21 @@ p {
 }
 
 .calendar-day {
-  padding: 10px;
+  padding: 8px 0;
   text-align: center;
   cursor: pointer;
   border-radius: 50%;
   font-weight: 500;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s;
 }
 
 .calendar-day:hover {
   background-color: #f1e7fe;
 }
 
+/* Grid de Horários (4 colunas perfeitas) */
 .horarios-grid {
   display: grid !important;
   grid-template-columns: repeat(4, 1fr) !important;
@@ -172,14 +149,23 @@ p {
 }
 
 .time-slot {
-  padding: 10px;
+  padding: 10px 0;
   border: 1px solid #e0e0e0;
   background-color: #fff;
   border-radius: 8px;
   cursor: pointer;
+  font-weight: 500;
+  font-size: 13px;
+  color: #444;
+  transition: all 0.2s;
 }
 
-/* 🌟 PINTA DE ROXO O DIA/HORA SELECIONADO 🌟 */
+.time-slot:hover {
+  border-color: #6a1b9a;
+  background-color: #f1e7fe;
+}
+
+/* 🌟 ESTADOS SELECIONADOS (ROXO COM TEXTO BRANCO) 🌟 */
 .calendar-day.selected {
   background-color: #6a1b9a !important;
   color: #ffffff !important;
@@ -193,43 +179,48 @@ p {
   font-weight: bold !important;
 }
 
+/* Botão Confirmar de dentro do modal */
+#confirmBtn {
+  background-color: #a855f7;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 4px 10px rgba(168, 85, 247, 0.3);
+  transition: background 0.2s;
+}
+
+#confirmBtn:hover {
+  background-color: #9333ea;
+}
+
+/* Botão Fechar (X) */
 .close-btn {
   position: absolute;
   top: 20px;
   right: 20px;
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 22px;
   cursor: pointer;
-  color: #999;
+  color: #aaa;
+}
+
+.close-btn:hover {
+  color: #333;
 }
 
 @keyframes surgirModal {
   from {
-    transform: scale(0.9);
+    transform: scale(0.95);
     opacity: 0;
   }
   to {
     transform: scale(1);
     opacity: 1;
-  }
-}
-
-@media (max-width: 768px) {
-  ul {
-    width: 100%;
-    height: auto;
-    position: relative;
-  }
-  .main-content,
-  #profissionaisContainer,
-  h2,
-  h3,
-  p {
-    margin-left: 0;
-  }
-  .modal {
-    left: 0;
-    width: 100%;
   }
 }

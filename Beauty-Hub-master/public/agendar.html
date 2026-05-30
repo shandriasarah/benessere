@@ -74,18 +74,20 @@
       <footer>© 2025 Beauty Hub - Todos os direitos reservados.</footer>
     </div>
 
-    <!-- Modal -->
-    <div id="agendarModal" class="modal">
-      <div class="modal-content">
-        <button class="close-btn" onclick="closeAgendarModal()">×</button>
-
-        <h2>Escolha a Data Disponível:</h2>
-        <div class="calendar-header">
-          <button id="prevMonth">&lt;</button>
-          <span id="monthYear"></span>
-          <button id="nextMonth">&gt;</button>
-        </div>
-
+<div id="agendarModal" class="modal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeAgendarModal()">&times;</button>
+    
+    <h3>Escolha a Data Disponível:</h3>
+    <div id="monthYear">Maio 2026</div>
+    <div id="calendarGrid" class="calendar-grid"></div>
+    
+    <h3>Escolha o Horário Disponível:</h3>
+    <div id="horariosGrid" class="horarios-grid"></div>
+    
+    <button id="confirmBtn" onclick="confirmarAgendamento()">Confirmar</button>
+  </div>
+</div>
         <div class="weekdays-grid">
           <div>D</div>
           <div>S</div>

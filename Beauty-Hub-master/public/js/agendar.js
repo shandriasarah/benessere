@@ -67,28 +67,27 @@
   function openAgendarModal(profissionalId) {
     const modal = document.getElementById("agendarModal");
     if (modal) {
-      modal.style.display = "flex"; // Abre o modal na tela
+      modal.style.display = "flex";
     }
 
-    // Salvando o ID com a escrita idêntica à do parâmetro
+    // 🌟 CORRIGIDO: Agora salva exatamente na variável correta
     profissionalSelecionadoId = profissionalId;
-
-    // Renderiza os horários para clique
     gerarHorariosTeste();
 
-    // Restaura o botão de confirmar para o estado inicial
     const btnConfirmar = document.getElementById("confirmBtn");
     if (btnConfirmar) {
       btnConfirmar.disabled = false;
       btnConfirmar.innerText = "Confirmar";
     }
 
-    // Reseta seleções de dias anteriores por segurança
     dataSelecionada = null;
     horarioSelecionado = null;
     document
       .querySelectorAll(".calendar-day")
       .forEach((d) => d.classList.remove("selected"));
+    document
+      .querySelectorAll(".time-slot")
+      .forEach((b) => b.classList.remove("selected"));
   }
 
   // Vincula as funções de abrir/fechar direto aos botões para segurança global
