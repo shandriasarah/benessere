@@ -30,6 +30,22 @@ router.put("/perfil/:userId", (req, res) => {
   );
 });
 
+router.get("/migrar2", (req, res) => {
+  const pool = req.db;
+  const resultados = {};
+
+  pool.query("ALTER TABLE users ADD COLUMN phone VARCHAR(20)", (err) => {
+    resultados.phone = err ? err.message : "OK";
+    pool.query("ALTER TABLE users ADD COLUMN address VARCHAR(255)", (err2) => {
+      resultados.address = err2 ? err2.message : "OK";
+      pool.query("ALTER TABLE users ADD COLUMN birth_date DATE", (err3) => {
+        resultados.birth_date = err3 ? err3.message : "OK";
+        res.json(resultados);
+      });
+    });
+  });
+});
+
 router.get("/migrar", (req, res) => {
   const pool = req.db;
   pool.query(
