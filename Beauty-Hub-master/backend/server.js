@@ -19,7 +19,13 @@ const PORT = process.env.PORT || 3000;
 // ==========================================
 // 1. MIDDLEWARES CONFIGURADOS NO TOPO (ESSENCIAL)
 // ==========================================
-app.use(cors()); // Libera o acesso para o seu navegador não dar erro de CORS!
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 app.use(express.json()); // Ensina o servidor a ler os dados enviados pelo JavaScript
 app.use(express.urlencoded({ extended: true }));
 
