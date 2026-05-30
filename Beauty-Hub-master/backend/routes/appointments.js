@@ -1,3 +1,5 @@
+const express = require("express");
+const router = express.Router();
 // Obter todos os agendamentos do usuário
 router.get("/meus-agendamentos/:userId", async (req, res) => {
   const { userId } = req.params;
