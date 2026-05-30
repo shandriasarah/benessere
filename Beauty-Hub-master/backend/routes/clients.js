@@ -52,6 +52,12 @@ router.get("/migrar", (req, res) => {
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS phone VARCHAR(20)",
     () => {
       pool.query(
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS role VARCHAR(20) DEFAULT 'client'",
+        () => {
+          res.json({ ok: true });
+        },
+      );
+      pool.query(
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS address VARCHAR(255)",
         () => {
           pool.query(
