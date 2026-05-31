@@ -16,25 +16,22 @@ const clientRoutes = require("./routes/clients");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// CORS
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  if (req.method === "OPTIONS") return res.sendStatus(200);
+// CORS - único bloco
+app.use("*", (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+  );
+  res.setHeader("Access-Control-Allow-Headers", "*");
+  res.setHeader("Access-Control-Max-Age", "86400");
+  if (req.method === "OPTIONS") return res.status(200).end();
   next();
 });
-app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  }),
-);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Banco de dados
 const dbConfig = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -54,11 +51,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// Arquivos estáticos
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "../public")));
 
-// Rotas auth
 app.post("/api/auth/register", async (req, res) => {
   const { name, email, password } = req.body;
   const pool = db.getPool();
@@ -119,7 +114,6 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-// Rotas externas
 app.use("/api/auth", authRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/professionals", professionalsRoutes);
@@ -145,7 +139,6 @@ app.get("*", (req, res) => {
   });
 });
 
-// Auto-ping para não dormir
 setInterval(
   () => {
     https
