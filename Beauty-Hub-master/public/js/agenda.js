@@ -4,28 +4,7 @@ function toggleMenu() {
   document.querySelector(".sidebar").classList.toggle("closed");
 }
 
-// Profissionais fixos (podem vir do banco futuramente)
-const professionals = [
-  {
-    id: 1,
-    name: "Ana Paula",
-    img: "https://i.pravatar.cc/50?img=12",
-    services: [
-      { name: "Corte", price: 60 },
-      { name: "Escova", price: 70 },
-      { name: "Coloração", price: 120 },
-    ],
-  },
-  {
-    id: 2,
-    name: "Marcos Lima",
-    img: "https://i.pravatar.cc/50?img=14",
-    services: [
-      { name: "Barba", price: 35 },
-      { name: "Corte", price: 55 },
-    ],
-  },
-];
+let professionals = [];
 
 let selectedService = null;
 let allAppointments = [];
@@ -150,7 +129,31 @@ const modalPrice = document.getElementById("modalPrice");
 const modalDate = document.getElementById("modalDate");
 const modalTime = document.getElementById("modalTime");
 
-professionals.forEach((p) => {
+async function carregarProfissionais() {
+  try {
+    const res = await fetch(`${API_URL}/professionals`);
+    const data = await res.json();
+    professionals = (Array.isArray(data) ? data : []).map((p) => ({
+      id: p.id,
+      name: p.nome,
+      img: `https://i.pravatar.cc/50?img=${p.id + 10}`,
+      especialidade: p.especialidade || "",
+      services: p.servicos || [],
+    }));
+  } catch (e) {
+    console.error("Erro ao carregar profissionais:", e);
+    professionals = [];
+  }
+  renderProfissionais();
+}
+
+function renderProfissionais() {
+  profContainer.innerHTML = "";
+  if (professionals.length === 0) {
+    profContainer.innerHTML = '<p style="color:#888;padding:16px">Nenhum profissional cadastrado.</p>';
+    return;
+  }
+  professionals.forEach((p) => {
   const div = document.createElement("div");
   div.className = "prof-card";
   div.innerHTML = `
@@ -173,11 +176,12 @@ professionals.forEach((p) => {
         .join("")}
     </div>`;
   profContainer.appendChild(div);
-  div.querySelector(".prof-header").onclick = () => {
-    const sd = div.querySelector(".services-container");
-    sd.style.display = sd.style.display === "flex" ? "none" : "flex";
-  };
-});
+    div.querySelector(".prof-header").onclick = () => {
+      const sd = div.querySelector(".services-container");
+      sd.style.display = sd.style.display === "flex" ? "none" : "flex";
+    };
+  });
+}
 
 profContainer.addEventListener("click", (e) => {
   if (e.target.classList.contains("agendar-btn")) {
@@ -273,3 +277,4 @@ document.getElementById("modalClose").onclick = () => {
 };
 
 carregarAgendamentos();
+carregarProfissionais();
