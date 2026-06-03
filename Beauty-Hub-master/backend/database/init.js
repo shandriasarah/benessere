@@ -5,7 +5,7 @@ class Database {
     this.config = config;
     // Criamos o pool IMEDIATAMENTE no construtor.
     // Assim, o getPool() nunca retornará nulo.
-    this.pool = mysql.createPool({
+    const rawPool = mysql.createPool({
       ...config,
       waitForConnections: true,
       connectionLimit: 10,
@@ -13,9 +13,11 @@ class Database {
       connectTimeout: 20000,
     });
 
-    this.pool.on("error", (err) => {
+    rawPool.on("error", (err) => {
       console.error("Pool error:", err.message);
     });
+
+    this.pool = rawPool.promise();
 
     console.log(" Pool de conexões MySQL criado.");
   }
@@ -23,7 +25,7 @@ class Database {
   async init() {
     // Apenas testa se a conexão está funcionando
     try {
-      const connection = await this.pool.promise().getConnection();
+      const connection = await this.pool.getConnection();
       console.log(`✅ Conexão com o banco validada! Host: ${this.config.host}`);
       connection.release();
     } catch (err) {
