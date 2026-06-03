@@ -1,6 +1,7 @@
 // Configurações
 const API_BASE =
-  window.location.hostname === "localhost"
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
     ? "http://localhost:3000/api"
     : "https://beauty-hub-72cv.onrender.com/api";
 
@@ -48,7 +49,8 @@ async function loadDashboard() {
 async function loadAppointments() {
   try {
     const response = await fetch(`${API_BASE}/admin/agendamentos`);
-    const appointments = await response.json();
+    const data = await response.json();
+    const appointments = Array.isArray(data) ? data : [];
 
     // Filtrar agendamentos de hoje
     const today = new Date().toISOString().split("T")[0];
