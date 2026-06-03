@@ -24,7 +24,7 @@ class Database {
     // Apenas testa se a conexão está funcionando
     try {
       const connection = await this.pool.promise().getConnection();
-      console.log("✅ Conexão com o banco Aiven validada!");
+      console.log(`✅ Conexão com o banco validada! Host: ${this.config.host}`);
       connection.release();
     } catch (err) {
       console.error("⏳ Banco ainda aquecendo ou erro de config:", err.message);
