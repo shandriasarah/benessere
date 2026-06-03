@@ -62,11 +62,8 @@ router.get("/agendamentos", async (req, res) => {
 
     const [appointments] = await connection.execute(
       `SELECT a.id, a.appointment_date, a.appointment_time, a.status, a.total_price,
-              u.nome as client_name, u.email, p.name as professional_name, s.type, s.name as service_name
+              a.client_name, a.service_name, a.professional_name
        FROM appointments a
-       JOIN users u ON a.user_id = u.id
-       JOIN professionals p ON a.professional_id = p.id
-       JOIN services s ON a.service_id = s.id
        ORDER BY a.appointment_date DESC, a.appointment_time`,
     );
 
@@ -109,7 +106,7 @@ router.delete("/usuario/:id", async (req, res) => {
     const pool = req.db;
     const connection = await pool.getConnection();
 
-    await connection.execute("DELETE FROM appointments WHERE user_id = ?", [
+    await connection.execute("DELETE FROM appointments WHERE client_id = ?", [
       id,
     ]);
 
