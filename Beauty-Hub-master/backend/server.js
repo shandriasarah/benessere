@@ -60,7 +60,7 @@ app.use((req, res, next) => {
 });
 
 // 5️⃣ Static files
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "../public")));
 
 // 6️⃣ Rotas de autenticação diretas (se existirem)
 app.post("/api/auth/register", async (req, res) => {
@@ -91,7 +91,7 @@ app.get("/api/health", (req, res) => {
 
 // 9️⃣ Fallback
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "../public", "index.html"));
 });
 
 // 🔟 Auto-ping (manter Render acordado)
