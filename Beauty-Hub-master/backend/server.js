@@ -44,8 +44,9 @@ const dbConfig = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 24756,
+  port: process.env.DB_PORT || 3306,
   connectTimeout: 60000,
+  ssl: { rejectUnauthorized: false },
 };
 
 const db = new Database(dbConfig);

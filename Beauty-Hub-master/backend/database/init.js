@@ -10,7 +10,11 @@ class Database {
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0,
-      connectTimeout: 20000, // 20 segundos para esperar o Aiven
+      connectTimeout: 20000,
+    });
+
+    this.pool.on("error", (err) => {
+      console.error("Pool error:", err.message);
     });
 
     console.log(" Pool de conexões MySQL criado.");
