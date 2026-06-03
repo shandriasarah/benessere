@@ -142,11 +142,12 @@ async function loadRevenueChart() {
 
     const response = await fetch(`${API_BASE}/admin/faturamento/${mes}/${ano}`);
     const data = await response.json();
+    const faturamento = Array.isArray(data) ? data : [];
 
     // Preparar dados para o gráfico
     const days = Array.from({ length: 28 }, (_, i) => {
       const day = i + 1;
-      const found = data.find((d) => {
+      const found = faturamento.find((d) => {
         const dDate = new Date(d.appointment_date);
         return dDate.getDate() === day;
       });
