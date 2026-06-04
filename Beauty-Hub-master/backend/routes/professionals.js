@@ -4,8 +4,21 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const pool = req.db;
-    const [results] = await pool.execute("SELECT * FROM professionals WHERE ativo = 1");
-    res.json(results || []);
+    const [professionals] = await pool.execute("SELECT * FROM professionals WHERE ativo = 1");
+
+    // Buscar serviços de cada profissional
+    for (const prof of professionals) {
+      const [services] = await pool.execute(
+        `SELECT s.id, s.nome as name, s.preco as price, s.duracao
+         FROM professional_services ps
+         JOIN services s ON ps.service_id = s.id
+         WHERE ps.professional_id = ?`,
+        [prof.id]
+      );
+      prof.servicos = services;
+    }
+
+    res.json(professionals || []);
   } catch (err) {
     console.error("Erro ao buscar profissionais:", err);
     res.status(500).json({ error: "Erro ao buscar profissionais." });
