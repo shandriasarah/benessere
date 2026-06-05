@@ -137,7 +137,6 @@ async function carregarProfissionais() {
     professionals = (Array.isArray(data) ? data : []).map((p) => ({
       id: p.id,
       name: p.nome,
-      img: `https://i.pravatar.cc/50?img=${p.id + 10}`,
       especialidade: p.especialidade || "",
       services: p.servicos || [],
     }));
@@ -159,7 +158,7 @@ function renderProfissionais() {
   div.className = "prof-card";
   div.innerHTML = `
     <div class="prof-header">
-      <div class="prof-left"><img src="${p.img}"><div class="prof-info"><h2>${p.name}</h2></div></div>
+      <div class="prof-left"><div class="prof-info"><h2>${p.name}</h2><small>${p.especialidade}</small></div></div>
       <i class="fa-solid fa-chevron-down"></i>
     </div>
     <div class="services-container">
