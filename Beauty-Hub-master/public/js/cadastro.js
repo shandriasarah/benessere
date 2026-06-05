@@ -29,8 +29,19 @@ async function cadastrarCliente(event) {
 
     if (response.ok) {
       msg.style.color = "green";
-      msg.textContent = "Cadastro realizado com sucesso! Redirecionando...";
-      setTimeout(() => { window.location.href = "login_cliente.html"; }, 2000);
+      msg.textContent = "Cadastro realizado! Entrando automaticamente...";
+
+      // Login automático após cadastro
+      const loginRes = await fetch(`${API_URL_CAD}/auth/login-cliente`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha }),
+      });
+      const loginData = await loginRes.json();
+      if (loginRes.ok) {
+        sessionStorage.setItem("tb_logged", JSON.stringify(loginData.user || loginData));
+      }
+      setTimeout(() => { window.location.href = "cliente_home.html"; }, 1000);
     } else {
       msg.style.color = "red";
       msg.textContent = data.error || data.message || "Erro ao cadastrar. Tente novamente.";
