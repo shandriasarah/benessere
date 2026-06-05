@@ -169,7 +169,7 @@ function renderProfissionais() {
         <div class="service-card" data-prof="${p.id}" data-profname="${p.name}" data-name="${s.name}" data-price="${s.price}">
           ${s.name}
           <div class="service-details">
-            <div>💰 R$ ${s.price.toFixed(2)}</div>
+            <div>💰 R$ ${Number(s.price).toFixed(2)}</div>
             <button class="agendar-btn">Agendar</button>
           </div>
         </div>`,
@@ -195,7 +195,7 @@ profContainer.addEventListener("click", (e) => {
     };
     modalProfName.value = selectedService.profname;
     modalService.value = selectedService.name;
-    modalPrice.value = "R$ " + Number(selectedService.price).toFixed(2);
+    modalPrice.value = Number(selectedService.price).toFixed(2);
     modalClient.value = "";
     modalDate.value = "";
     modalTime.innerHTML = "";
