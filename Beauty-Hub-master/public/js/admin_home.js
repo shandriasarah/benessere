@@ -120,7 +120,7 @@ function updateAppointmentsList(appointments) {
             ${app.service_name || "Serviço"} • ${app.professional_name || "Profissional"}
           </div>
           <div style="font-size:0.85em;color:#888;margin-top:2px">
-            📅 ${date} às ${time}
+            ${date} às ${time}
           </div>
         </div>
         <div style="text-align:right">
@@ -216,12 +216,12 @@ async function loadRevenueChart() {
 function refreshData() {
   const btn = document.getElementById("btnRefresh");
   const originalText = btn.innerHTML;
-  btn.innerHTML = "⏳ Atualizando...";
+  btn.innerHTML = "Atualizando...";
   btn.disabled = true;
 
   Promise.all([loadDashboard(), loadAppointments(), loadRevenueChart()])
     .then(() => {
-      btn.innerHTML = "✅ Atualizado!";
+      btn.innerHTML = "Atualizado!";
       setTimeout(() => {
         btn.innerHTML = originalText;
         btn.disabled = false;

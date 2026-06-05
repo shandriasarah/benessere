@@ -17,7 +17,7 @@ recebido.addEventListener('input',()=>{
   const pago=parseFloat(recebido.value)||0;
   const troco=pago-preco;
   if(pago>0 && preco>0){
-    resultado.textContent=troco>=0?`💰 Troco: R$ ${troco.toFixed(2)}`:`⚠️ Falta receber: R$ ${(troco*-1).toFixed(2)}`;
+    resultado.textContent=troco>=0?`Troco: R$ ${troco.toFixed(2)}`:`Falta receber: R$ ${(troco*-1).toFixed(2)}`;
   }else{resultado.textContent='';}
 });
 
@@ -31,7 +31,7 @@ function registrarPagamento(){
   historico.push({nome,serv,preco,pago,status:'Concluído',data});
   localStorage.setItem('bh_history_v2',JSON.stringify(historico));
   atualizarHistorico();
-  alert(`✅ Pagamento registrado!\nCliente: ${nome}\nServiço: ${serv}\nValor: R$${preco.toFixed(2)}\nRecebido: R$${pago.toFixed(2)}`);
+  alert(`Pagamento registrado!\nCliente: ${nome}\nServiço: ${serv}\nValor: R$${preco.toFixed(2)}\nRecebido: R$${pago.toFixed(2)}`);
   document.getElementById('cliente').value='';
   servico.value='';
   valor.value='';

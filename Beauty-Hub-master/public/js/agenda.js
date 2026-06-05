@@ -168,7 +168,7 @@ function renderProfissionais() {
         <div class="service-card" data-prof="${p.id}" data-profname="${p.name}" data-name="${s.name}" data-price="${s.price}">
           ${s.name}
           <div class="service-details">
-            <div>💰 R$ ${Number(s.price).toFixed(2)}</div>
+            <div>R$ ${Number(s.price).toFixed(2)}</div>
             <button class="agendar-btn">Agendar</button>
           </div>
         </div>`,
