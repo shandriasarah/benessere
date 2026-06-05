@@ -7,7 +7,7 @@ async function cadastrarCliente(event) {
   const email = document.getElementById("cadEmail").value.trim().toLowerCase();
   const telefone = document.getElementById("cadTelefone")?.value.trim() || "";
   const senha = document.getElementById("cadSenha").value;
-  const msg = document.getElementById("msgCadastro");
+  const msg = document.getElementById("msgCliente") || document.getElementById("msgCadastro");
 
   if (!nome || !email || !senha) {
     msg.style.color = "red";
