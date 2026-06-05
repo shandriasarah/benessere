@@ -124,6 +124,7 @@ document.getElementById("clearFilters").addEventListener("click", () => {
 const profContainer = document.getElementById("professionalsContainer");
 const modalOverlay = document.getElementById("modalOverlay");
 const modalClient = document.getElementById("modalClient");
+const modalProfName = document.getElementById("modalProfName");
 const modalService = document.getElementById("modalService");
 const modalPrice = document.getElementById("modalPrice");
 const modalDate = document.getElementById("modalDate");
@@ -192,8 +193,9 @@ profContainer.addEventListener("click", (e) => {
       name: card.dataset.name,
       price: card.dataset.price,
     };
+    modalProfName.value = selectedService.profname;
     modalService.value = selectedService.name;
-    modalPrice.value = selectedService.price;
+    modalPrice.value = "R$ " + Number(selectedService.price).toFixed(2);
     modalClient.value = "";
     modalDate.value = "";
     modalTime.innerHTML = "";
