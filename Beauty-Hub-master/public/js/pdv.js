@@ -1,3 +1,4 @@
+const API_URL = "https://beauty-hub-72cv.onrender.com/api";
 const servico=document.getElementById('servico');
 const valor=document.getElementById('valor');
 const recebido=document.getElementById('recebido');
@@ -5,6 +6,24 @@ const resultado=document.getElementById('resultado');
 let historico=JSON.parse(localStorage.getItem('bh_history_v2')||'[]');
 
 function toggleMenu(){document.querySelector('.sidebar').classList.toggle('closed');}
+
+// Carrega serviços do banco
+async function carregarServicos() {
+  try {
+    const res = await fetch(`${API_URL}/services`);
+    const data = await res.json();
+    servico.innerHTML = '<option value="">Selecione um serviço</option>';
+    (Array.isArray(data) ? data : []).forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s.nome;
+      opt.setAttribute('data-valor', s.preco);
+      opt.textContent = `${s.nome} — R$ ${Number(s.preco).toFixed(2)}`;
+      servico.appendChild(opt);
+    });
+  } catch(e) {
+    servico.innerHTML = '<option value="">Erro ao carregar serviços</option>';
+  }
+}
 
 servico.addEventListener('change',()=>{
   const option=servico.options[servico.selectedIndex];
@@ -31,6 +50,7 @@ function registrarPagamento(){
   historico.push({nome,serv,preco,pago,status:'Concluído',data});
   localStorage.setItem('bh_history_v2',JSON.stringify(historico));
   atualizarHistorico();
+  carregarServicos();
   alert(`Pagamento registrado!\nCliente: ${nome}\nServiço: ${serv}\nValor: R$${preco.toFixed(2)}\nRecebido: R$${pago.toFixed(2)}`);
   document.getElementById('cliente').value='';
   servico.value='';

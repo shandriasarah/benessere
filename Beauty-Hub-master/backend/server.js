@@ -77,12 +77,14 @@ const appointmentRoutes = require("./routes/appointments");
 const professionalsRoutes = require("./routes/professionals");
 const adminRoutes = require("./routes/admin");
 const clientRoutes = require("./routes/clients");
+const servicesRoutes = require("./routes/services");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/professionals", professionalsRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/clients", clientRoutes);
+app.use("/api/services", servicesRoutes);
 
 // 8️⃣ Health check
 app.get("/api/health", (req, res) => {
