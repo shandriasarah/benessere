@@ -250,9 +250,10 @@ document.getElementById("modalConfirm").onclick = async () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        user_id: 1, // admin cria em nome do cliente
+        client_name: modalClient.value,
         professional_id: Number(selectedService.prof),
-        service_id: 1,
+        professional_name: selectedService.profname,
+        service_name: selectedService.name,
         appointment_date: modalDate.value,
         appointment_time: modalTime.value,
         total_price: Number(selectedService.price),

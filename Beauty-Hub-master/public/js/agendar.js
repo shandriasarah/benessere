@@ -42,8 +42,8 @@
           <div class="card-avatar">
               <i class="fa-solid fa-user-tie"></i>
           </div>
-          <h3>${prof.name}</h3>
-          <p class="specialty">${prof.specialty || "Especialista em Beleza"}</p>
+          <h3>${prof.nome}</h3>
+          <p class="specialty">${prof.especialidade || "Especialista em Beleza"}</p>
           <button class="select-prof-btn" id="btn-prof-${prof.id}">
               Agendar Horário <i class="fa-solid fa-chevron-right"></i>
           </button>
@@ -263,9 +263,12 @@
     }
 
     const dadosAgendamento = {
-      user_id: usuarioLogado.id,
+      client_id: usuarioLogado.id,
+      client_name: usuarioLogado.nome || usuarioLogado.name || "",
       professional_id: profissionalSelecionadoId,
-      service_id: 1,
+      professional_name: "",
+      service_id: null,
+      service_name: "Serviço",
       appointment_date: dataSelecionada,
       appointment_time: horarioSelecionado,
       total_price: 50.0,

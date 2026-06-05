@@ -82,10 +82,10 @@ document.getElementById("clientSave").onclick = async () => {
   }
 
   try {
-    const res = await fetch(`${API_URL}/auth/register`, {
+    const res = await fetch(`${API_URL}/auth/cadastro-cliente`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, phone, password: "senha123" }),
+      body: JSON.stringify({ nome: name, email, telefone: phone, senha: "senha123" }),
     });
     if (res.ok) {
       alert("Cliente cadastrado com sucesso! Senha padrão: senha123");
