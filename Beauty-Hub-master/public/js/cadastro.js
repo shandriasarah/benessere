@@ -1,47 +1,43 @@
-async function cadastrarCliente(event) {
-  event.preventDefault(); // Impede a página de recarregar
+const API_URL_CAD = "https://beauty-hub-72cv.onrender.com/api";
 
-  const name = document.getElementById("cadNome").value.trim();
+async function cadastrarCliente(event) {
+  event.preventDefault();
+
+  const nome = document.getElementById("cadNome").value.trim();
   const email = document.getElementById("cadEmail").value.trim().toLowerCase();
-  const password = document.getElementById("cadSenha").value;
-  const msg = document.getElementById("msgCadastro"); // Elemento de mensagem na tela
+  const telefone = document.getElementById("cadTelefone")?.value.trim() || "";
+  const senha = document.getElementById("cadSenha").value;
+  const msg = document.getElementById("msgCadastro");
+
+  if (!nome || !email || !senha) {
+    msg.style.color = "red";
+    msg.textContent = "Preencha todos os campos obrigatórios!";
+    return;
+  }
 
   msg.style.color = "blue";
-  msg.textContent = "Enviando dados para o servidor...";
+  msg.textContent = "Cadastrando...";
 
   try {
-    // Envia os dados para a sua API real no Render
-    const response = await fetch(
-      "https://beauty-hub-72cv.onrender.com/api/auth/register",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, password }),
-      },
-    );
+    const response = await fetch(`${API_URL_CAD}/auth/cadastro-cliente`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nome, email, telefone, senha }),
+    });
 
     const data = await response.json();
 
     if (response.ok) {
       msg.style.color = "green";
-      msg.textContent =
-        "Cadastro realizado com sucesso! Redirecionando para o login...";
-
-      // Espera 2 segundos e joga o cliente para a tela de login
-      setTimeout(() => {
-        window.location.href = "login_cliente.html";
-      }, 2000);
+      msg.textContent = "Cadastro realizado com sucesso! Redirecionando...";
+      setTimeout(() => { window.location.href = "login_cliente.html"; }, 2000);
     } else {
-      // Se o e-mail já existir, por exemplo, o banco avisa aqui
       msg.style.color = "red";
-      msg.textContent =
-        data.message || "Erro ao realizar cadastro. Tente novamente.";
+      msg.textContent = data.error || data.message || "Erro ao cadastrar. Tente novamente.";
     }
   } catch (error) {
     console.error("Erro no cadastro:", error);
     msg.style.color = "red";
-    msg.textContent = "Erro ao conectar com o servidor. Tente mais tarde.";
+    msg.textContent = "Erro ao conectar com o servidor.";
   }
 }
