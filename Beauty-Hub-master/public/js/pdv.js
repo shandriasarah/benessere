@@ -49,17 +49,17 @@ function registrarPagamento(){
   const data=new Date().toLocaleString();
   historico.push({nome,serv,preco,pago,status:'Concluído',data});
   localStorage.setItem('bh_history_v2',JSON.stringify(historico));
-  atualizarHistorico();
-  carregarServicos();
+  atualizarHistoricoInterno();
   alert(`Pagamento registrado!\nCliente: ${nome}\nServiço: ${serv}\nValor: R$${preco.toFixed(2)}\nRecebido: R$${pago.toFixed(2)}`);
   document.getElementById('cliente').value='';
   servico.value='';
   valor.value='';
   recebido.value='';
   resultado.textContent='';
+  carregarServicos();
 }
 
-function atualizarHistorico(){
+function atualizarHistoricoInterno(){
   const tbody=document.getElementById('historicoBody');
   tbody.innerHTML='';
   historico.forEach((h,i)=>{
@@ -73,4 +73,5 @@ function atualizarHistorico(){
   });
 }
 
-atualizarHistorico();
+atualizarHistoricoInterno();
+carregarServicos();
