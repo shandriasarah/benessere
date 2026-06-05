@@ -79,25 +79,22 @@
       <div class="modal-content">
         <button class="close-btn" onclick="closeAgendarModal()">&times;</button>
 
+        <h3 id="modalProfTitle" style="color:#6B21A8;margin-bottom:8px"></h3>
+
+        <h3>Escolha o Serviço:</h3>
+        <div id="servicosGrid" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px"></div>
+
         <h3>Escolha a Data Disponível:</h3>
         <div id="monthYear">Maio 2026</div>
         <div class="weekdays-grid">
-          <div>D</div>
-          <div>S</div>
-          <div>T</div>
-          <div>Q</div>
-          <div>Q</div>
-          <div>S</div>
-          <div>S</div>
+          <div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div>
         </div>
         <div id="calendarGrid" class="calendar-grid"></div>
 
         <h3>Escolha o Horário Disponível:</h3>
         <div id="horariosGrid" class="horarios-grid"></div>
 
-        <button id="confirmBtn" onclick="confirmarAgendamento()">
-          Confirmar
-        </button>
+        <button id="confirmBtn" onclick="confirmarAgendamento()">Confirmar</button>
       </div>
     </div>
 

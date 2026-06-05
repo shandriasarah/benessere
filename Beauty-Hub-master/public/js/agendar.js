@@ -4,6 +4,8 @@
 
   // Variáveis para guardar o que o usuário escolheu antes de confirmar
   let profissionalSelecionadoId = null;
+  let profissionalSelecionadoNome = null;
+  let servicoSelecionado = null;
   let dataSelecionada = null;
   let horarioSelecionado = null;
 
@@ -53,7 +55,7 @@
         // Define o clique do botão de forma segura para não depender do HTML global
         const btnNode = document.getElementById(`btn-prof-${prof.id}`);
         if (btnNode) {
-          btnNode.onclick = () => openAgendarModal(prof.id);
+          btnNode.onclick = () => openAgendarModal(prof.id, prof.nome, prof.servicos || []);
         }
       });
     } catch (error) {
@@ -64,14 +66,36 @@
   }
 
   // --- 2. ABRIR E FECHAR MODAL (100% PADRONIZADO) ---
-  function openAgendarModal(profissionalId) {
+  function openAgendarModal(profissionalId, profNome, servicos) {
     const modal = document.getElementById("agendarModal");
-    if (modal) {
-      modal.style.display = "flex";
+    if (modal) modal.style.display = "flex";
+
+    profissionalSelecionadoId = profissionalId;
+    profissionalSelecionadoNome = profNome;
+    servicoSelecionado = null;
+
+    // Título com nome do profissional
+    const titulo = document.getElementById("modalProfTitle");
+    if (titulo) titulo.textContent = "Profissional: " + profNome;
+
+    // Renderiza serviços
+    const servicosGrid = document.getElementById("servicosGrid");
+    if (servicosGrid) {
+      servicosGrid.innerHTML = "";
+      (servicos || []).forEach((s) => {
+        const btn = document.createElement("button");
+        btn.textContent = `${s.name} — R$ ${Number(s.price).toFixed(2)}`;
+        btn.style.cssText = "padding:8px 14px;border:2px solid #6B21A8;border-radius:20px;background:white;color:#6B21A8;cursor:pointer;font-size:0.9em";
+        btn.onclick = () => {
+          servicosGrid.querySelectorAll("button").forEach(b => b.style.background = "white");
+          btn.style.background = "#6B21A8";
+          btn.style.color = "white";
+          servicoSelecionado = { id: s.id, name: s.name, price: s.price };
+        };
+        servicosGrid.appendChild(btn);
+      });
     }
 
-    // 🌟 CORRIGIDO: Agora salva exatamente na variável correta
-    profissionalSelecionadoId = profissionalId;
     gerarHorariosTeste();
 
     const btnConfirmar = document.getElementById("confirmBtn");
@@ -262,16 +286,22 @@
       btnConfirmar.innerText = "Agendando...";
     }
 
+    if (!servicoSelecionado) {
+      alert("Por favor, selecione um serviço!");
+      if (btnConfirmar) { btnConfirmar.disabled = false; btnConfirmar.innerText = "Confirmar"; }
+      return;
+    }
+
     const dadosAgendamento = {
       client_id: usuarioLogado.id,
       client_name: usuarioLogado.nome || usuarioLogado.name || "",
       professional_id: profissionalSelecionadoId,
-      professional_name: "",
-      service_id: null,
-      service_name: "Serviço",
+      professional_name: profissionalSelecionadoNome || "",
+      service_id: servicoSelecionado.id || null,
+      service_name: servicoSelecionado.name || "",
       appointment_date: dataSelecionada,
       appointment_time: horarioSelecionado,
-      total_price: 50.0,
+      total_price: Number(servicoSelecionado.price) || 0,
     };
 
     try {
