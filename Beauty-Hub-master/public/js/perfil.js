@@ -13,7 +13,6 @@ const profileBirth = document.getElementById("profileBirth");
 const editBtn = document.getElementById("editBtn");
 const saveBtn = document.getElementById("saveBtn");
 
-// Carrega perfil do banco
 async function loadProfile() {
   if (!usuarioLogado) {
     window.location.href = "login_cliente.html";
@@ -24,13 +23,12 @@ async function loadProfile() {
     const res = await fetch(`${API_URL}/clients/perfil/${usuarioLogado.id}`);
     const data = await res.json();
 
-    profileName.value = data.name || "";
-    profileEmail.value = data.email || "";
-    profilePhone.value = data.phone || "";
-    profileAddress.value = data.address || "";
-    profileBirth.value = data.birth_date ? data.birth_date.split("T")[0] : "";
+    if (profileName) profileName.value = data.nome || data.name || "";
+    if (profileEmail) profileEmail.value = data.email || "";
+    if (profilePhone) profilePhone.value = data.telefone || data.phone || "";
+    if (profileAddress) profileAddress.value = data.endereco || data.address || "";
+    if (profileBirth) profileBirth.value = data.data_nascimento ? data.data_nascimento.split("T")[0] : "";
 
-    // Desabilita campos por padrão
     setFieldsDisabled(true);
   } catch {
     alert("Erro ao carregar perfil.");
@@ -38,35 +36,34 @@ async function loadProfile() {
 }
 
 function setFieldsDisabled(disabled) {
-  profileName.disabled = disabled;
-  profilePhone.disabled = disabled;
-  profileAddress.disabled = disabled;
-  profileBirth.disabled = disabled;
-  profileEmail.disabled = true; // email nunca editável
-  saveBtn.style.display = disabled ? "none" : "inline-block";
-  editBtn.style.display = disabled ? "inline-block" : "none";
+  if (profileName) profileName.disabled = disabled;
+  if (profilePhone) profilePhone.disabled = disabled;
+  if (profileAddress) profileAddress.disabled = disabled;
+  if (profileBirth) profileBirth.disabled = disabled;
+  if (profileEmail) profileEmail.disabled = true;
+  if (saveBtn) saveBtn.style.display = disabled ? "none" : "inline-block";
+  if (editBtn) editBtn.style.display = disabled ? "inline-block" : "none";
 }
 
-editBtn.addEventListener("click", () => setFieldsDisabled(false));
+if (editBtn) editBtn.addEventListener("click", () => setFieldsDisabled(false));
 
-saveBtn.addEventListener("click", async () => {
+if (saveBtn) saveBtn.addEventListener("click", async () => {
   try {
     const res = await fetch(`${API_URL}/clients/perfil/${usuarioLogado.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: profileName.value,
-        phone: profilePhone.value,
-        address: profileAddress.value,
-        birth_date: profileBirth.value || null,
+        nome: profileName?.value || "",
+        telefone: profilePhone?.value || "",
+        endereco: profileAddress?.value || null,
+        data_nascimento: profileBirth?.value || null,
       }),
     });
 
     if (res.ok) {
       alert("Perfil atualizado com sucesso!");
       setFieldsDisabled(true);
-      // Atualiza nome na sessão
-      usuarioLogado.name = profileName.value;
+      usuarioLogado.nome = profileName?.value;
       sessionStorage.setItem("tb_logged", JSON.stringify(usuarioLogado));
     } else {
       const data = await res.json();
