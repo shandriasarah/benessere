@@ -5,7 +5,7 @@
   --ok:#2fa84f; --danger:#e05b5b; --neutral:#6b5671;
 }
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif}
-body{background:linear-gradient(135deg,#E8D6FF,#F3E9FF);min-height:100vh;display:flex;overflow:hidden;}
+body{background:linear-gradient(135deg,#E8D6FF,#F3E9FF);min-height:100vh;display:flex;}
 .sidebar{width:260px;background: linear-gradient(180deg, rgba(155,98,214,0.95), rgba(139,92,246,0.95));backdrop-filter: blur(8px); color:white; position: fixed; height:100%; left:0; top:0; padding:25px 20px; transition: all 0.4s ease; box-shadow:6px 0 25px rgba(0,0,0,0.15); z-index:100;}
 .sidebar.closed{width:80px;padding:25px 10px;}
 .sidebar h2{font-size:22px;text-align:center;font-weight:700;margin-bottom:40px;transition:opacity 0.3s ease;}
@@ -82,7 +82,6 @@ footer {
 
   .status.ativo { background-color: #2fa84f; color:white; padding:4px 8px; border-radius:5px; }
   .status.inativo { background-color: #e05b5b; color:white; padding:4px 8px; border-radius:5px; }
-}
 
 @media (max-width: 768px) {
   .sidebar { width:100%;height:auto;position:relative;padding:14px 16px; }
