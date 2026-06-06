@@ -18,7 +18,8 @@ body {
   background: linear-gradient(135deg, #f3ecff, #f7f5ff);
   min-height: 100vh;
   display: flex;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 h1 {
   color: var(--purple-700);
