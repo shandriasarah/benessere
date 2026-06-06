@@ -252,11 +252,21 @@ footer {
 }
 
 @media (max-width: 750px) {
-  .choice-btn {
+  .sidebar {
     width: 100%;
-    justify-content: center;
+    height: auto;
+    position: relative;
+    padding: 14px 16px;
   }
-  .content {
-    padding: 30px 20px 70px;
-  }
+  .sidebar ul { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sidebar ul li { margin: 0; }
+  .sidebar ul li a { padding: 8px 12px; font-size: 13px; }
+  .sidebar h2 { margin-bottom: 10px; font-size: 18px; }
+  .toggle-btn { display: none; }
+  .main { margin-left: 0 !important; }
+  body { flex-direction: column; }
+  .content { padding: 20px 14px 60px; }
+  .choice-btn { width: 100%; justify-content: center; }
+  .cards-container { grid-template-columns: 1fr; }
+  .topbar { flex-wrap: wrap; gap: 8px; }
 }

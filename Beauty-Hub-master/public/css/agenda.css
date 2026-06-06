@@ -112,3 +112,23 @@ h1{color:var(--purple-700);font-size:22px;margin-bottom:6px}
 input, select{padding:8px 10px;border-radius:5px;border:1px solid rgba(99,39,145,0.06);outline:none;font-size:14px;background:#fff}
 .btn-small{padding:6px 10px;border-radius:5px;border:0;cursor:pointer;font-weight:600}
 footer{padding:26px;text-align:center;color:#6B21A8}
+
+@media (max-width: 768px) {
+  .sidebar{width:100%;height:auto;position:relative;padding:14px 16px;}
+  .sidebar ul{display:flex;flex-wrap:wrap;gap:6px;}
+  .sidebar ul li{margin:0;}
+  .sidebar ul li a{padding:8px 12px;font-size:13px;}
+  .sidebar h2{margin-bottom:10px;font-size:18px;}
+  .toggle-btn{display:none;}
+  .main{margin-left:0 !important;}
+  body{flex-direction:column;}
+  .layout{grid-template-columns:1fr;}
+  .content{padding:16px 12px;}
+  .table thead{display:none;}
+  .table tbody td{display:block;text-align:right;padding:6px 10px;}
+  .table tbody td::before{content:attr(data-label);float:left;font-weight:700;color:var(--purple-700);}
+  .table tbody tr{display:block;border:1px solid #e8d6ff;border-radius:8px;margin-bottom:10px;padding:6px;}
+  .modal{width:95%;margin:0 auto;}
+  .controls{flex-wrap:wrap;gap:6px;}
+  .topbar{flex-wrap:wrap;gap:8px;padding:10px 12px;}
+}

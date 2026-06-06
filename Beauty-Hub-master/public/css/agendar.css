@@ -442,10 +442,38 @@ footer {
    RESPONSIVO
    ========================================================================== */
 @media (max-width: 750px) {
-  .content {
-    padding: 30px 20px 70px;
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 14px 16px;
   }
+  .sidebar ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .sidebar ul li { margin: 0; }
+  .sidebar ul li a { padding: 8px 12px; font-size: 13px; }
+  .sidebar h2 { margin-bottom: 10px; font-size: 18px; }
+  .toggle-btn { display: none; }
+  .main { margin-left: 0 !important; }
+  body { flex-direction: column; }
+  .content { padding: 20px 14px 60px; }
   #profissionaisContainer {
     justify-content: center;
+    gap: 14px;
+  }
+  .professional-card {
+    width: calc(50% - 10px);
+    min-width: 140px;
+    padding: 16px 12px;
+  }
+  .modal-content {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+  .horarios-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }

@@ -274,3 +274,18 @@ footer {
   text-align: center;
   color: #6b21a8;
 }
+
+@media (max-width: 768px) {
+  .sidebar { width:100%;height:auto;position:relative;padding:14px 16px; }
+  .sidebar ul { display:flex;flex-wrap:wrap;gap:6px; }
+  .sidebar ul li { margin:0; }
+  .sidebar ul li a { padding:8px 12px;font-size:13px; }
+  .sidebar h2 { margin-bottom:10px;font-size:18px; }
+  .toggle-btn { display:none; }
+  .main { margin-left:0 !important; }
+  body { flex-direction:column; }
+  .layout { grid-template-columns:1fr; gap:16px; }
+  .topbar { flex-wrap:wrap;gap:8px;padding:10px 12px; }
+  .hist-table { display:block;overflow-x:auto; }
+  .content { padding:16px 12px; }
+}

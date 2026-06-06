@@ -347,6 +347,71 @@ footer {
   .brand {
     font-size: 14px;
   }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 14px 16px;
+  }
+  .sidebar.closed {
+    width: 100%;
+  }
+  .sidebar ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .sidebar ul li {
+    margin: 0;
+  }
+  .sidebar ul li a {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  .sidebar h2 {
+    margin-bottom: 12px;
+    font-size: 18px;
+  }
+  .toggle-btn {
+    display: none;
+  }
+  .main {
+    margin-left: 0 !important;
+  }
+  body {
+    flex-direction: column;
+  }
+  .topbar {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+  .controls {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .table thead {
+    display: none;
+  }
+  .table tbody td {
+    display: block;
+    text-align: right;
+    padding: 6px 10px;
+    position: relative;
+  }
+  .table tbody td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: 700;
+    color: var(--purple-700);
+  }
+  .table tbody tr {
+    display: block;
+    border: 1px solid #e8d6ff;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    padding: 6px;
+  }
 }
 
 h1 {
