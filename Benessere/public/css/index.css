@@ -83,6 +83,7 @@ img { max-width: 100%; display: block; }
   height: 42px;
   object-fit: contain;
   display: block;
+  mix-blend-mode: multiply;
 }
 .logo-text {
   font-size: 28px;
@@ -218,6 +219,20 @@ img { max-width: 100%; display: block; }
   height: auto;
   display: block;
   margin: 0;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
 }
 
 /* ABOUT */
