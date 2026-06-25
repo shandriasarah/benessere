@@ -1,52 +1,61 @@
-﻿<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Login Admin | Benessere</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="css/login_admin.css">
-</head>
-<body>
-
-<div class="topbar">
-  <div class="brand"><i class="fa-solid fa-sparkles"></i> Benessere</div>
-  <div class="topbar-right">
-    <div class="user-avatar"></div>
-  </div>
-</div>
-
-<main>
-  <div class="side-text">
-  <img src="img/logo_benessere.jpeg" alt="Beleza e confiança" />
-</div>
-
-
-  <div class="form-container">
-    <a href="index.html" class="back-button">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Acesso Administrador | Benessere</title>
+    <link rel="icon" type="image/png" href="img/logo_icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/auth.css" />
+  </head>
+  <body>
+    <a href="index.html" class="back-link" aria-label="Voltar ao início">
       <i class="fa-solid fa-arrow-left"></i>
     </a>
 
-    <h1>Login do Admin</h1>
-    <form onsubmit="return loginAdmin(event)">
-      <div class="input-group">
-        <i class="fa-solid fa-envelope"></i>
-        <input id="adminUser" type="text" required placeholder="Digite o usuário">
+    <main class="auth-wrapper">
+      <a href="index.html" class="auth-brand">
+        <img src="img/logo_icon.png" alt="Benessere" class="auth-logo" />
+        <span class="auth-brand-text">Benessere</span>
+      </a>
+
+      <div class="auth-card">
+        <span class="eyebrow center">Área Administrativa</span>
+        <h1>Acesso restrito</h1>
+        <p class="subtitle">Entre com suas credenciais administrativas.</p>
+
+        <form onsubmit="return loginAdmin(event);">
+          <div class="input-group">
+            <i class="fa-solid fa-user-shield"></i>
+            <input type="text" id="adminUser" placeholder="Usuário" required />
+          </div>
+
+          <div class="input-group">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="adminSenha" placeholder="Senha" required />
+          </div>
+
+          <button class="btn-primary btn-full" type="submit">Entrar</button>
+          <p id="msgAdmin" class="form-msg"></p>
+        </form>
+
+        <p class="auth-link">
+          <a href="login_cliente.html">← Voltar para login do cliente</a>
+        </p>
       </div>
-      <div class="input-group">
-        <i class="fa-solid fa-lock"></i>
-        <input id="adminSenha" type="password" required placeholder="Digite sua senha">
-      </div>
-      <button class="btn" type="submit">Entrar</button>
-      <p id="msgAdmin"></p>
-    </form>
-  </div>
-</main>
+    </main>
 
-  <footer>© 2025 Benessere - Todos os direitos reservados.</footer>
+    <footer class="auth-footer">© 2026 Benessere — Todos os direitos reservados.</footer>
 
-<script src="js/login_admin.js"></script>
-
-</body>
+    <script src="js/login_admin.js"></script>
+  </body>
 </html>
