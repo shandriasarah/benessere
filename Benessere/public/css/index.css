@@ -106,10 +106,9 @@ img { max-width: 100%; display: block; }
   align-items: center;
   justify-content: center;
   text-align: center;
-  min-height: calc(100vh - 80px);
   max-width: 1180px;
   margin: 0 auto;
-  padding: 60px 28px;
+  padding: 80px 28px 120px;
   position: relative;
 }
 .hero::before {
@@ -171,26 +170,20 @@ img { max-width: 100%; display: block; }
 }
 .btn-outline:hover { background: var(--gold); color: white; border-color: var(--gold); }
 
-/* HERO LOGO BANNER */
+/* HERO LOGO BANNER — FULL WIDTH */
 .hero-logo-banner {
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto 70px;
+  width: 100vw;
+  margin: 0;
   padding: 0;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  will-change: opacity, transform;
+  display: block;
+  line-height: 0;
+  will-change: opacity;
 }
 .hero-logo-banner img {
   width: 100%;
-  max-width: 880px;
   height: auto;
-  max-height: 360px;
-  object-fit: contain;
-  filter: drop-shadow(0 12px 30px rgba(60, 45, 25, 0.18));
-  transition: opacity 0.4s ease;
+  display: block;
+  margin: 0;
 }
 
 /* ABOUT */
