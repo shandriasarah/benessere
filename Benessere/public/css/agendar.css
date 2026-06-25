@@ -1,479 +1,249 @@
-﻿/* ==========================================================================
-   VARIÁVEIS E RESET
-   ========================================================================== */
-:root {
-  --purple-600: #8b5cf6;
-  --purple-700: #6b21a8;
-  --card-bg: #fff;
-  --card-shadow: 0 8px 20px rgba(139, 92, 246, 0.12);
-  --muted: #6b5671;
+/* ============================================================
+   AGENDAR — específico
+   ============================================================ */
+
+.brand-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
 }
 
-* {
-  box-sizing: border-box;
-  font-family: "Inter", system-ui, Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
-html,
-body {
-  height: 100%;
-  background: linear-gradient(135deg, #e8d6ff, #f3e9ff 60%);
-  color: #2b2140;
-}
-
-/* ==========================================================================
-   SIDEBAR
-   ========================================================================== */
-.sidebar {
-  width: 260px;
-  background: linear-gradient(
-    180deg,
-    rgba(155, 98, 214, 0.95),
-    rgba(139, 92, 246, 0.95)
-  );
-  color: white;
-  position: fixed;
-  height: 100%;
-  left: 0;
-  top: 0;
-  padding: 25px 20px;
-  transition: all 0.4s ease;
-  box-shadow: 6px 0 25px rgba(0, 0, 0, 0.15);
-  z-index: 100;
-}
-
-.sidebar.closed {
-  width: 80px;
-  padding: 25px 10px;
-}
-
-.sidebar h2 {
-  font-size: 22px;
+.page-head {
   text-align: center;
-  font-weight: 700;
-  margin-bottom: 40px;
-  transition: opacity 0.3s ease;
+  margin-bottom: 50px;
+  padding-top: 20px;
 }
+.page-head h1 {
+  font-size: clamp(30px, 4vw, 44px);
+  color: var(--bronze);
+  margin: 8px 0 10px;
+  font-weight: 400;
+}
+.page-head .lead { max-width: 540px; margin: 0 auto; }
 
-.sidebar.closed h2 {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.sidebar ul {
-  list-style: none;
-}
-
-.sidebar ul li {
-  margin: 18px 0;
-}
-
-.sidebar ul li a {
-  color: white;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px 15px;
-  border-radius: 12px;
-  transition: 0.3s;
-  font-weight: 500;
-  background: transparent;
-}
-
-.sidebar ul li a:hover,
-.sidebar ul li a.active {
-  background: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
-  transform: translateX(5px);
-}
-
-.sidebar ul li i {
-  font-size: 18px;
-  transition: transform 0.3s;
-}
-
-.sidebar.closed ul li span {
-  display: none;
-}
-
-.toggle-btn {
-  position: absolute;
-  right: -18px;
-  top: 20px;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: #fff;
-  color: var(--purple-600);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-  cursor: pointer;
-  z-index: 140;
-}
-
-/* ==========================================================================
-   MAIN
-   ========================================================================== */
-.main {
-  margin-left: 260px;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  transition: margin-left 0.35s ease;
-}
-
-.sidebar.closed + .main {
-  margin-left: 90px;
-}
-
-/* ==========================================================================
-   TOPBAR
-   ========================================================================== */
-.topbar {
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 20px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-  position: sticky;
-  top: 0;
-  z-index: 80;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.brand {
-  font-weight: 700;
-  color: var(--purple-700);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 20px;
-}
-
-.topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-
-.icon-btn {
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-  font-size: 18px;
-  color: var(--purple-700);
-}
-
-.user-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: url("../img/logo_benessere.jpeg") center/cover;
-  border: 2px solid #c4b5fd;
-}
-/* ==========================================================================
-   CONTEÚDO
-   ========================================================================== */
-.content {
-  padding: 40px 28px 80px;
-  flex: 1;
-}
-
-.content h1 {
-  font-size: 28px;
-  color: var(--purple-700);
-  margin-bottom: 10px;
-}
-
-.lead {
-  font-size: 16px;
-  color: #6d5a7a;
-  margin-bottom: 30px;
-}
-
-/* ==========================================================================
-   CARDS DOS PROFISSIONAIS
-   ========================================================================== */
+/* ============================================================
+   PROFISSIONAIS CONTAINER
+============================================================ */
 #profissionaisContainer {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 22px;
-  padding: 0;
-  box-sizing: border-box;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .professional-card {
-  background: var(--card-bg);
-  border-radius: 16px;
-  padding: 24px 20px;
-  width: 240px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 32px 22px 26px;
   text-align: center;
-  box-shadow: var(--card-shadow);
-  transition: 0.3s;
+  transition: all 0.4s var(--ease-out);
+  position: relative;
+  overflow: hidden;
 }
-
+.professional-card::before {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+  transition: width 0.6s var(--ease-out);
+}
 .professional-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 26px rgba(122, 60, 170, 0.18);
+  transform: translateY(-6px);
+  box-shadow: 0 18px 38px rgba(107, 79, 46, 0.12);
+  border-color: transparent;
 }
+.professional-card:hover::before { width: 100%; }
 
 .card-avatar {
-  font-size: 35px;
-  color: var(--purple-600);
-  margin-bottom: 15px;
-}
-
-.professional-card h3 {
-  margin: 10px 0 5px 0;
-  font-size: 18px;
-  color: var(--purple-700);
-}
-
-.professional-card .specialty {
-  font-size: 14px;
-  color: #5a4b6e;
-  margin-bottom: 20px;
-}
-
-.select-prof-btn {
-  background: linear-gradient(135deg, #a36ad9, #b47ee5);
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 30px;
-  cursor: pointer;
-  font-weight: 600;
-  width: 100%;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+  color: var(--ivory);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  font-size: 14px;
-  transition: 0.3s;
-  box-shadow: 0 4px 10px rgba(164, 104, 210, 0.3);
+  margin: 0 auto 16px;
+  font-size: 28px;
+  box-shadow: 0 6px 18px rgba(168, 138, 71, 0.25);
 }
-
-.select-prof-btn:hover {
-  background: #7c3aed;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 18px rgba(122, 60, 170, 0.3);
-}
-
-/* ==========================================================================
-   MODAL
-   ========================================================================== */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 99999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background-color: #ffffff;
-  padding: 30px;
-  border-radius: 24px;
-  width: 90%;
-  max-width: 460px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  position: relative;
-  text-align: center;
-  box-sizing: border-box;
-  animation: surgirModal 0.3s ease-out;
-}
-
-.modal-content h3 {
-  color: var(--purple-700);
-  font-size: 20px;
-  margin-top: 0;
-  font-weight: 700;
-}
-
-/* ==========================================================================
-   CALENDÁRIO
-   ========================================================================== */
-.weekdays-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  text-align: center;
-  font-weight: 600;
-  font-size: 13px;
-  color: #888;
+.professional-card h3 {
+  font-size: 22px;
+  color: var(--bronze);
   margin-bottom: 4px;
+  font-weight: 500;
 }
-
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
+.professional-card .specialty {
+  font-size: 12px;
+  color: var(--gold-dark);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 22px;
+  display: block;
+}
+.select-prof-btn {
+  display: inline-flex;
+  align-items: center;
   gap: 8px;
-  margin: 20px 0;
-}
-
-.calendar-day {
-  padding: 8px 0;
-  text-align: center;
-  cursor: pointer;
-  border-radius: 50%;
-  font-weight: 500;
-  font-size: 14px;
-  color: #333;
-  transition: all 0.2s;
-}
-
-.calendar-day:hover {
-  background-color: #f1e7fe;
-}
-
-.calendar-day.selected {
-  background-color: var(--purple-700);
-  color: #ffffff;
-  font-weight: bold;
-}
-
-/* ==========================================================================
-   HORÁRIOS
-   ========================================================================== */
-.horarios-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin: 20px 0;
-}
-
-.time-slot {
-  padding: 10px 0;
-  border: 1px solid #e0e0e0;
-  background-color: #fff;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 13px;
-  color: #444;
-  transition: all 0.2s;
-}
-
-.time-slot:hover {
-  border-color: var(--purple-600);
-  background-color: #f1e7fe;
-}
-
-.time-slot.selected {
-  background-color: var(--purple-700);
-  color: #ffffff;
-  border-color: var(--purple-700);
-  font-weight: bold;
-}
-
-/* ==========================================================================
-   BOTÕES DO MODAL
-   ========================================================================== */
-#confirmBtn {
-  background: linear-gradient(135deg, #a36ad9, #b47ee5);
-  color: white;
+  padding: 11px 22px;
+  background: var(--bronze);
+  color: var(--ivory);
   border: none;
-  padding: 12px 30px;
-  border-radius: 30px;
-  font-weight: 600;
-  font-size: 15px;
+  border-radius: 999px;
   cursor: pointer;
-  margin-top: 10px;
-  box-shadow: 0 4px 10px rgba(164, 104, 210, 0.3);
-  transition: 0.3s;
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: all 0.3s var(--ease-out);
+}
+.select-prof-btn:hover {
+  background: var(--charcoal);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(107, 79, 46, 0.3);
 }
 
-#confirmBtn:hover {
-  background: #7c3aed;
-  transform: translateY(-2px);
+/* ============================================================
+   MODAL AGENDAR
+============================================================ */
+.modal-agendar { max-width: 560px; padding: 36px 32px; position: relative; }
+.modal-agendar h3 {
+  text-align: center;
+  font-size: 24px;
+  color: var(--bronze);
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
 }
 
 .close-btn {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  font-size: 22px;
+  top: 16px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 0;
+  color: var(--bronze);
+  font-size: 20px;
   cursor: pointer;
-  color: #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+.close-btn:hover { background: var(--error); color: #fff; }
+
+/* CHIPS (serviços + horários) */
+.chips-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.chip,
+.time-slot,
+#servicosGrid button,
+#horariosGrid button {
+  padding: 9px 16px;
+  border: 1px solid var(--line);
+  background: var(--cream);
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  color: var(--bronze);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+.chip:hover,
+.time-slot:hover,
+#servicosGrid button:hover,
+#horariosGrid button:hover {
+  border-color: var(--gold);
+  background: #fff;
+}
+.chip.selected,
+.time-slot.selected,
+#servicosGrid button.selected,
+#horariosGrid button.selected {
+  background: var(--bronze);
+  border-color: var(--bronze);
+  color: var(--ivory);
 }
 
-.close-btn:hover {
-  color: #333;
+/* ============================================================
+   CALENDAR
+============================================================ */
+.month-year {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 10px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 19px;
+  color: var(--bronze);
+  font-weight: 500;
 }
+.month-year button {
+  background: transparent;
+  border: 0;
+  color: var(--gold-dark);
+  font-size: 18px;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+.month-year button:hover { background: var(--cream); color: var(--bronze); }
 
-/* ==========================================================================
-   FOOTER
-   ========================================================================== */
-footer {
-  padding: 26px;
+.weekdays-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
   text-align: center;
-  color: var(--purple-700);
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  font-size: 11px;
+  color: var(--gold-dark);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 22px;
+}
+.calendar-day {
+  padding: 8px 0;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--charcoal);
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+.calendar-day:hover { background: var(--cream); }
+.calendar-day.selected {
+  background: var(--bronze);
+  color: var(--ivory);
 }
 
-/* ==========================================================================
-   ANIMAÇÃO DO MODAL
-   ========================================================================== */
-@keyframes surgirModal {
-  from {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
+#confirmBtn { font-size: 12px; }
 
-/* ==========================================================================
-   RESPONSIVO
-   ========================================================================== */
-@media (max-width: 750px) {
-  .sidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
-    padding: 14px 16px;
-  }
-  .sidebar ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .sidebar ul li { margin: 0; }
-  .sidebar ul li a { padding: 8px 12px; font-size: 13px; }
-  .sidebar h2 { margin-bottom: 10px; font-size: 18px; }
-  .toggle-btn { display: none; }
-  .main { margin-left: 0 !important; }
-  body { flex-direction: column; }
-  .content { padding: 20px 14px 60px; }
-  #profissionaisContainer {
-    justify-content: center;
-    gap: 14px;
-  }
-  .professional-card {
-    width: calc(50% - 10px);
-    min-width: 140px;
-    padding: 16px 12px;
-  }
-  .modal-content {
-    padding: 20px 16px;
-    border-radius: 16px;
-  }
-  .horarios-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+@media (max-width: 600px) {
+  #profissionaisContainer { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .professional-card { padding: 22px 14px 18px; }
+  .card-avatar { width: 56px; height: 56px; font-size: 22px; }
 }

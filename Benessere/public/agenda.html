@@ -1,83 +1,113 @@
-﻿<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Agende o Horario do Seu Cliente | Benessere</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="css/agenda.css">
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Agendamentos | Benessere</title>
+    <link rel="icon" type="image/png" href="img/logo_icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/agenda.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="toggle-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
+      <h2>Benessere</h2>
+      <ul>
+        <li><a href="admin_home.html"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
+        <li><a href="agenda.html" class="active"><i class="fa-solid fa-calendar-days"></i><span>Agendamentos</span></a></li>
+        <li><a href="cliente.html"><i class="fa-solid fa-users"></i><span>Clientes</span></a></li>
+        <li><a href="pdv.html"><i class="fa-solid fa-cash-register"></i><span>PDV</span></a></li>
+        <li><a href="index.html"><i class="fa-solid fa-right-from-bracket"></i><span>Sair</span></a></li>
+      </ul>
+    </aside>
 
-<div class="sidebar">
-  <div class="toggle-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
-  <h2>Benessere</h2>
-  <ul>
-    <li><a href="admin_home.html"><i class="fa-solid fa-house"></i><span> Início</span></a></li>
-    <li><a href="agenda.html" class="active"><i class="fa-solid fa-clock"></i><span>Agendamentos</span></a></li>   
-    <li><a href="cliente.html"><i class="fa-solid fa-users"></i><span>Clientes</span></a></li>
-    <li><a href="pdv.html"><i class="fa-solid fa-cash-register"></i><span> PDV</span></a></li>
-    <li><a href="index.html"><i class="fa-solid fa-right-from-bracket"></i><span> Sair</span></a></li>
-  </ul>
-</div>
-
-<div class="main">
-  <div class="topbar">
-    <h1>Benessere</h1>
-    <div class="controls">
-      <div class="search">
-        <i class="fa-solid fa-magnifying-glass" style="color:var(--purple-700)"></i>
-        <input id="searchInput" placeholder="Pesquisar por cliente ou serviço..." />
+    <div class="main">
+      <div class="topbar">
+        <div class="brand">
+          <img src="img/logo_icon.png" alt="" class="brand-icon" />
+          Benessere
+        </div>
+        <div class="controls">
+          <div class="search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input id="searchInput" placeholder="Cliente ou serviço..." />
+          </div>
+          <select id="filterStatus" title="Filtrar por status">
+            <option value="all">Todos</option>
+            <option value="Agendado">Agendado</option>
+            <option value="Concluído">Concluído</option>
+            <option value="Cancelado">Cancelado</option>
+          </select>
+          <button class="btn-small" id="clearFilters">Limpar</button>
+          <button class="btn" id="newBooking"><i class="fa-solid fa-plus"></i> Novo</button>
+        </div>
       </div>
-      <select id="filterStatus" title="Filtrar por status">
-        <option value="all">Todos</option>
-        <option value="Agendado">Agendado</option>
-        <option value="Concluído">Concluído</option>
-        <option value="Cancelado">Cancelado</option>
-      </select>
-      <button class="btn-small" id="clearFilters">Limpar</button>
-      <button class="btn-small" id="newBooking" style="background:var(--purple-600);color:white;">Novo Agendamento</button>
+
+      <div class="content">
+        <div class="page-head">
+          <span class="eyebrow">Painel</span>
+          <h1>Agendamentos</h1>
+        </div>
+
+        <div class="layout">
+          <section class="panel">
+            <h3 class="panel-title">Agenda</h3>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Hora</th>
+                  <th>Cliente</th>
+                  <th>Serviço</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="appointmentsBody"></tbody>
+            </table>
+            <div id="emptyMsg" class="empty" style="display:none">Nenhum agendamento</div>
+          </section>
+
+          <aside class="panel">
+            <h3 class="panel-title">Profissionais</h3>
+            <div id="professionalsContainer"></div>
+          </aside>
+        </div>
+      </div>
+
+      <footer>© 2026 Benessere — Todos os direitos reservados.</footer>
     </div>
-  </div>
 
-  <div class="content">
-    <div class="layout">
-      <section class="panel">
-        <table class="table">
-          <h1>Agenda:</h1>
-          <thead><tr><th>Data</th><th>Hora</th><th>Cliente</th><th>Serviço</th><th>Status</th><th>Ações</th></tr></thead>
-          <tbody id="appointmentsBody"></tbody>
-        </table>
-        <div id="emptyMsg" class="empty" style="display:none">Nenhum agendamento</div>
-      </section>
-
-      <aside class="panel">
-        <h1>Profissionais:</h1>
-        <div id="professionalsContainer"></div>
-      </aside>
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal">
+        <h3>Novo Agendamento</h3>
+        <label>Profissional</label>
+        <input id="modalProfName" type="text" disabled />
+        <label>Cliente</label>
+        <input id="modalClient" type="text" placeholder="Nome do cliente" />
+        <label>Serviço</label>
+        <input id="modalService" type="text" disabled />
+        <label>Valor (R$)</label>
+        <input id="modalPrice" type="text" disabled />
+        <label>Data</label>
+        <input id="modalDate" type="date" />
+        <label>Hora</label>
+        <select id="modalTime"></select>
+        <div class="modal-actions">
+          <button class="btn-small" id="modalClose">Cancelar</button>
+          <button class="btn" id="modalConfirm">Confirmar</button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <h3>Agendar Atendimento</h3>
-    <div><label>Profissional</label><input id="modalProfName" type="text" disabled style="background:#f3f0ff;font-weight:600;color:#6B21A8"></div>
-    <div><label>Cliente</label><input id="modalClient" type="text" placeholder="Nome do cliente"></div>
-    <div><label>Serviço</label><input id="modalService" type="text" disabled></div>
-    <div><label>Valor (R$)</label><input id="modalPrice" type="number" disabled></div>
-    <div><label>Data</label><input id="modalDate" type="date"></div>
-    <div><label>Hora</label><select id="modalTime"></select></div>
-    <div class="modal-actions">
-      <button class="btn-small" id="modalClose">Cancelar</button>
-      <button class="btn-small" id="modalConfirm" style="background:var(--purple-600);color:white">Confirmar</button>
-    </div>
-  </div>
-</div>
-
-<script src="js/agenda.js"></script>
-
-  <footer>© 2025 Benessere - Todos os direitos reservados.</footer>
-</body>
+    <script src="js/agenda.js"></script>
+    <script>
+      function toggleMenu(){ document.querySelector('.sidebar').classList.toggle('closed'); }
+    </script>
+  </body>
 </html>
