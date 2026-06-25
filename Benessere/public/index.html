@@ -146,5 +146,25 @@
         <p>© 2026 Benessere — Todos os direitos reservados.</p>
       </div>
     </footer>
+
+    <script>
+      // Efeito fade-out fluido da logo conforme rola a página
+      const logoBanner = document.querySelector('.hero-logo-banner');
+      const heroContent = document.querySelector('.hero-content');
+      if (logoBanner) {
+        window.addEventListener('scroll', () => {
+          const scrollY = window.scrollY;
+          const fadeStart = 0;
+          const fadeEnd = 500;
+          const progress = Math.max(0, Math.min(1, (scrollY - fadeStart) / (fadeEnd - fadeStart)));
+          logoBanner.style.opacity = 1 - progress;
+          logoBanner.style.transform = `translateY(${scrollY * 0.3}px) scale(${1 - progress * 0.1})`;
+          if (heroContent) {
+            heroContent.style.transform = `translateY(${scrollY * 0.15}px)`;
+            heroContent.style.opacity = 1 - progress * 0.8;
+          }
+        }, { passive: true });
+      }
+    </script>
   </body>
 </html>
