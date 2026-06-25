@@ -1,11 +1,13 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-br">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Acesso | Benessere</title>
+    <title>Benessere — Salão de Beleza</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
     <link
@@ -15,28 +17,134 @@
     <link rel="stylesheet" href="css/index.css" />
   </head>
   <body>
-    <div class="topbar">
-      <div class="brand"><i class="fa-solid fa-sparkles"></i> Benessere</div>
-      <div class="topbar-right">
-        <div class="user-avatar"></div>
+    <!-- NAV -->
+    <header class="navbar">
+      <div class="nav-container">
+        <a href="#" class="logo-text">Benessere</a>
+        <nav class="nav-links">
+          <a href="#sobre">Sobre</a>
+          <a href="#servicos">Serviços</a>
+          <a href="#contato">Contato</a>
+          <a href="login_cliente.html" class="nav-cta">Entrar</a>
+        </nav>
       </div>
-    </div>
+    </header>
 
-    <main>
-      <div class="side-text">
-        <img src="img/logo_benessere.jpeg" alt="Beleza e confiança" />
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-content">
+        <span class="eyebrow">Salão de Beleza</span>
+        <h1>Onde a beleza<br/>encontra o bem-estar</h1>
+        <p class="hero-subtitle">
+          Realce sua essência em um refúgio de elegância, conforto e cuidado.
+        </p>
+        <div class="hero-buttons">
+          <a class="btn-primary" href="login_cliente.html">Agendar agora</a>
+          <a class="btn-outline" href="login_admin.html">Acesso Administrador</a>
+        </div>
       </div>
-
-      <div class="choice-buttons">
-        <h1>Escolha seu acesso:</h1>
-        <p class="subtitle">Entre no seu espaço de beleza e bem-estar</p>
-
-        <a class="btn" href="login_cliente.html">Sou Cliente</a>
-
-        <a class="btn btn-admin" href="login_admin.html">Sou Administrador</a>
+      <div class="hero-logo">
+        <img src="img/logo_benessere.jpeg" alt="Logo Benessere" />
       </div>
-    </main>
+    </section>
 
-    <footer>© 2025 Benessere - Todos os direitos reservados.</footer>
+    <!-- SOBRE -->
+    <section id="sobre" class="about">
+      <div class="container">
+        <span class="eyebrow center">Nossa Essência</span>
+        <h2>Mais que beleza, uma experiência.</h2>
+        <p class="about-text">
+          No Benessere, cada detalhe é pensado para você se reconectar com sua melhor versão.
+          Combinamos técnicas refinadas, profissionais qualificados e um ambiente acolhedor
+          para transformar seu momento em um verdadeiro ritual de bem-estar.
+        </p>
+      </div>
+    </section>
+
+    <!-- SERVIÇOS -->
+    <section id="servicos" class="services">
+      <div class="container">
+        <span class="eyebrow center">Nossos Serviços</span>
+        <h2>Cuidado em cada detalhe</h2>
+        <div class="services-grid">
+          <div class="service-card">
+            <i class="fa-solid fa-scissors"></i>
+            <h3>Cabelo</h3>
+            <p>Cortes, escovas e colorações personalizados para realçar sua beleza natural.</p>
+          </div>
+          <div class="service-card">
+            <i class="fa-solid fa-hand-sparkles"></i>
+            <h3>Manicure & Pedicure</h3>
+            <p>Cuidado completo das suas mãos e pés com técnicas refinadas e produtos de qualidade.</p>
+          </div>
+          <div class="service-card">
+            <i class="fa-solid fa-spray-can-sparkles"></i>
+            <h3>Maquiagem</h3>
+            <p>Maquiagem profissional para eventos, ensaios fotográficos ou para o dia a dia.</p>
+          </div>
+          <div class="service-card">
+            <i class="fa-solid fa-feather"></i>
+            <h3>Design de Sobrancelha</h3>
+            <p>Modelagem precisa para harmonizar e valorizar seu olhar com elegância.</p>
+          </div>
+          <div class="service-card">
+            <i class="fa-solid fa-user-tie"></i>
+            <h3>Barbearia</h3>
+            <p>Corte masculino, barba e cuidados especiais com atendimento exclusivo.</p>
+          </div>
+          <div class="service-card">
+            <i class="fa-solid fa-palette"></i>
+            <h3>Coloração & Luzes</h3>
+            <p>Técnicas avançadas de coloração e mechas para transformar seu visual.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DESTAQUE -->
+    <section class="highlight">
+      <div class="container highlight-container">
+        <div>
+          <span class="eyebrow">Reserve seu Horário</span>
+          <h2>Sua beleza merece um momento só seu.</h2>
+          <p>
+            Agende online, escolha o profissional e o serviço da sua preferência.
+            Simples, rápido e exclusivo.
+          </p>
+        </div>
+        <div class="highlight-cta">
+          <a class="btn-primary big" href="login_cliente.html">Quero Agendar</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato" class="contact">
+      <div class="container contact-grid">
+        <div class="contact-item">
+          <i class="fa-solid fa-location-dot"></i>
+          <h4>Endereço</h4>
+          <p>Rua das Flores, 123<br/>Centro, São Paulo</p>
+        </div>
+        <div class="contact-item">
+          <i class="fa-solid fa-clock"></i>
+          <h4>Horário</h4>
+          <p>Seg a Sáb: 9h às 19h<br/>Domingos: fechado</p>
+        </div>
+        <div class="contact-item">
+          <i class="fa-brands fa-instagram"></i>
+          <h4>Redes Sociais</h4>
+          <p>@benessere<br/>Siga-nos no Instagram</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container footer-content">
+        <span class="logo-text-footer">Benessere</span>
+        <p>© 2026 Benessere — Todos os direitos reservados.</p>
+      </div>
+    </footer>
   </body>
 </html>
