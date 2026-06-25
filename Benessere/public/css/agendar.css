@@ -1,0 +1,479 @@
+﻿/* ==========================================================================
+   VARIÁVEIS E RESET
+   ========================================================================== */
+:root {
+  --purple-600: #8b5cf6;
+  --purple-700: #6b21a8;
+  --card-bg: #fff;
+  --card-shadow: 0 8px 20px rgba(139, 92, 246, 0.12);
+  --muted: #6b5671;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Inter", system-ui, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  background: linear-gradient(135deg, #e8d6ff, #f3e9ff 60%);
+  color: #2b2140;
+}
+
+/* ==========================================================================
+   SIDEBAR
+   ========================================================================== */
+.sidebar {
+  width: 260px;
+  background: linear-gradient(
+    180deg,
+    rgba(155, 98, 214, 0.95),
+    rgba(139, 92, 246, 0.95)
+  );
+  color: white;
+  position: fixed;
+  height: 100%;
+  left: 0;
+  top: 0;
+  padding: 25px 20px;
+  transition: all 0.4s ease;
+  box-shadow: 6px 0 25px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+}
+
+.sidebar.closed {
+  width: 80px;
+  padding: 25px 10px;
+}
+
+.sidebar h2 {
+  font-size: 22px;
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 40px;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar.closed h2 {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar ul li {
+  margin: 18px 0;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 15px;
+  border-radius: 12px;
+  transition: 0.3s;
+  font-weight: 500;
+  background: transparent;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+  transform: translateX(5px);
+}
+
+.sidebar ul li i {
+  font-size: 18px;
+  transition: transform 0.3s;
+}
+
+.sidebar.closed ul li span {
+  display: none;
+}
+
+.toggle-btn {
+  position: absolute;
+  right: -18px;
+  top: 20px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--purple-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  z-index: 140;
+}
+
+/* ==========================================================================
+   MAIN
+   ========================================================================== */
+.main {
+  margin-left: 260px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: margin-left 0.35s ease;
+}
+
+.sidebar.closed + .main {
+  margin-left: 90px;
+}
+
+/* ==========================================================================
+   TOPBAR
+   ========================================================================== */
+.topbar {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.brand {
+  font-weight: 700;
+  color: var(--purple-700);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.icon-btn {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--purple-700);
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: url("../img/logo_benessere.jpeg") center/cover;
+  border: 2px solid #c4b5fd;
+}
+/* ==========================================================================
+   CONTEÚDO
+   ========================================================================== */
+.content {
+  padding: 40px 28px 80px;
+  flex: 1;
+}
+
+.content h1 {
+  font-size: 28px;
+  color: var(--purple-700);
+  margin-bottom: 10px;
+}
+
+.lead {
+  font-size: 16px;
+  color: #6d5a7a;
+  margin-bottom: 30px;
+}
+
+/* ==========================================================================
+   CARDS DOS PROFISSIONAIS
+   ========================================================================== */
+#profissionaisContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.professional-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 24px 20px;
+  width: 240px;
+  text-align: center;
+  box-shadow: var(--card-shadow);
+  transition: 0.3s;
+}
+
+.professional-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 26px rgba(122, 60, 170, 0.18);
+}
+
+.card-avatar {
+  font-size: 35px;
+  color: var(--purple-600);
+  margin-bottom: 15px;
+}
+
+.professional-card h3 {
+  margin: 10px 0 5px 0;
+  font-size: 18px;
+  color: var(--purple-700);
+}
+
+.professional-card .specialty {
+  font-size: 14px;
+  color: #5a4b6e;
+  margin-bottom: 20px;
+}
+
+.select-prof-btn {
+  background: linear-gradient(135deg, #a36ad9, #b47ee5);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  transition: 0.3s;
+  box-shadow: 0 4px 10px rgba(164, 104, 210, 0.3);
+}
+
+.select-prof-btn:hover {
+  background: #7c3aed;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(122, 60, 170, 0.3);
+}
+
+/* ==========================================================================
+   MODAL
+   ========================================================================== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 99999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 24px;
+  width: 90%;
+  max-width: 460px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
+  text-align: center;
+  box-sizing: border-box;
+  animation: surgirModal 0.3s ease-out;
+}
+
+.modal-content h3 {
+  color: var(--purple-700);
+  font-size: 20px;
+  margin-top: 0;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   CALENDÁRIO
+   ========================================================================== */
+.weekdays-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: 600;
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.calendar-day {
+  padding: 8px 0;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 50%;
+  font-weight: 500;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s;
+}
+
+.calendar-day:hover {
+  background-color: #f1e7fe;
+}
+
+.calendar-day.selected {
+  background-color: var(--purple-700);
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* ==========================================================================
+   HORÁRIOS
+   ========================================================================== */
+.horarios-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.time-slot {
+  padding: 10px 0;
+  border: 1px solid #e0e0e0;
+  background-color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 13px;
+  color: #444;
+  transition: all 0.2s;
+}
+
+.time-slot:hover {
+  border-color: var(--purple-600);
+  background-color: #f1e7fe;
+}
+
+.time-slot.selected {
+  background-color: var(--purple-700);
+  color: #ffffff;
+  border-color: var(--purple-700);
+  font-weight: bold;
+}
+
+/* ==========================================================================
+   BOTÕES DO MODAL
+   ========================================================================== */
+#confirmBtn {
+  background: linear-gradient(135deg, #a36ad9, #b47ee5);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 4px 10px rgba(164, 104, 210, 0.3);
+  transition: 0.3s;
+}
+
+#confirmBtn:hover {
+  background: #7c3aed;
+  transform: translateY(-2px);
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #aaa;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+footer {
+  padding: 26px;
+  text-align: center;
+  color: var(--purple-700);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* ==========================================================================
+   ANIMAÇÃO DO MODAL
+   ========================================================================== */
+@keyframes surgirModal {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVO
+   ========================================================================== */
+@media (max-width: 750px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 14px 16px;
+  }
+  .sidebar ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .sidebar ul li { margin: 0; }
+  .sidebar ul li a { padding: 8px 12px; font-size: 13px; }
+  .sidebar h2 { margin-bottom: 10px; font-size: 18px; }
+  .toggle-btn { display: none; }
+  .main { margin-left: 0 !important; }
+  body { flex-direction: column; }
+  .content { padding: 20px 14px 60px; }
+  #profissionaisContainer {
+    justify-content: center;
+    gap: 14px;
+  }
+  .professional-card {
+    width: calc(50% - 10px);
+    min-width: 140px;
+    padding: 16px 12px;
+  }
+  .modal-content {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+  .horarios-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

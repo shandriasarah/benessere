@@ -1,0 +1,158 @@
+﻿:root {
+  --purple-600: #8b5cf6;
+  --purple-700: #6b21a8;
+  --muted: #6b5671;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #f3eaf9, #ffffff);
+  color: #3b2e4a;
+  overflow-x: hidden;
+}
+
+/* Topbar */
+.topbar {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.brand {
+  font-weight: 700;
+  color: var(--purple-700);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+}
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: url("../img/logo_benessere.jpeg") center/cover;
+  border: 2px solid #c4b5fd;
+}
+/* Container principal */
+main {
+  width: 90%;
+  max-width: 900px;
+  display: flex;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 20px 40px rgba(75, 45, 85, 0.15);
+  overflow: hidden;
+  margin: 120px auto 80px; /* margem superior maior */
+  position: relative;
+}
+
+/* Lado da frase motivacional */
+.side-text {
+  flex: 1;
+  background: linear-gradient(135deg, rgb(169, 86, 247), #6b21a8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px;
+  color: #fff;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.side-text p {
+  background: rgba(0, 0, 0, 0.25);
+  padding: 20px 25px;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Área dos botões */
+.choice-buttons {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 30px;
+  gap: 25px;
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #6b21a8;
+}
+p.subtitle {
+  font-size: 15px;
+  color: #6b21a8;
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+/* Botões */
+.btn {
+  padding: 15px 40px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  color: #fff;
+  background: linear-gradient(135deg, rgb(169, 86, 247), #6b21a8);
+  transition: 0.3s;
+  box-shadow: 0 6px 12px rgba(75, 45, 85, 0.2);
+}
+.btn:hover {
+  background: #6b21a8;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(75, 45, 85, 0.3);
+}
+
+/* Footer */
+footer {
+  padding: 26px;
+  text-align: center;
+  color: #6b21a8;
+}
+
+/* Responsivo */
+@media (max-width: 750px) {
+  main {
+    flex-direction: column;
+    margin: 140px 20px 80px;
+  }
+  .side-text {
+    font-size: 18px;
+    padding: 40px;
+    height: auto;
+  }
+  .choice-buttons {
+    padding: 30px;
+  }
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.side-text img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px; /* opcional */
+}

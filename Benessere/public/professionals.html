@@ -1,0 +1,75 @@
+﻿<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Nossos Profissionais | Benessere</title>
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="brand">Nossos Especialistas</div>
+    </div>
+
+    <main style="display: block; padding: 20px; text-align: center">
+      <h1>Lista de Profissionais (Dados da API)</h1>
+      <div
+        id="lista-profissionais"
+        style="
+          margin-top: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          align-items: center;
+        "
+      >
+        <p>Carregando profissionais...</p>
+      </div>
+      <br />
+      <a href="index.html" class="btn">Voltar</a>
+    </main>
+
+    <script>
+      async function carregarProfissionais() {
+        try {
+          const response = await fetch(
+            "/api/professionals",
+          );
+          const dados = await response.json();
+
+          const container = document.getElementById("lista-profissionais");
+          container.innerHTML = "";
+
+          if (dados.length === 0) {
+            container.innerHTML =
+              "<p>Nenhum profissional cadastrado no banco.</p>";
+            return;
+          }
+
+          dados.forEach((p) => {
+            const div = document.createElement("div");
+            div.style.border = "1px solid #ccc";
+            div.style.padding = "15px";
+            div.style.width = "300px";
+            div.style.borderRadius = "8px";
+            div.style.marginBottom = "10px";
+            div.style.backgroundColor = "#fff";
+
+            // CORREÇÃO AQUI: Mudamos de p.desc para p.description
+            // ADICIONAMOS: A tag de imagem para mostrar a foto
+            div.innerHTML = `
+          ${p.image ? `<img src="${p.image}" style="width:80px; height:80px; border-radius:50%; object-fit:cover;"><br>` : ""}
+          <strong style="font-size: 1.2em; color: #6a1b9a;">${p.name}</strong><br>
+          <p style="margin: 5px 0;">${p.description || "Sem descrição"}</p>
+        `;
+            container.appendChild(div);
+          });
+        } catch (error) {
+          document.getElementById("lista-profissionais").innerHTML =
+            '<p style="color: red;">Erro ao conectar com a API!</p>';
+        }
+      }
+
+      carregarProfissionais();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,231 @@
+﻿:root {
+  --purple-600: #8b5cf6;
+  --purple-700: #6b21a8;
+  --muted: #6b5671;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f2e3ff, #f9f7fc);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Topbar */
+.topbar {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.brand {
+  font-weight: 700;
+  color: var(--purple-700);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.icon-btn {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--purple-700);
+}
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: url("../img/logo_benessere.jpeg") center/cover;
+  border: 2px solid #c4b5fd;
+}
+
+/* Container principal */
+main {
+  width: 90%;
+  max-width: 900px;
+  display: flex;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+  box-shadow: 0 20px 40px rgba(80, 30, 120, 0.25);
+  overflow: hidden;
+  margin: 120px auto 40px; /* aumentei de 80px para 120px */
+  padding: 0;
+  gap: 0;
+  flex-direction: row;
+  position: relative;
+  z-index: 2;
+}
+
+/* Frase motivacional */
+.side-text {
+  flex: 1;
+  background: linear-gradient(135deg, rgb(169, 86, 247), #6b21a8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px;
+  color: #fff;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.side-text p {
+  background: rgba(0, 0, 0, 0.25);
+  padding: 20px 25px;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Card de login */
+.form-container {
+  flex: 1;
+  padding: 50px 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 28px;
+  color: #6b21a8;
+  margin-bottom: 10px;
+}
+.subtitle {
+  font-size: 15px;
+  color: #6b21a8;
+  margin-bottom: 28px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+label {
+  text-align: left;
+  font-weight: 600;
+  color: #6b21a8;
+}
+.input-group {
+  position: relative;
+}
+.input-group i {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #6b21a8;
+}
+input {
+  width: 100%;
+  padding: 12px 14px 12px 38px;
+  border-radius: 10px;
+  border: 1px solid #c89bf5;
+  font-size: 15px;
+  outline: none;
+  transition: 0.3s;
+}
+input:focus {
+  border-color: #a15bd6;
+  box-shadow: 0 0 8px rgba(161, 91, 214, 0.4);
+}
+.btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #fff;
+  background: linear-gradient(135deg, rgb(169, 86, 247), #6b21a8);
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn:hover {
+  background: #8c44c7;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(75, 0, 130, 0.3);
+}
+#msgAdmin {
+  font-weight: 600;
+  margin-top: 10px;
+  min-height: 20px;
+  text-align: center;
+  color: red;
+}
+
+/* Back button */
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--purple-700);
+  color: #fff;
+  border-radius: 20%;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: 0.2s;
+  margin-bottom: 20px;
+  align-self: flex-start; /* alinha ao topo do form */
+}
+.back-button i {
+  font-size: 16px;
+}
+.back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+/* Footer */
+footer {
+  padding: 26px;
+  text-align: center;
+  color: var(--purple-700);
+}
+
+/* Responsivo */
+@media (max-width: 750px) {
+  main {
+    flex-direction: column;
+  }
+  .side-text {
+    padding: 30px;
+    font-size: 18px;
+  }
+  .form-container {
+    padding: 40px 20px;
+  }
+}
+
+.side-text img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px; /* opcional */
+}
