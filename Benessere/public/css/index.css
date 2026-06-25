@@ -77,6 +77,7 @@ img { max-width: 100%; display: block; }
   align-items: center;
   gap: 12px;
   text-decoration: none;
+  isolation: isolate;
 }
 .logo-icon {
   width: 42px;
@@ -84,6 +85,7 @@ img { max-width: 100%; display: block; }
   object-fit: contain;
   display: block;
   mix-blend-mode: multiply;
+  filter: contrast(1.1);
 }
 .logo-text {
   font-size: 28px;
@@ -221,16 +223,14 @@ img { max-width: 100%; display: block; }
   margin: 0;
   -webkit-mask-image: linear-gradient(
     to bottom,
-    transparent 0%,
-    black 12%,
-    black 88%,
+    black 0%,
+    black 75%,
     transparent 100%
   );
   mask-image: linear-gradient(
     to bottom,
-    transparent 0%,
-    black 12%,
-    black 88%,
+    black 0%,
+    black 75%,
     transparent 100%
   );
 }
