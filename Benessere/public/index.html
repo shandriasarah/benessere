@@ -3,7 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Benessere — Salão de Beleza</title>
+    <title>Benessere — Salão de Beleza & Bem-Estar</title>
+    <meta name="description" content="Benessere — Salão de beleza exclusivo. Cabelo, manicure, maquiagem, sobrancelha e mais. Agende online com os melhores profissionais." />
+    <meta name="theme-color" content="#6b4f2e" />
+
+    <!-- Open Graph (compartilhamento WhatsApp / redes sociais) -->
+    <meta property="og:title" content="Benessere — Salão de Beleza" />
+    <meta property="og:description" content="Onde a beleza encontra o bem-estar. Agende online." />
+    <meta property="og:image" content="img/logo_benessere.png" />
+    <meta property="og:type" content="website" />
+
+    <link rel="icon" type="image/png" href="img/logo_icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -24,13 +34,18 @@
           <img src="img/logo_icon.png" alt="Benessere" class="logo-icon" />
           <span class="logo-text">Benessere</span>
         </a>
-        <nav class="nav-links">
+        <nav class="nav-links" id="navLinks">
           <a href="#sobre">Sobre</a>
           <a href="#servicos">Serviços</a>
+          <a href="#profissionais">Profissionais</a>
+          <a href="#depoimentos">Depoimentos</a>
           <a href="#contato">Contato</a>
           <a href="login_cliente.html" class="nav-cta">Entrar</a>
           <a href="login_admin.html" class="nav-cta">Acesso Administrador</a>
         </nav>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </header>
 
@@ -41,7 +56,7 @@
 
     <!-- HERO -->
     <section class="hero">
-      <div class="hero-content">
+      <div class="hero-content reveal">
         <span class="eyebrow">Salão de Beleza</span>
         <h1>Onde a beleza<br/>encontra o bem-estar</h1>
         <p class="hero-subtitle">
@@ -51,11 +66,15 @@
           <a class="btn-primary btn-wide" href="login_cliente.html">Agendar agora</a>
         </div>
       </div>
+      <a href="#sobre" class="scroll-indicator" aria-label="Rolar para baixo">
+        <span class="line"></span>
+        <span class="text">Descubra</span>
+      </a>
     </section>
 
     <!-- SOBRE -->
     <section id="sobre" class="about">
-      <div class="container">
+      <div class="container reveal">
         <span class="eyebrow center">Nossa Essência</span>
         <h2>Mais que beleza, uma experiência.</h2>
         <p class="about-text">
@@ -63,41 +82,61 @@
           Combinamos técnicas refinadas, profissionais qualificados e um ambiente acolhedor
           para transformar seu momento em um verdadeiro ritual de bem-estar.
         </p>
+        <div class="stats-row">
+          <div class="stat">
+            <div class="stat-num">+5</div>
+            <div class="stat-label">Anos de mercado</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">+2k</div>
+            <div class="stat-label">Clientes atendidas</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">7</div>
+            <div class="stat-label">Profissionais</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">4.9</div>
+            <div class="stat-label">Avaliação média</div>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- SERVIÇOS -->
     <section id="servicos" class="services">
       <div class="container">
-        <span class="eyebrow center">Nossos Serviços</span>
-        <h2>Cuidado em cada detalhe</h2>
+        <div class="section-head reveal">
+          <span class="eyebrow center">Nossos Serviços</span>
+          <h2>Cuidado em cada detalhe</h2>
+        </div>
         <div class="services-grid">
-          <div class="service-card">
+          <div class="service-card reveal">
             <i class="fa-solid fa-scissors"></i>
             <h3>Cabelo</h3>
             <p>Cortes, escovas e colorações personalizados para realçar sua beleza natural.</p>
           </div>
-          <div class="service-card">
+          <div class="service-card reveal">
             <i class="fa-solid fa-hand-sparkles"></i>
             <h3>Manicure & Pedicure</h3>
             <p>Cuidado completo das suas mãos e pés com técnicas refinadas e produtos de qualidade.</p>
           </div>
-          <div class="service-card">
+          <div class="service-card reveal">
             <i class="fa-solid fa-spray-can-sparkles"></i>
             <h3>Maquiagem</h3>
             <p>Maquiagem profissional para eventos, ensaios fotográficos ou para o dia a dia.</p>
           </div>
-          <div class="service-card">
+          <div class="service-card reveal">
             <i class="fa-solid fa-feather"></i>
             <h3>Design de Sobrancelha</h3>
             <p>Modelagem precisa para harmonizar e valorizar seu olhar com elegância.</p>
           </div>
-          <div class="service-card">
+          <div class="service-card reveal">
             <i class="fa-solid fa-user-tie"></i>
             <h3>Barbearia</h3>
             <p>Corte masculino, barba e cuidados especiais com atendimento exclusivo.</p>
           </div>
-          <div class="service-card">
+          <div class="service-card reveal">
             <i class="fa-solid fa-palette"></i>
             <h3>Coloração & Luzes</h3>
             <p>Técnicas avançadas de coloração e mechas para transformar seu visual.</p>
@@ -106,9 +145,56 @@
       </div>
     </section>
 
+    <!-- PROFISSIONAIS -->
+    <section id="profissionais" class="professionals">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow center">Nossa Equipe</span>
+          <h2>Profissionais que cuidam de você</h2>
+        </div>
+        <div class="prof-grid">
+          <div class="prof-card reveal">
+            <div class="prof-avatar">AP</div>
+            <h4>Ana Paula</h4>
+            <span class="prof-spec">Cabelo</span>
+          </div>
+          <div class="prof-card reveal">
+            <div class="prof-avatar">ML</div>
+            <h4>Marcos Lima</h4>
+            <span class="prof-spec">Barba e Corte</span>
+          </div>
+          <div class="prof-card reveal">
+            <div class="prof-avatar">JC</div>
+            <h4>Juliana Costa</h4>
+            <span class="prof-spec">Manicure & Pedicure</span>
+          </div>
+          <div class="prof-card reveal">
+            <div class="prof-avatar">RS</div>
+            <h4>Rafael Santos</h4>
+            <span class="prof-spec">Barbeiro</span>
+          </div>
+          <div class="prof-card reveal">
+            <div class="prof-avatar">CO</div>
+            <h4>Camila Oliveira</h4>
+            <span class="prof-spec">Maquiagem & Sobrancelha</span>
+          </div>
+          <div class="prof-card reveal">
+            <div class="prof-avatar">PL</div>
+            <h4>Patricia Lima</h4>
+            <span class="prof-spec">Coloração & Luzes</span>
+          </div>
+          <div class="prof-card reveal">
+            <div class="prof-avatar">FA</div>
+            <h4>Fernando Alves</h4>
+            <span class="prof-spec">Corte Masculino</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- DESTAQUE -->
     <section class="highlight">
-      <div class="container highlight-container">
+      <div class="container highlight-container reveal">
         <div>
           <span class="eyebrow">Reserve seu Horário</span>
           <h2>Sua beleza merece um momento só seu.</h2>
@@ -123,9 +209,45 @@
       </div>
     </section>
 
+    <!-- DEPOIMENTOS -->
+    <section id="depoimentos" class="testimonials">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow center">O que dizem nossas clientes</span>
+          <h2>Histórias de quem se sentiu em casa</h2>
+        </div>
+        <div class="testimonials-grid">
+          <article class="testimonial-card reveal">
+            <div class="stars">★★★★★</div>
+            <p class="quote">"Saí me sentindo outra pessoa. A Ana Paula é mágica com o cabelo e o ambiente é simplesmente um sonho."</p>
+            <div class="author">
+              <span class="author-name">Mariana S.</span>
+              <span class="author-role">Cliente desde 2024</span>
+            </div>
+          </article>
+          <article class="testimonial-card reveal">
+            <div class="stars">★★★★★</div>
+            <p class="quote">"Atendimento impecável, profissionalismo de outro nível. O Benessere virou meu refúgio mensal."</p>
+            <div class="author">
+              <span class="author-name">Camila R.</span>
+              <span class="author-role">Cliente desde 2023</span>
+            </div>
+          </article>
+          <article class="testimonial-card reveal">
+            <div class="stars">★★★★★</div>
+            <p class="quote">"Cada detalhe é pensado com carinho. A experiência vai muito além do serviço - é puro acolhimento."</p>
+            <div class="author">
+              <span class="author-name">Beatriz F.</span>
+              <span class="author-role">Cliente desde 2025</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <!-- CONTATO -->
     <section id="contato" class="contact">
-      <div class="container contact-grid">
+      <div class="container contact-grid reveal">
         <div class="contact-item">
           <i class="fa-solid fa-location-dot"></i>
           <h4>Endereço</h4>
@@ -152,18 +274,74 @@
       </div>
     </footer>
 
+    <!-- WHATSAPP FLOATING -->
+    <a href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20agendar%20um%20horário%20no%20Benessere." class="whatsapp-float" aria-label="Falar no WhatsApp" target="_blank" rel="noopener">
+      <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
     <script>
-      // Fade-out suave da logo conforme rola a página
+      // ============================================
+      // FADE LOGO COM SCROLL (passive + rAF)
+      // ============================================
       const logoBanner = document.querySelector('.hero-logo-banner');
-      if (logoBanner) {
-        const logoImg = logoBanner.querySelector('img');
-        window.addEventListener('scroll', () => {
-          const scrollY = window.scrollY;
-          const fadeEnd = logoBanner.offsetHeight * 0.9;
-          const progress = Math.max(0, Math.min(1, scrollY / fadeEnd));
-          if (logoImg) logoImg.style.opacity = 1 - progress;
-        }, { passive: true });
+      const logoImg = logoBanner?.querySelector('img');
+      let ticking = false;
+      function onScroll() {
+        if (!logoBanner || !logoImg) return;
+        const scrollY = window.scrollY;
+        const fadeEnd = logoBanner.offsetHeight * 0.9;
+        const progress = Math.max(0, Math.min(1, scrollY / fadeEnd));
+        logoImg.style.opacity = 1 - progress;
+        ticking = false;
       }
+      window.addEventListener('scroll', () => {
+        if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
+      }, { passive: true });
+
+      // ============================================
+      // FADE-IN SCROLL ANIMATIONS (IntersectionObserver)
+      // ============================================
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduce) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-visible');
+              io.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+      } else {
+        document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+      }
+
+      // ============================================
+      // MOBILE HAMBURGER MENU
+      // ============================================
+      const navToggle = document.getElementById('navToggle');
+      const navLinks = document.getElementById('navLinks');
+      navToggle?.addEventListener('click', () => {
+        const open = navLinks.classList.toggle('open');
+        navToggle.classList.toggle('open');
+        navToggle.setAttribute('aria-expanded', open);
+      });
+      navLinks?.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          navLinks.classList.remove('open');
+          navToggle.classList.remove('open');
+          navToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      // ============================================
+      // NAVBAR SHRINK ON SCROLL
+      // ============================================
+      const navbar = document.querySelector('.navbar');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) navbar.classList.add('scrolled');
+        else navbar.classList.remove('scrolled');
+      }, { passive: true });
     </script>
   </body>
 </html>
