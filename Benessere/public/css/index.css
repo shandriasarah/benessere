@@ -72,6 +72,18 @@ img { max-width: 100%; display: block; }
   align-items: center;
   justify-content: space-between;
 }
+.logo-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+.logo-icon {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  display: block;
+}
 .logo-text {
   font-size: 28px;
   color: var(--bronze);
@@ -98,6 +110,18 @@ img { max-width: 100%; display: block; }
   transition: all 0.3s ease;
 }
 .nav-cta:hover { background: var(--gold); color: white !important; }
+.nav-cta-secondary {
+  padding: 10px 22px;
+  border: 1px solid var(--bronze);
+  border-radius: 999px;
+  background: var(--bronze);
+  color: var(--ivory) !important;
+  transition: all 0.3s ease;
+}
+.nav-cta-secondary:hover {
+  background: var(--charcoal);
+  border-color: var(--charcoal);
+}
 
 /* HERO */
 .hero {
@@ -163,6 +187,15 @@ img { max-width: 100%; display: block; }
   box-shadow: 0 12px 30px rgba(107, 79, 46, 0.35);
 }
 .btn-primary.big { padding: 20px 48px; font-size: 14px; }
+.btn-primary.btn-wide {
+  padding: 22px 100px;
+  font-size: 14px;
+  letter-spacing: 3px;
+  min-width: 460px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 .btn-outline {
   background: transparent;
   color: var(--bronze);
@@ -285,8 +318,11 @@ img { max-width: 100%; display: block; }
 
 /* RESPONSIVO */
 @media (max-width: 900px) {
-  .nav-links { gap: 18px; }
-  .nav-links a:not(.nav-cta) { display: none; }
+  .nav-links { gap: 10px; }
+  .nav-links a:not(.nav-cta):not(.nav-cta-secondary) { display: none; }
+  .nav-cta-secondary { padding: 8px 14px; font-size: 12px; }
+  .nav-cta { padding: 8px 14px; font-size: 12px; }
+  .logo-icon { width: 34px; height: 34px; }
   .hero { padding: 40px 20px 80px; }
   .hero-logo-banner { margin-bottom: 40px; }
   .hero-logo-banner img { max-height: 220px; }
@@ -301,5 +337,6 @@ img { max-width: 100%; display: block; }
   .logo-text { font-size: 22px; letter-spacing: 3px; }
   .hero-content h1 { font-size: 36px; }
   .btn-primary, .btn-outline { width: 100%; padding: 14px 24px; }
+  .btn-primary.btn-wide { min-width: 0; padding: 16px 24px; width: 100%; }
   .hero-buttons { flex-direction: column; }
 }
