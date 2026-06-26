@@ -171,12 +171,12 @@ async function loadRevenueChart() {
           {
             label: "Faturamento Diário (R$)",
             data: days,
-            borderColor: "#7c3aed",
-            backgroundColor: "rgba(124, 58, 237, 0.1)",
+            borderColor: "#a88a47",
+            backgroundColor: "rgba(201, 169, 97, 0.18)",
             tension: 0.4,
             fill: true,
             pointRadius: 3,
-            pointBackgroundColor: "#7c3aed",
+            pointBackgroundColor: "#a88a47",
           },
         ],
       },
@@ -276,7 +276,7 @@ function showNotification(message, type = "info") {
   notif.style.cssText = `
     position:fixed;top:20px;right:20px;padding:12px 24px;
     border-radius:8px;color:white;font-weight:500;z-index:10000;
-    background:${type === "error" ? "#ef4444" : type === "success" ? "#10b981" : "#7c3aed"};
+    background:${type === "error" ? "#ef4444" : type === "success" ? "#10b981" : "#a88a47"};
     animation:slideIn 0.3s ease;
   `;
 
