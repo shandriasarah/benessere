@@ -85,10 +85,10 @@
       (servicos || []).forEach((s) => {
         const btn = document.createElement("button");
         btn.textContent = `${s.name} — R$ ${Number(s.price).toFixed(2)}`;
-        btn.style.cssText = "padding:8px 14px;border:2px solid #6B21A8;border-radius:20px;background:white;color:#6B21A8;cursor:pointer;font-size:0.9em";
+        btn.style.cssText = "padding:8px 14px;border:2px solid #6b4f2e;border-radius:20px;background:white;color:#6b4f2e;cursor:pointer;font-size:0.9em";
         btn.onclick = () => {
           servicosGrid.querySelectorAll("button").forEach(b => b.style.background = "white");
-          btn.style.background = "#6B21A8";
+          btn.style.background = "#6b4f2e";
           btn.style.color = "white";
           servicoSelecionado = { id: s.id, name: s.name, price: s.price };
         };
@@ -158,9 +158,9 @@
 
     monthYearEl.innerHTML = `
     <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px">
-      <button onclick="mudarMes(-1)" style="background:none;border:none;font-size:18px;cursor:pointer;color:#6B21A8">&#8249;</button>
-      <span style="font-weight:700;color:#6B21A8">${meses[mes]} ${ano}</span>
-      <button onclick="mudarMes(1)" style="background:none;border:none;font-size:18px;cursor:pointer;color:#6B21A8">&#8250;</button>
+      <button onclick="mudarMes(-1)" style="background:none;border:none;font-size:18px;cursor:pointer;color:#6b4f2e">&#8249;</button>
+      <span style="font-weight:700;color:#6b4f2e">${meses[mes]} ${ano}</span>
+      <button onclick="mudarMes(1)" style="background:none;border:none;font-size:18px;cursor:pointer;color:#6b4f2e">&#8250;</button>
     </div>
   `;
 

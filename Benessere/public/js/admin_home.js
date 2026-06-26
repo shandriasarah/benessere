@@ -84,7 +84,7 @@ function createAppointmentsSection() {
   const section = document.createElement("div");
   section.className = "appointments-section";
   section.innerHTML = `
-    <h3 style="margin:0 0 12px 0;color:var(--purple-700)">Agendamentos Recentes</h3>
+    <h3 style="margin:0 0 12px 0;color:#6b4f2e">Agendamentos Recentes</h3>
     <div id="appointmentsList" style="display:flex;flex-direction:column;gap:8px">
       <p style="color:#888;text-align:center;padding:20px">Carregando...</p>
     </div>
@@ -113,9 +113,9 @@ function updateAppointmentsList(appointments) {
       const price = formatCurrency(app.total_price || 0);
 
       return `
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:#f8f5ff;border-radius:8px;border-left:4px solid var(--purple-500)">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:#f8f3ea;border-radius:8px;border-left:4px solid #c9a961">
         <div style="flex:1">
-          <div style="font-weight:600;color:var(--purple-700)">${app.client_name || "Cliente"}</div>
+          <div style="font-weight:600;color:#6b4f2e">${app.client_name || "Cliente"}</div>
           <div style="font-size:0.85em;color:#666;margin-top:4px">
             ${app.service_name || "Serviço"} • ${app.professional_name || "Profissional"}
           </div>
@@ -124,7 +124,7 @@ function updateAppointmentsList(appointments) {
           </div>
         </div>
         <div style="text-align:right">
-          <div style="font-weight:600;color:var(--purple-700)">${price}</div>
+          <div style="font-weight:600;color:#6b4f2e">${price}</div>
           <div style="margin-top:4px">${status}</div>
         </div>
       </div>

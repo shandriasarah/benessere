@@ -26,24 +26,19 @@
     </aside>
 
     <div class="main">
-      <div class="topbar">
-        <div class="brand">
-          <span class="brand-icon"></span>
-          Benessere
-        </div>
-        <div class="controls">
-          <div class="search">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input id="searchInput" placeholder="Pesquisar cliente..." />
-          </div>
-          <button class="btn" id="newClient"><i class="fa-solid fa-plus"></i> Novo Cliente</button>
-        </div>
-      </div>
-
       <div class="content">
         <div class="page-head">
-          <span class="eyebrow">Gerenciamento</span>
-          <h1>Clientes</h1>
+          <div>
+            <span class="eyebrow">Gerenciamento</span>
+            <h1>Clientes</h1>
+          </div>
+          <div class="controls">
+            <div class="search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input id="searchInput" placeholder="Pesquisar cliente..." />
+            </div>
+            <button class="btn" id="newClient"><i class="fa-solid fa-plus"></i> Novo Cliente</button>
+          </div>
         </div>
 
         <section class="panel">
@@ -123,9 +118,6 @@
         <input type="text" id="anamnesisFrequency" />
         <label>Objetivos do cliente</label>
         <input type="text" id="anamnesisGoals" />
-        <label>Fotos</label>
-        <input type="file" id="anamnesisPhoto" accept="image/*" multiple />
-        <div class="photo-container" id="photoPreviewContainer"></div>
         <div class="modal-actions">
           <button class="btn-small" id="anamnesisCancel">Cancelar</button>
           <button class="btn" id="anamnesisSave">Salvar</button>

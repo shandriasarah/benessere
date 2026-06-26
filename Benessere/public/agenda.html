@@ -26,31 +26,26 @@
     </aside>
 
     <div class="main">
-      <div class="topbar">
-        <div class="brand">
-          <span class="brand-icon"></span>
-          Benessere
-        </div>
-        <div class="controls">
-          <div class="search">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input id="searchInput" placeholder="Cliente ou serviço..." />
-          </div>
-          <select id="filterStatus" title="Filtrar por status">
-            <option value="all">Todos</option>
-            <option value="Agendado">Agendado</option>
-            <option value="Concluído">Concluído</option>
-            <option value="Cancelado">Cancelado</option>
-          </select>
-          <button class="btn-small" id="clearFilters">Limpar</button>
-          <button class="btn" id="newBooking"><i class="fa-solid fa-plus"></i> Novo</button>
-        </div>
-      </div>
-
       <div class="content">
         <div class="page-head">
-          <span class="eyebrow">Painel</span>
-          <h1>Agendamentos</h1>
+          <div>
+            <span class="eyebrow">Painel</span>
+            <h1>Agendamentos</h1>
+          </div>
+          <div class="controls">
+            <div class="search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input id="searchInput" placeholder="Cliente ou serviço..." />
+            </div>
+            <select id="filterStatus" title="Filtrar por status">
+              <option value="all">Todos</option>
+              <option value="Agendado">Agendado</option>
+              <option value="Concluído">Concluído</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+            <button class="btn-small" id="clearFilters">Limpar</button>
+            <button class="btn" id="newBooking"><i class="fa-solid fa-plus"></i> Novo</button>
+          </div>
         </div>
 
         <div class="layout">
