@@ -85,11 +85,14 @@
       (servicos || []).forEach((s) => {
         const btn = document.createElement("button");
         btn.textContent = `${s.name} — R$ ${Number(s.price).toFixed(2)}`;
-        btn.style.cssText = "padding:8px 14px;border:2px solid #6b4f2e;border-radius:20px;background:white;color:#6b4f2e;cursor:pointer;font-size:0.9em";
+        btn.style.cssText = "padding:9px 18px;border:1px solid #6b4f2e;border-radius:999px;background:#f8f3ea;color:#6b4f2e;cursor:pointer;font-size:13px;font-weight:500;transition:all 0.3s ease";
         btn.onclick = () => {
-          servicosGrid.querySelectorAll("button").forEach(b => b.style.background = "white");
+          servicosGrid.querySelectorAll("button").forEach(b => {
+            b.style.background = "#f8f3ea";
+            b.style.color = "#6b4f2e";
+          });
           btn.style.background = "#6b4f2e";
-          btn.style.color = "white";
+          btn.style.color = "#fdfaf3";
           servicoSelecionado = { id: s.id, name: s.name, price: s.price };
         };
         servicosGrid.appendChild(btn);

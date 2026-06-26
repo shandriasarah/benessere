@@ -37,7 +37,7 @@ function renderClientes(users) {
       <td>${u.phone || u.telefone || "-"}</td>
       <td><span class="status ativo">Ativo</span></td>
       <td class="actions">
-        <button class="btn-small delete"><i class="fa-solid fa-trash"></i> Excluir</button>
+        <button class="action-btn delete">Excluir</button>
       </td>`;
     clientsBody.appendChild(tr);
 

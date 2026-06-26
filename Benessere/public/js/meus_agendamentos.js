@@ -123,12 +123,8 @@ function renderAgendamentos(lista) {
       <td>${a.service_name || "Corte e Beleza"}</td>
       <td><span class="status ${statusClass}">${status}</span></td>
       <td class="actions">
-        <button class="btn edit" title="Editar agendamento" ${!podeEditar ? "disabled" : ""}>
-          <i class="fa-solid fa-pen"></i>
-        </button>
-        <button class="btn cancel" title="Cancelar agendamento" ${!podeEditar ? "disabled" : ""}>
-          <i class="fa-solid fa-ban"></i>
-        </button>
+        <button class="action-btn edit" ${!podeEditar ? "disabled" : ""}>Editar</button>
+        <button class="action-btn cancel" ${!podeEditar ? "disabled" : ""}>Cancelar</button>
       </td>
     `;
     tbody.appendChild(tr);

@@ -93,8 +93,8 @@ function renderAgendamentos() {
       <td>${a.service_name || "-"}</td>
       <td><span class="status ${sc}">${sl}</span></td>
       <td class="actions">
-        <button class="btn edit"   title="Editar"><i class="fa-solid fa-pen"></i></button>
-        <button class="btn cancel" title="Cancelar"><i class="fa-solid fa-ban"></i></button>
+        <button class="action-btn edit">Editar</button>
+        <button class="action-btn cancel">Cancelar</button>
       </td>`;
     body.appendChild(tr);
 

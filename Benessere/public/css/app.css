@@ -275,6 +275,23 @@ select:focus { border-color: var(--gold); }
   font-weight: 500;
 }
 .page-head .controls { margin-top: 0; }
+
+/* PAGE HEAD CENTRALIZADO (páginas sem controles) */
+.page-head-center {
+  display: block;
+  text-align: center;
+  max-width: 720px;
+  margin: 20px auto 50px;
+}
+.page-head-center h1 {
+  font-size: clamp(32px, 4.5vw, 44px);
+  margin-bottom: 12px;
+}
+.page-head-center .lead {
+  max-width: 540px;
+  margin: 0 auto;
+}
+
 @media (max-width: 700px) {
   .page-head { flex-direction: column; align-items: stretch; }
   .page-head .controls { width: 100%; flex-wrap: wrap; }
@@ -396,9 +413,45 @@ select:focus { border-color: var(--gold); }
 .status.Pendente { background: rgba(212, 154, 58, 0.15); color: var(--warning); }
 
 /* ============================================================
-   ACTION BUTTONS (icon)
+   ACTION BUTTONS — texto
 ============================================================ */
-.actions { display: flex; gap: 6px; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.action-btn {
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+}
+.action-btn.edit {
+  background: rgba(201, 169, 97, 0.14);
+  color: var(--bronze);
+  border-color: rgba(201, 169, 97, 0.4);
+}
+.action-btn.edit:hover:not(:disabled) {
+  background: var(--bronze);
+  color: var(--ivory);
+  border-color: var(--bronze);
+}
+.action-btn.cancel, .action-btn.delete {
+  background: rgba(197, 69, 61, 0.10);
+  color: var(--error);
+  border-color: rgba(197, 69, 61, 0.3);
+}
+.action-btn.cancel:hover:not(:disabled),
+.action-btn.delete:hover:not(:disabled) {
+  background: var(--error);
+  color: #fff;
+  border-color: var(--error);
+}
+.action-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Mantém compatibilidade com botões antigos de ícone */
 .btn.edit, .btn.cancel, .btn.delete, .btn.reagendar {
   width: 34px;
   height: 34px;
