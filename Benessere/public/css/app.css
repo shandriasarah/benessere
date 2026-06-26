@@ -86,15 +86,18 @@ img { max-width: 100%; display: block; }
   display: flex;
   align-items: center;
   gap: 12px;
+  isolation: isolate;
 }
 .sidebar-brand .brand-icon {
-  width: 36px;
-  height: 36px;
-  background-color: var(--bronze);
-  -webkit-mask: url("../img/logo_icon.png") center/contain no-repeat;
-  mask: url("../img/logo_icon.png") center/contain no-repeat;
+  width: 40px;
+  height: 40px;
+  background: none;
+  -webkit-mask: none;
+  mask: none;
   flex-shrink: 0;
+  display: inline-block;
 }
+.sidebar-brand img.brand-icon { mix-blend-mode: multiply; }
 
 .sidebar ul {
   list-style: none;
