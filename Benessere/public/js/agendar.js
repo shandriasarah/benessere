@@ -321,7 +321,6 @@
       if (response.ok) {
         alert("Horário agendado com sucesso!");
         window.closeAgendarModal();
-        window.location.href = "meus_agendamentos.html";
       } else {
         // 🌟 AGORA VAI EXIBIR O DETALHE REAL:
         console.error("Detalhes do erro do servidor:", data);

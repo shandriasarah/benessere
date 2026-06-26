@@ -123,20 +123,18 @@ function renderAgendamentos(lista) {
       <td>${a.service_name || "Corte e Beleza"}</td>
       <td><span class="status ${statusClass}">${status}</span></td>
       <td class="actions">
-        <button class="action-btn edit" ${!podeEditar ? "disabled" : ""}>Editar</button>
-        <button class="action-btn cancel" ${!podeEditar ? "disabled" : ""}>Cancelar</button>
+        <button class="action-btn edit">Editar</button>
+        <button class="action-btn cancel">Cancelar</button>
       </td>
     `;
     tbody.appendChild(tr);
 
-    if (podeEditar) {
-      tr.querySelector(".edit").addEventListener("click", () =>
-        abrirModalEdicao(a),
-      );
-      tr.querySelector(".cancel").addEventListener("click", () =>
-        cancelarAgendamento(a.id),
-      );
-    }
+    tr.querySelector(".edit").addEventListener("click", () =>
+      abrirModalEdicao(a),
+    );
+    tr.querySelector(".cancel").addEventListener("click", () =>
+      cancelarAgendamento(a.id),
+    );
   });
 }
 
