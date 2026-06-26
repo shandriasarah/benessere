@@ -33,7 +33,7 @@ body {
   font-size: 15px;
   min-height: 100vh;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 h1, h2, h3, h4, h5 {
@@ -47,136 +47,110 @@ a { text-decoration: none; }
 img { max-width: 100%; display: block; }
 
 /* ============================================================
-   SIDEBAR — FLUTUANTE GLASS CLARA
+   SIDEBAR — NAVBAR HORIZONTAL NO TOPO (estilo landing)
 ============================================================ */
 .sidebar {
-  width: 220px;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  width: 100%;
+  background: rgba(253, 250, 243, 0.85);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
   color: var(--charcoal);
-  position: fixed;
-  height: calc(100vh - 32px);
-  left: 16px;
-  top: 16px;
-  padding: 28px 16px;
-  transition: width 0.4s var(--ease-out), left 0.4s var(--ease-out);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  box-shadow:
-    0 10px 40px rgba(60, 45, 25, 0.08),
-    0 2px 6px rgba(60, 45, 25, 0.04);
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: auto;
+  padding: 14px 32px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
   z-index: 100;
   display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  overflow: visible;
+  box-shadow: none;
 }
-.sidebar.closed { width: 72px; padding: 28px 12px; }
 
 .sidebar h2 {
-  font-size: 22px;
-  text-align: center;
+  font-size: 26px;
   color: var(--bronze);
   letter-spacing: 4px;
-  margin-bottom: 32px;
+  margin: 0;
   font-weight: 500;
-  transition: opacity 0.3s ease;
+  font-family: "Cormorant Garamond", serif;
   white-space: nowrap;
 }
-.sidebar.closed h2 { opacity: 0; pointer-events: none; height: 0; margin: 0; }
 
-.sidebar ul { list-style: none; flex: 1; }
-.sidebar ul li { margin: 3px 0; }
+.sidebar ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  justify-content: flex-end;
+}
+.sidebar ul li { margin: 0; }
 .sidebar ul li a {
   color: var(--soft-text);
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 11px 14px;
-  border-radius: 10px;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 999px;
   transition: all 0.3s var(--ease-out);
   font-weight: 500;
-  font-size: 13px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
   position: relative;
-  letter-spacing: 0.2px;
 }
 .sidebar ul li a:hover {
   background: rgba(201, 169, 97, 0.12);
   color: var(--bronze);
 }
 .sidebar ul li a.active {
-  background: linear-gradient(135deg, var(--bronze), var(--bronze-deep));
+  background: var(--bronze);
   color: var(--ivory);
   box-shadow: 0 6px 16px rgba(107, 79, 46, 0.25);
 }
 .sidebar ul li a.active i { color: var(--gold-light); }
 .sidebar ul li i {
-  font-size: 15px;
-  width: 22px;
-  text-align: center;
-  flex-shrink: 0;
+  font-size: 13px;
   color: var(--gold-dark);
   transition: color 0.3s ease;
 }
-.sidebar.closed ul li span { display: none; }
-.sidebar.closed ul li a { justify-content: center; padding: 12px 0; }
 
-/* Toggle integrado no topo, sutil */
-.toggle-btn {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--gold-dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 12px;
-  transition: all 0.3s ease;
-  border: 0;
-}
-.toggle-btn:hover { background: rgba(201, 169, 97, 0.15); color: var(--bronze); }
+.toggle-btn { display: none; }
 
 /* ============================================================
    MAIN
 ============================================================ */
 .main {
-  margin-left: 252px;
+  margin-left: 0;
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  transition: margin-left 0.4s var(--ease-out);
-  width: calc(100% - 252px);
-}
-.sidebar.closed + .main {
-  margin-left: 104px;
-  width: calc(100% - 104px);
+  min-height: calc(100vh - 70px);
+  width: 100%;
 }
 
 /* ============================================================
    TOPBAR
 ============================================================ */
 .topbar {
-  background: rgba(253, 250, 243, 0.78);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: transparent;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 18px 30px;
-  border-bottom: 1px solid transparent;
-  position: sticky;
-  top: 0;
-  z-index: 80;
+  justify-content: flex-end;
+  padding: 18px 32px 0;
+  position: relative;
+  z-index: 50;
   gap: 16px;
-  transition: border-color 0.3s ease;
 }
-.topbar.scrolled { border-bottom-color: var(--line); }
+.topbar:empty,
+.topbar:has(> div:only-child:empty),
+.topbar > div:empty { display: none; }
 .topbar h1, .topbar .brand {
   font-family: "Cormorant Garamond", serif;
   font-size: 26px;
@@ -510,35 +484,24 @@ footer {
    RESPONSIVO
 ============================================================ */
 @media (max-width: 900px) {
-  body { flex-direction: column; }
   .sidebar {
-    width: calc(100% - 16px);
-    height: auto;
-    position: sticky;
-    left: 8px;
-    right: 8px;
-    top: 8px;
-    padding: 14px 16px;
-    border-radius: 14px;
-    margin: 8px 8px 0;
+    padding: 12px 18px;
+    flex-wrap: wrap;
+    gap: 12px;
   }
-  .sidebar h2 { display: none; }
+  .sidebar h2 { font-size: 22px; flex: 0 0 auto; }
   .sidebar ul {
-    display: flex;
     flex-wrap: wrap;
     gap: 4px;
     justify-content: center;
+    width: 100%;
   }
-  .sidebar ul li { margin: 0; }
   .sidebar ul li a {
-    padding: 8px 14px;
-    font-size: 12px;
-    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 11px;
   }
-  .sidebar ul li i { font-size: 13px; }
-  .toggle-btn { display: none; }
-  .main { margin-left: 0 !important; width: 100% !important; }
-  .topbar { padding: 14px 16px; flex-wrap: wrap; }
+  .sidebar ul li i { font-size: 12px; }
+  .topbar { padding: 14px 16px 0; flex-wrap: wrap; }
   .topbar h1, .topbar .brand { font-size: 20px; }
   .content { padding: 24px 18px 50px; }
   .controls { width: 100%; }
