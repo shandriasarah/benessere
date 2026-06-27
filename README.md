@@ -62,4 +62,4 @@ benessere/
 Desenvolvido por Sarah, estudante de Ciência da Computação e desenvolvedora Full Stack.
 
 - GitHub: [@shandriasarah](https://github.com/shandriasarah)
-- LinkedIn: [seu-perfil](#)
+- LinkedIn: [Sarah Shandria](https://www.linkedin.com/in/sarah-shandria-727b86376/)
