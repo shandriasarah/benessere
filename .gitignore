@@ -1,0 +1,31 @@
+# Dependências
+node_modules/
+.pnp
+.pnp.js
+
+# Macros do macOS
+__MACOSX/
+.DS_Store
+._*
+
+# Variáveis de ambiente
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build/cache
+.vercel
+.next
+dist/
+build/
+
+# Editor
+.vscode/
+.idea/
+
+# Sistema
+Thumbs.db
