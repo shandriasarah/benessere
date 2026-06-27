@@ -49,3 +49,17 @@ npm start
 ```
 
 ## Estrutura do projeto
+benessere/
+
+├── Benessere/        # Código-fonte da aplicação
+
+├── .gitignore
+
+└── README.md
+
+## Autora
+
+Desenvolvido por Sarah, estudante de Ciência da Computação e desenvolvedora Full Stack.
+
+- GitHub: [@shandriasarah](https://github.com/shandriasarah)
+- LinkedIn: [seu-perfil](#)
